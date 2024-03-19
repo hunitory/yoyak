@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yoyak/components/BottomBar.dart';
 import 'package:yoyak/screen/Alarm/alarm_screen.dart';
 import 'package:yoyak/screen/Challenge/challenge_screen.dart';
+import 'package:yoyak/screen/Search/photo_search_screen.dart';
 
 import '../Home/home_screen.dart';
 
@@ -21,24 +22,24 @@ class _MainScreenState extends State<MainScreen> {
   final mainTabs = [
     const AlarmScreen(),
     const HomeScreen(),
-    const ChallengeScreen()
+    const ChallengeScreen(),
+    const PhotoSearchScreen()
   ];
 
   // tabIdx 수정
-  setCurTabIdx (int idx) {
-     setState(() {
-       print(idx);
-       curTabIdx = idx;
-     });
-}
-
-
+  setCurTabIdx(int idx) {
+    setState(() {
+      print(idx);
+      curTabIdx = idx;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: mainTabs[curTabIdx],
-      bottomNavigationBar: BottomBar(curTabIdx: curTabIdx, setCurTabIdx: setCurTabIdx, mainTabs: mainTabs),
+      bottomNavigationBar: BottomBar(
+          curTabIdx: curTabIdx, setCurTabIdx: setCurTabIdx, mainTabs: mainTabs),
     );
   }
 }

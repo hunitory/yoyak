@@ -7,4 +7,5 @@ class Palette {
   static const Color SUB_BLACK = Color(0xFFA3A3A3);
   static const Color BG_BLUE = Color(0xFFF8F8FB);
   static const Color MAIN_RED = Color(0xFFFF4343);
+  static const Color SHADOW_GREY = Color(0xFFE5E5E5);
 }
