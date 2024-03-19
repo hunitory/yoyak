@@ -52,7 +52,7 @@ async def upload_file(image: UploadFile = File(...)):
         buffer.write(image.file.read())
 
     option = {
-        "weights":ROOT / './trained_model/yolov9e_transfer.pt',
+        "weights":ROOT / './trained_model/yolov9c_transfer.pt',
         "source" : file_path,
         "data": ROOT/'data/custom.yaml',
         "imgsz" : [320,320],
