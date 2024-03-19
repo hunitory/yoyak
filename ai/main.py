@@ -52,7 +52,7 @@ async def upload_file(image: UploadFile = File(...)):
         buffer.write(image.file.read())
 
     option = {
-        "weights":ROOT / './trained_model/yolov9c_instance.pt',
+        "weights":ROOT / './trained_model/yolov9e_transfer.pt',
         "source" : file_path,
         "data": ROOT/'data/custom.yaml',
         "imgsz" : [320,320],
@@ -68,6 +68,8 @@ async def upload_file(image: UploadFile = File(...)):
         data["medicineCode"] = splited[0]
         data["medicineName"] = splited[1]
         medicineList.append(data)
+
+    
 
 
     return {
