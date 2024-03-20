@@ -22,16 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class AwsFileController {
     private final AwsFileService awsFileService;
 
-    @GetMapping("/file/{filename}")
-    public ResponseEntity<String> getFile(@PathVariable String filename){
-        String presignedUrl = awsFileService.getPresignedUrl("", filename);
-        return ResponseEntity.ok(presignedUrl);
-    }
 
-    @PostMapping("/file/upload")
-    public ResponseEntity<Object> uploadFile(@RequestParam("url") String url, @RequestParam("file") MultipartFile file){
-        log.info("url: {}", url);
-        return ResponseEntity.ok().build();
-    }
 
 }
