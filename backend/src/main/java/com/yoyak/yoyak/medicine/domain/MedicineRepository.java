@@ -18,10 +18,12 @@ public interface MedicineRepository extends JpaRepository<Medicine, Integer> {
             + "AND (:colorClass IS NULL OR md.colorClass1 = :colorClass OR md.colorClass2 = :colorClass) "
             + "AND (:formCodeName IS NULL OR md.formCodeName LIKE CONCAT('%', :formCodeName, '%')) "
             + "AND (:line IS NULL OR md.lineFront = :line OR md.lineBack = :line)")
-    List<MedicineDto> findByParameters(
+    List<MedicineDto> findByParameter(
         @Param("drugShape") String drugShape,
         @Param("colorClass") String colorClass,
         @Param("formCodeName") String formCodeName,
         @Param("line") String line
     );
+
+
 }

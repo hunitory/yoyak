@@ -17,6 +17,9 @@ public enum CustomExceptionStatus {
     // account 관련
     ACCOUNT_INVALID(7001, "존재하지 않는 계정입니다");
 
+
+    //
+
     private final Integer code;
     private final String message;
 }

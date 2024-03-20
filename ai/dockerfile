@@ -1,0 +1,26 @@
+# 기본 이미지 지정
+FROM continuumio/miniconda3
+
+# 작업 디렉토리 설정
+WORKDIR /yolo
+
+RUN apt-get update && apt-get install -y libgl1-mesa-glx
+
+
+# environment.yaml 파일 복사
+COPY environment.yaml .
+
+RUN conda env create -f environment.yaml
+
+RUN echo "source activate torch"  > ~/.bashrc
+ENV PATH /opt/conda/envs/torch/bin:$PATH
+
+
+
+
+# 나머지 애플리케이션 파일 복사
+COPY . .
+
+#CMD ["uvicorn", "main:app", "--host=0.0.0.0", "--reload"]
+
+CMD ["python", "main.py"]
