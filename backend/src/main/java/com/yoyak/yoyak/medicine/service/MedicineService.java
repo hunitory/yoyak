@@ -1,5 +1,6 @@
 package com.yoyak.yoyak.medicine.service;
 
+import com.yoyak.yoyak.medicine.domain.Medicine;
 import com.yoyak.yoyak.medicine.domain.MedicineRepository;
 import com.yoyak.yoyak.medicine.dto.MedicineDto;
 import com.yoyak.yoyak.medicine.dto.MedicineSearchParametersDto;
@@ -15,9 +16,14 @@ public class MedicineService {
 
     private final MedicineRepository medicineRepository;
 
+    public MedicineDto findMedicine(Long seq) {
+        Medicine medicine = medicineRepository.findBySeq(seq).orElseThrow(() -> new IllegalArgumentException("해당 약이 없습니다. seq=" + seq));
+        return new MedicineDto(medicine.getSeq(), medicine.getImgPath(), medicine.getItemName(), medicine.getEntpName());
+    }
+
     public List<MedicineDto> findOrderParameters(MedicineSearchParametersDto parameters) {
         log.info("param={}", parameters.getFormCodeName());
-        return medicineRepository.findByParameters(
+        return medicineRepository.findByParameter(
             parameters.getDrugShape(),
             parameters.getColorClass(),
             parameters.getFormCodeName(),
