@@ -39,7 +39,4 @@ public class Challenge {
     private LocalDate endDate;
 
 
-//    @Column(name="goal")
-//    private String goal;
-//
 }
