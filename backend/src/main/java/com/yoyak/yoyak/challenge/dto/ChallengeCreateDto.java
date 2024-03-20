@@ -14,6 +14,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 public class ChallengeCreateDto {
+    private Long userSeq;
     private String title;
     private String startDate;
     private String endDate;
