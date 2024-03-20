@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double rectangleSize = MediaQuery.of(context).size.width * 0.44;
 
     return Scaffold(
-      appBar: MainAppBar(),
+      appBar: const MainAppBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "성현님 건강하세요",
                       style: TextStyle(
                         fontSize: 22,
@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     RichText(
-                        text: TextSpan(children: [
+                        text: const TextSpan(children: [
                       TextSpan(
                         text: '오늘 드실 약은 ',
                         style: TextStyle(
@@ -78,38 +78,47 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               color: Colors.blueAccent,
               child: Container(
-                decoration: BoxDecoration(
-                  color: Palette.BG_BLUE,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20)),
-                  border: Border.all(
-                    width: 0.1,
-                    color: Colors.grey.withOpacity(0.5),
-                  ),),
-                width: screenWidth,
-                height: 560,
-              
-                child: Column(
-                  children: [
-                    Padding(padding: EdgeInsets.only(top: 40),),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Spacer(),
-                        RoundedRectangle(width: rectangleSize, height: rectangleSize, destination: AlarmScreen(), child: Container(
-                          child: Text(""),
-                        )),
-                        Spacer(),
-                        RoundedRectangle(width: rectangleSize, height: rectangleSize, destination: AlarmScreen(),child: Container(
-                          child: Text(""),
-                        )),
-                        Spacer(),
-                      ],
+                  decoration: BoxDecoration(
+                    color: Palette.BG_BLUE,
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20)),
+                    border: Border.all(
+                      width: 0.1,
+                      color: Colors.grey.withOpacity(0.5),
                     ),
-                  ],
-                )
-              ),
+                  ),
+                  width: screenWidth,
+                  height: 560,
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(top: 40),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Spacer(),
+                          RoundedRectangle(
+                              width: rectangleSize,
+                              height: rectangleSize,
+                              onTap: () => (),
+                              child: Container(
+                                child: const Text(""),
+                              )),
+                          const Spacer(),
+                          RoundedRectangle(
+                              width: rectangleSize,
+                              height: rectangleSize,
+                              onTap: () => (),
+                              child: Container(
+                                child: const Text(""),
+                              )),
+                          const Spacer(),
+                        ],
+                      ),
+                    ],
+                  )),
             )
           ],
         ),

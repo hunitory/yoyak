@@ -39,7 +39,10 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: mainTabs[curTabIdx],
       bottomNavigationBar: BottomBar(
-          curTabIdx: curTabIdx, setCurTabIdx: setCurTabIdx, mainTabs: mainTabs),
+        curTabIdx: curTabIdx,
+        setCurTabIdx: setCurTabIdx,
+        mainTabs: mainTabs,
+      ),
     );
   }
 }
