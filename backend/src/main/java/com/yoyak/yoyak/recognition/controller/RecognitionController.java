@@ -64,11 +64,11 @@ public class RecognitionController {
             MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
             body.add("image", fileResource);
 
-            fastApiUrl += "/python/upload";
+            String url = fastApiUrl + "/python/upload";
 
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
             RestTemplate restTemplate = new RestTemplate();
-            String response = restTemplate.postForObject(fastApiUrl, requestEntity, String.class);
+            String response = restTemplate.postForObject(url, requestEntity, String.class);
 
             log.info("response = {}", response);
 
