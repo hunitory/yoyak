@@ -34,7 +34,7 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 24)
     private String name;
 
     @Column(nullable = false)
