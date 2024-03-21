@@ -14,6 +14,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class MedicationDto {
 
-    private Long seq;
+    private Long notiTimeSeq;
     private LocalTime takenTime;
 }

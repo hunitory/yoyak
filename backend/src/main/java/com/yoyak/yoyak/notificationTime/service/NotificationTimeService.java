@@ -96,9 +96,10 @@ public class NotificationTimeService {
 
         for (NotificationTime notificationTime : notificationTimes) {
             NotificationListDto notificationListDto = NotificationListDto.builder()
-                .seq(notificationTime.getSeq())
+                .notiTimeSeq(notificationTime.getSeq())
                 .name(notificationTime.getNotification().getName())
                 .time(notificationTime.getTime())
+                .taken(notificationTime.getTaken())
                 .takenTime(notificationTime.getTakenTime())
                 .accountSeq(notificationTime.getNotification().getAccount().getSeq())
                 .notiSeq(notificationTime.getNotification().getSeq())
@@ -123,7 +124,7 @@ public class NotificationTimeService {
 
     // 복용 먹음 등록
     public void addMedication(MedicationDto medicationDto) {
-        NotificationTime notificationTime = findById(medicationDto.getSeq());
+        NotificationTime notificationTime = findById(medicationDto.getNotiTimeSeq());
 
         notificationTime.takenNotificationTime(medicationDto.getTakenTime());
     }
