@@ -22,7 +22,13 @@ public enum CustomExceptionStatus {
     ACCOUNT_INVALID(7001, "존재하지 않는 계정입니다"),
 
     // security 관련
-    NO_AUTHENTICATION(9001, "No authentication information");
+    NO_AUTHENTICATION(9001, "No authentication information"),
+    
+    ARTICLE_INVALID(8001, "존재하지 않는 게시글입니다"),
+
+    CHEER_ALREADY_EXIST(8002, "이미 응원한 게시글입니다");
+
+    //
 
     private final Integer code;
     private final String message;
