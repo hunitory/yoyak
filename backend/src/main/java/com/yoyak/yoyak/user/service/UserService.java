@@ -89,7 +89,9 @@ public class UserService {
         User user = userRepository.findByUserId(dupIdRequestDto.getUserId())
             .orElseThrow(() -> new CustomException(CustomExceptionStatus.ID_AVAILABLE));
 
-        throw new CustomException(CustomExceptionStatus.ID_DUPLICATION);
+        if (user != null) {
+            throw new CustomException(CustomExceptionStatus.ID_DUPLICATION);
+        }
     }
 
     // 닉네임 중복체크
@@ -97,7 +99,9 @@ public class UserService {
         User user = userRepository.findByNickname(dupNicknameRequestDto.getNickname())
             .orElseThrow(() -> new CustomException(CustomExceptionStatus.NICKNAME_AVAILABLE));
 
-        throw new CustomException(CustomExceptionStatus.NICKNAME_DUPLICATION);
+        if (user != null) {
+            throw new CustomException(CustomExceptionStatus.NICKNAME_DUPLICATION);
+        }
     }
 
     public User findById(Long seq) {
