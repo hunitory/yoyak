@@ -4,7 +4,6 @@ import com.yoyak.yoyak.challenge.domain.Challenge;
 import com.yoyak.yoyak.challenge.domain.ChallengeRepository;
 import com.yoyak.yoyak.challenge.dto.ChallengeCreateDto;
 import com.yoyak.yoyak.user.domain.User;
-import com.yoyak.yoyak.util.s3.AwsFileService;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class ChallengeService {
+
     private final ChallengeRepository challengeRepository;
 
     public void create(ChallengeCreateDto challengeCreateDto) {

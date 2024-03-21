@@ -52,8 +52,8 @@ async def upload_file(image: UploadFile = File(...)):
         buffer.write(image.file.read())
 
     option = {
-        "weights":ROOT / './trained_model/best.pt',
-        "source" : file_path,
+        "weights":ROOT / './trained_model/2515_2659_2066_1224_2558_109.pt',
+        "source" : "https://yoyak.s3.ap-northeast-2.amazonaws.com/1.jpg",
         "data": ROOT/'data/custom.yaml',
         "imgsz" : [640,640],
         "device" : "cpu"
