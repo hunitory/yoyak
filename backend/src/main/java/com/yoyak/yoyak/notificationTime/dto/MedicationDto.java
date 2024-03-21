@@ -1,6 +1,6 @@
 package com.yoyak.yoyak.notificationTime.dto;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,5 +15,5 @@ import lombok.Setter;
 public class MedicationDto {
 
     private Long notiTimeSeq;
-    private LocalTime takenTime;
+    private LocalDateTime takenTime;
 }

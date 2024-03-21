@@ -12,7 +12,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,13 +39,13 @@ public class NotificationTime {
     private NotificationTimeTaken taken;
 
     @Column(nullable = true)
-    private LocalTime takenTime;
+    private LocalDateTime takenTime;
 
     @ManyToOne
     @JoinColumn(name = "notification_seq", nullable = false)
     private Notification notification;
 
-    public void takenNotificationTime(LocalTime takenTime) {
+    public void takenNotificationTime(LocalDateTime takenTime) {
         this.taken = NotificationTimeTaken.TAKEN;
         this.takenTime = takenTime;
     }
