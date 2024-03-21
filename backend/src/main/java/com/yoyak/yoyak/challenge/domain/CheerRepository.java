@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CheerRepository extends JpaRepository<Cheer, Long>{
 
-    boolean existsByUserAAndChallengeArticle(User user, ChallengeArticle challengeArticle);
+    boolean existsByUserAndChallengeArticle(User user, ChallengeArticle challengeArticle);
 
-    int countByBoard(User user, ChallengeArticle challengeArticle);
+    int countByBoard(ChallengeArticle challengeArticle);
 }

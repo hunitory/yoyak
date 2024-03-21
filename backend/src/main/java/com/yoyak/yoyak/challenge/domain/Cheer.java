@@ -10,10 +10,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"user_seq", "challenge_article_seq"}))
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Cheer {
 
     @Id
