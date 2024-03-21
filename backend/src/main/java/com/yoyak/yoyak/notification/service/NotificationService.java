@@ -46,6 +46,7 @@ public class NotificationService {
         Notification notification = findById(notiSeq);
 
         return NotificationFindDto.builder()
+            .accountSeq(notification.getAccount().getSeq())
             .notiSeq(notification.getSeq())
             .name(notification.getName())
             .startDate(notification.getStartDate())

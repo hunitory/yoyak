@@ -17,6 +17,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class NotificationFindDto {
 
+    private Long accountSeq;
     private Long notiSeq;
     private String name;
     private LocalDate startDate;

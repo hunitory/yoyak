@@ -15,11 +15,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class NotificationListDto {
 
+    private Long accountSeq;
     private Long notiTimeSeq;
     private String name;
     private LocalDateTime time;
     private NotificationTimeTaken taken;
     private LocalDateTime takenTime;
-    private Long accountSeq;
     private Long notiSeq;
 }
