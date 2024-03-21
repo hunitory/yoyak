@@ -5,16 +5,20 @@ import static com.yoyak.yoyak.challenge.domain.QChallengeArticle.challengeArticl
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleResponseDto;
+import com.yoyak.yoyak.user.domain.QUser;
+import com.yoyak.yoyak.user.domain.User;
 import jakarta.persistence.EntityManager;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 
 @Slf4j
-@RequiredArgsConstructor
 public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCustomRepository {
 
     private final JPAQueryFactory queryFactory;
@@ -23,19 +27,53 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    // n+1 문제 고려
     @Override
     public List<ChallengeArticleResponseDto> findArticlesExceptUserSeq(Long userSeq) {
-        return queryFactory.select(Projections.bean(ChallengeArticleResponseDto.class,
+//        List<ChallengeArticle> challengeArticles = queryFactory.selectFrom(challengeArticle)
+//            .where(challengeArticle.user.seq.ne(userSeq))
+//            .fetch();
+//
+//        challengeArticles.stream().map((article)->{
+//            Set<User> cheeringUsers = article.getCheers().getCheeringUsers();
+//
+//
+//
+//
+//
+//        }).collect(Collectors.toList());
+
+
+
+
+
+        return queryFactory.select(Projections.fields(ChallengeArticleResponseDto.class,
               challengeArticle.seq,
-              challengeArticle.challenge.seq,
+              challengeArticle.challenge.seq.as("challengeSeq"),
               challengeArticle.imgUrl,
               challengeArticle.content,
-                challengeArticle.user.seq,
-                challengeArticle.user.nickname
+                challengeArticle.user.seq.as("userSeq"),
+                challengeArticle.user.nickname.as("userNickname")
               ))
               .from(challengeArticle)
                 .where(challengeArticle.user.seq.ne(userSeq))
               .fetch();
 
+    }
+
+    @Override
+    public List<ChallengeArticleResponseDto> findMyArticles(Long userSeq) {
+        return queryFactory.select(Projections.fields(ChallengeArticleResponseDto.class,
+            challengeArticle.seq,
+            challengeArticle.challenge.seq.as("challengeSeq"),
+            challengeArticle.imgUrl,
+            challengeArticle.content,
+            challengeArticle.user.seq.as("userSeq"),
+            challengeArticle.user.nickname.as("userNickname"),
+            challengeArticle.cheers.cheeringUsers.size().as("cheerCnt")
+        ))
+            .from(challengeArticle)
+            .where(challengeArticle.user.seq.eq(userSeq))
+            .fetch();
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleCreateDto;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleResponseDto;
 import com.yoyak.yoyak.challenge.dto.ChallengeCreateDto;
+import com.yoyak.yoyak.challenge.dto.CheerRequestDto;
 import com.yoyak.yoyak.challenge.service.ChallengeArticleService;
 import com.yoyak.yoyak.challenge.service.ChallengeService;
 import com.yoyak.yoyak.util.dto.StatusResponseDto;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -65,14 +67,20 @@ public class ChallengeController {
     }
 
     @GetMapping("/article")
-    public ResponseEntity<List<ChallengeArticleResponseDto>> getChallengeArticles(){
-        return ResponseEntity.ok(challengeArticleService.getArticles());
-//        return ResponseEntity.ok(challengeArticleService.getArticles());
+    public ResponseEntity<List<ChallengeArticleResponseDto>> getChallengeArticles(@RequestParam("userSeq") Long userSeq){
+        return ResponseEntity.ok(challengeArticleService.getArticles(userSeq));
     }
 
     @GetMapping("/{userSeq}")
     public ResponseEntity<List<ChallengeArticleResponseDto>> getMyChallengeArticles(@PathVariable Long userSeq){
         return ResponseEntity.ok(challengeArticleService.getMyChallengeArticles(userSeq));
     }
+
+    @PutMapping("/article/cheer-up")
+    public ResponseEntity<Void> cheerUp(@RequestBody CheerRequestDto cheerRequestDto){
+        challengeArticleService.cheerUp(cheerRequestDto);
+        return ResponseEntity.ok().build();
+    }
+
 
 }

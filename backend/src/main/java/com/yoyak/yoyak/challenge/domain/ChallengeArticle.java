@@ -8,6 +8,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,7 +41,9 @@ public class ChallengeArticle {
     @Column(name = "content")
     private String content;
 
-    @Column(name="cheer")
-    private int cheer;
+
+    @OneToMany(mappedBy = "challengeArticle")
+    private List<Cheer> cheers = new ArrayList<>();
+
 
 }

@@ -19,4 +19,10 @@ class ChallengeArticleServiceTest {
 //        List<ChallengeArticleResponseDto> challengeArticles = challengeArticleService.getArticles();
 //        assertThat(challengeArticles.size()).isEqualTo(1);
     }
+
+    @Test
+    public void getMyArticleTest(){
+        challengeArticleService.getMyChallengeArticles(1L).forEach(System.out::println);
+
+    }
 }

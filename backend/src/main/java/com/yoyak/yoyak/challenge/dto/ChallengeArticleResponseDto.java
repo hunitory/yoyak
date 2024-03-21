@@ -24,4 +24,6 @@ public class ChallengeArticleResponseDto {
     private String userNickname;
     private Long userSeq;
 
+    private int cheerCnt;
+
 }

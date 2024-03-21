@@ -9,14 +9,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class ChallengeArticleCustomRepositoryImplTest {
-//    @Autowired
-//    private EntityManager em;
+    @Autowired
+    private EntityManager em;
 //
-//    @Autowired
-//    private ChallengeArticleRepsoitory challengeArticleRepsoitory;
+    @Autowired
+    private ChallengeArticleRepository challengeArticleRepsoitory;
 
     @Test
     public void excpetUserSeqTest(){
-//        challengeArticleRepsoitory.findArticlesExceptUserSeq(1L).forEach(System.out::println);
+        challengeArticleRepsoitory.findArticlesExceptUserSeq(1L).forEach(System.out::println);
     }
 }

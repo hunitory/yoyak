@@ -2,9 +2,11 @@ package com.yoyak.yoyak.challenge.service;
 
 import com.yoyak.yoyak.challenge.domain.Challenge;
 import com.yoyak.yoyak.challenge.domain.ChallengeArticle;
-import com.yoyak.yoyak.challenge.domain.ChallengeArticleRepsoitory;
+import com.yoyak.yoyak.challenge.domain.ChallengeArticleRepository;
+import com.yoyak.yoyak.challenge.domain.Cheer;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleCreateDto;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleResponseDto;
+import com.yoyak.yoyak.challenge.dto.CheerRequestDto;
 import com.yoyak.yoyak.user.domain.User;
 import com.yoyak.yoyak.util.s3.AwsFileService;
 import java.util.List;
@@ -18,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @RequiredArgsConstructor
 public class ChallengeArticleService {
-    private final ChallengeArticleRepsoitory challengeArticleRepsoitory;
+    private final ChallengeArticleRepository challengeArticleRepository;
 
     private final AwsFileService awsFileService;
     public void create(ChallengeArticleCreateDto dto, MultipartFile image) {
@@ -39,7 +41,7 @@ public class ChallengeArticleService {
                 .imgUrl(url)
                 .build();
 
-            challengeArticleRepsoitory.save(article);
+            challengeArticleRepository.save(article);
 
         log.info("url: {}", url);
         }catch (Exception e){
@@ -48,48 +50,16 @@ public class ChallengeArticleService {
 
     }
 
-    public List<ChallengeArticleResponseDto> getArticles() {
-         return challengeArticleRepsoitory.findAll()
-             .stream()
-             .map(article-> {
-                     User user = article.getChallenge().getUser();
-
-                 ChallengeArticleResponseDto dto = ChallengeArticleResponseDto.builder()
-                     .seq(article.getSeq())
-                     .userNickname(user.getNickname())
-                    .userSeq(user.getSeq())
-                     .challengeSeq(article.getChallenge().getSeq())
-                     .content(article.getContent())
-                     .imgUrl(article.getImgUrl())
-                     .cheer(article.getCheer())
-                     .build();
-
-                 return dto;
-             }
-             )
-             .collect(Collectors.toList());
+    public List<ChallengeArticleResponseDto> getArticles(Long userSeq) {
+         return challengeArticleRepository.findArticlesExceptUserSeq(userSeq);
     }
 
     public List<ChallengeArticleResponseDto> getMyChallengeArticles(Long userSeq){
-        return challengeArticleRepsoitory.findByUserSeq(userSeq)
-            .stream()
-            .map(article-> {
-                    User user = article.getChallenge().getUser();
+        return challengeArticleRepository.findMyArticles(userSeq);
+    }
 
-                ChallengeArticleResponseDto dto = ChallengeArticleResponseDto.builder()
-                    .seq(article.getSeq())
-                    .userNickname(user.getNickname())
-                    .userSeq(user.getSeq())
-                    .challengeSeq(article.getChallenge().getSeq())
-                    .content(article.getContent())
-                    .imgUrl(article.getImgUrl())
-                    .cheer(article.getCheer())
-                    .build();
+    public void cheerUp(CheerRequestDto cheerRequestDto){
 
-                return dto;
-            }
-            )
-            .collect(Collectors.toList());
     }
 
 }

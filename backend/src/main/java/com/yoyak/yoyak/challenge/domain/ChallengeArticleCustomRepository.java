@@ -6,4 +6,5 @@ import java.util.List;
 public interface ChallengeArticleCustomRepository {
     List<ChallengeArticleResponseDto> findArticlesExceptUserSeq(Long userSeq);
 
+    List<ChallengeArticleResponseDto> findMyArticles(Long userSeq);
 }
