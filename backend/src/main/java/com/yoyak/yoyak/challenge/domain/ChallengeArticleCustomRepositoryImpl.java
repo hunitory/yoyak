@@ -2,20 +2,12 @@ package com.yoyak.yoyak.challenge.domain;
 
 import static com.yoyak.yoyak.challenge.domain.QChallengeArticle.challengeArticle;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleResponseDto;
-import com.yoyak.yoyak.user.domain.QUser;
-import com.yoyak.yoyak.user.domain.User;
 import jakarta.persistence.EntityManager;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 
 @Slf4j
@@ -27,36 +19,57 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    // n+1 문제 고려
+    // 추후에 n+1 문제 고려해서 수정할 것
     @Override
     public List<ChallengeArticleResponseDto> findArticlesExceptUserSeq(Long userSeq) {
+        List<ChallengeArticle> articles = queryFactory.select(challengeArticle)
+            .from(challengeArticle)
+            .where(challengeArticle.user.seq.ne(userSeq))
+            .fetch();
 
-        return queryFactory.select(Projections.fields(ChallengeArticleResponseDto.class,
-              challengeArticle.seq,
-              challengeArticle.challenge.seq.as("challengeSeq"),
-              challengeArticle.imgUrl,
-              challengeArticle.content,
-                challengeArticle.user.seq.as("userSeq"),
-                challengeArticle.user.nickname.as("userNickname")
-              ))
-              .from(challengeArticle)
-                .where(challengeArticle.user.seq.ne(userSeq))
-              .fetch();
+        List<ChallengeArticleResponseDto> responseDtos = articles.stream().map((article) -> {
+            int cheerCnt = article.getCheers().size();
+
+            ChallengeArticleResponseDto responseDto = ChallengeArticleResponseDto.builder()
+                .articleSeq(article.getSeq())
+                .challengeSeq(article.getChallenge().getSeq())
+                .imgUrl(article.getImgUrl())
+                .content(article.getContent())
+                .userNickname(article.getUser().getNickname())
+                .userSeq(article.getUser().getSeq())
+                .cheerCnt(cheerCnt)
+                .build();
+
+            return responseDto;
+        }).collect(Collectors.toList());
+
+        return responseDtos;
 
     }
 
     @Override
     public List<ChallengeArticleResponseDto> findMyArticles(Long userSeq) {
-        return queryFactory.select(Projections.fields(ChallengeArticleResponseDto.class,
-            challengeArticle.seq,
-            challengeArticle.challenge.seq.as("challengeSeq"),
-            challengeArticle.imgUrl,
-            challengeArticle.content,
-            challengeArticle.user.seq.as("userSeq"),
-            challengeArticle.user.nickname.as("userNickname")
-        ))
+
+        List<ChallengeArticle> articles = queryFactory.select(challengeArticle)
             .from(challengeArticle)
             .where(challengeArticle.user.seq.eq(userSeq))
             .fetch();
+
+        return articles.stream().map((article) -> {
+            int cheerCnt = article.getCheers().size();
+
+            ChallengeArticleResponseDto responseDto = ChallengeArticleResponseDto.builder()
+                .articleSeq(article.getSeq())
+                .challengeSeq(article.getChallenge().getSeq())
+                .imgUrl(article.getImgUrl())
+                .content(article.getContent())
+                .userNickname(article.getUser().getNickname())
+                .userSeq(article.getUser().getSeq())
+                .cheerCnt(cheerCnt)
+                .build();
+
+            return responseDto;
+        }).collect(Collectors.toList());
+
     }
 }

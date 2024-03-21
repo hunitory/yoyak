@@ -9,7 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -23,6 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChallengeArticle {
+
     @Id
     @GeneratedValue
     private Long seq;
@@ -43,7 +43,12 @@ public class ChallengeArticle {
 
 
     @OneToMany(mappedBy = "challengeArticle")
+    @Builder.Default
     private List<Cheer> cheers = new ArrayList<>();
 
+    public void changeCheers(Cheer cheer) {
+        cheers.add(cheer);
+
+    }
 
 }

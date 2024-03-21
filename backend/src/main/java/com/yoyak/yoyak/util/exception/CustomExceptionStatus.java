@@ -18,8 +18,7 @@ public enum CustomExceptionStatus {
 
     ARTICLE_INVALID(8001, "존재하지 않는 게시글입니다"),
 
-    CHEER_ALREADY_EXIST(9001, "이미 응원한 게시글입니다");
-
+    CHEER_ALREADY_EXIST(8002, "이미 응원한 게시글입니다");
 
     //
 
