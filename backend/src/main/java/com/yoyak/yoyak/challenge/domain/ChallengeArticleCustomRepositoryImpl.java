@@ -6,7 +6,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleResponseDto;
 import jakarta.persistence.EntityManager;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -27,10 +26,10 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
             .where(challengeArticle.user.seq.ne(userSeq))
             .fetch();
 
-        List<ChallengeArticleResponseDto> responseDtos = articles.stream().map((article) -> {
+        return articles.stream().map(article -> {
             int cheerCnt = article.getCheers().size();
 
-            ChallengeArticleResponseDto responseDto = ChallengeArticleResponseDto.builder()
+            return ChallengeArticleResponseDto.builder()
                 .articleSeq(article.getSeq())
                 .challengeSeq(article.getChallenge().getSeq())
                 .imgUrl(article.getImgUrl())
@@ -40,10 +39,7 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
                 .cheerCnt(cheerCnt)
                 .build();
 
-            return responseDto;
-        }).collect(Collectors.toList());
-
-        return responseDtos;
+        }).toList();
 
     }
 
@@ -55,10 +51,10 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
             .where(challengeArticle.user.seq.eq(userSeq))
             .fetch();
 
-        return articles.stream().map((article) -> {
+        return articles.stream().map(article -> {
             int cheerCnt = article.getCheers().size();
 
-            ChallengeArticleResponseDto responseDto = ChallengeArticleResponseDto.builder()
+            return ChallengeArticleResponseDto.builder()
                 .articleSeq(article.getSeq())
                 .challengeSeq(article.getChallenge().getSeq())
                 .imgUrl(article.getImgUrl())
@@ -68,8 +64,7 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
                 .cheerCnt(cheerCnt)
                 .build();
 
-            return responseDto;
-        }).collect(Collectors.toList());
+        }).toList();
 
     }
 }

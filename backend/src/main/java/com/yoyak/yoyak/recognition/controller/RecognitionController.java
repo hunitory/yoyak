@@ -20,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @RequestMapping("/api/recognition")
 @RequiredArgsConstructor
+@CrossOrigin(originPatterns = "*")
 public class RecognitionController {
 
     @Value("${fastapi.url}")
@@ -47,14 +49,15 @@ public class RecognitionController {
     public ResponseEntity<Object> test() {
         return ResponseEntity.ok("TEST Success");
     }
+
     @PostMapping("/upload")
     public ResponseEntity<Object> uploadImage(@RequestParam("image") MultipartFile file) {
         log.info("file = {}", file.getOriginalFilename());
-        try{
+        try {
             byte[] fileBytes = file.getBytes();
-            ByteArrayResource fileResource = new ByteArrayResource(fileBytes){
+            ByteArrayResource fileResource = new ByteArrayResource(fileBytes) {
                 @Override
-                public String getFilename(){
+                public String getFilename() {
                     return file.getOriginalFilename();
                 }
             };
@@ -66,7 +69,8 @@ public class RecognitionController {
 
             String url = fastApiUrl + "/python/upload";
 
-            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body,
+                headers);
             RestTemplate restTemplate = new RestTemplate();
             String response = restTemplate.postForObject(url, requestEntity, String.class);
 
@@ -81,14 +85,15 @@ public class RecognitionController {
             JsonNode medicineList = jsonNode.get("medicineList");
             log.info("medicineList = {}", medicineList.size());
             List<MedicineDto> medicineDtos = new ArrayList<>();
-            for(JsonNode medicine : medicineList){
+            for (JsonNode medicine : medicineList) {
                 Long medicineCode = medicine.get("medicineCode").asLong();
                 String medicineName = medicine.get("medicineName").asText();
-                try{
+                try {
                     MedicineDto dto = medicineService.findMedicine(medicineCode);
                     medicineDtos.add(dto);
-                }catch(IllegalArgumentException e){
-                    MedicineDto dto = MedicineDto.builder().medicineSeq(medicineCode).itemName(medicineName).build();
+                } catch (IllegalArgumentException e) {
+                    MedicineDto dto = MedicineDto.builder().medicineSeq(medicineCode)
+                        .itemName(medicineName).build();
                     medicineDtos.add(dto);
                 }
 
@@ -99,10 +104,9 @@ public class RecognitionController {
                 .medicineList(medicineDtos)
                 .build();
 
-
             return ResponseEntity.ok().body(responseDto);
 
-        }catch(CustomException | IOException e){
+        } catch (CustomException | IOException e) {
 
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
