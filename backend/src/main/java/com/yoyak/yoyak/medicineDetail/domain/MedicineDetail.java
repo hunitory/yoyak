@@ -23,15 +23,6 @@ public class MedicineDetail {
     @Id
     private Long seq;
 
-    /*@Column(name = "item_name", length = 500)
-    private String itemName;
-
-    @Column(name = "entp_name", length = 255)
-    private String entpName;
-
-    @Column(name = "img_path", length = 500)
-    private String imgPath;*/
-
     @Column(name = "efficacy", columnDefinition = "TEXT")
     private String efficacy;
 

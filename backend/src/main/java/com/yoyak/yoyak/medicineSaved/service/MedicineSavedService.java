@@ -6,6 +6,7 @@ import com.yoyak.yoyak.medicineEnvelop.domain.MedicineEnvelop;
 import com.yoyak.yoyak.medicineEnvelop.domain.MedicineEnvelopRepository;
 import com.yoyak.yoyak.medicineSaved.domain.MedicineSaved;
 import com.yoyak.yoyak.medicineSaved.domain.MedicineSavedRepository;
+import com.yoyak.yoyak.medicineSaved.dto.MedicineFromEnvelopeRemovalDto;
 import com.yoyak.yoyak.medicineSaved.dto.MedicineToEnvelopRegistrationDto;
 import com.yoyak.yoyak.util.dto.StatusResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -24,27 +25,42 @@ public class MedicineSavedService {
 
     @Transactional
     public StatusResponseDto addMedicineToEnvelop(
-        MedicineToEnvelopRegistrationDto medicineToEnvelopRegistrationDto) {
+        MedicineToEnvelopRegistrationDto requestDto) {
 
-        Medicine medicine = medicineRepository.findBySeq(
-            medicineToEnvelopRegistrationDto.getMedicineSeq()).orElseThrow();
+        Medicine medicine = medicineRepository.
+            findBySeq(requestDto.getMedicineSeq())
+            .orElseThrow();
+        log.info("seq ={}, medicine ={}", requestDto.getMedicineSeq(), medicine);
 
-        for (Long envelopSeq : medicineToEnvelopRegistrationDto.getEnvelopeSeqList()) {
-            MedicineEnvelop medicineEnvelop = medicineEnvelopRepository.findById(envelopSeq)
-                .orElseThrow();
+        MedicineEnvelop envelop = medicineEnvelopRepository
+            .findById(requestDto.getEnvelopeSeq())
+            .orElseThrow();
+        log.info("seq ={}, envelop ={}", requestDto.getEnvelopeSeq(), envelop);
 
-            MedicineSaved medicineSaved = MedicineSaved.builder()
-                .accountSeq(medicineToEnvelopRegistrationDto.getAccountSeq())
-                .medicineEnvelop(medicineEnvelop)
-                .medicine(medicine).build();
-
-            log.info("medicineSaved={}", medicineSaved);
-            medicineSavedRepository.save(medicineSaved);
-        }
+        MedicineSaved medicineSaved = MedicineSaved.builder()
+            .accountSeq(requestDto.getAccountSeq())
+            .medicineEnvelop(envelop)
+            .medicine(medicine)
+            .build();
+        log.info("medicineSaved ={}", medicineSaved);
+        medicineSavedRepository.save(medicineSaved);
 
         return StatusResponseDto.builder()
             .code(200)
             .message("sucess")
             .build();
     }
+
+    public StatusResponseDto deleteMedicineToEnvelop(
+        MedicineFromEnvelopeRemovalDto requestDto) {
+
+        medicineSavedRepository.deleteByMedicineEnvelopSeqAndMedicineSeq(
+            requestDto.getEnvelopeSeq(), requestDto.getMedicineSeq());
+
+        return StatusResponseDto.builder()
+            .code(200)
+            .message("success")
+            .build();
+    }
 }
+
