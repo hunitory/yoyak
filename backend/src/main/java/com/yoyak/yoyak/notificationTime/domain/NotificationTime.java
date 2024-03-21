@@ -3,6 +3,8 @@ package com.yoyak.yoyak.notificationTime.domain;
 import com.yoyak.yoyak.notification.domain.Notification;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,6 +35,10 @@ public class NotificationTime {
     @Column(nullable = false)
     private LocalDateTime time;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private NotificationTimeTaken taken;
+
     @Column(nullable = true)
     private LocalTime takenTime;
 
@@ -40,8 +46,19 @@ public class NotificationTime {
     @JoinColumn(name = "notification_seq", nullable = false)
     private Notification notification;
 
-    public void modifyNotificationTime(LocalTime takenTime) {
+    public void takenNotificationTime(LocalTime takenTime) {
+        this.taken = NotificationTimeTaken.TAKEN;
         this.takenTime = takenTime;
+    }
+
+    public void notNotificationTime() {
+        this.taken = NotificationTimeTaken.NOT_TAKEN;
+        this.takenTime = null;
+    }
+
+    public void yetNotificationTime() {
+        this.taken = NotificationTimeTaken.YET_TAKEN;
+        this.takenTime = null;
     }
 
 }

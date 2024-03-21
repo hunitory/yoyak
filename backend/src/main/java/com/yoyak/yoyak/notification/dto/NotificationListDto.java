@@ -1,5 +1,6 @@
 package com.yoyak.yoyak.notification.dto;
 
+import com.yoyak.yoyak.notificationTime.domain.NotificationTimeTaken;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import lombok.AllArgsConstructor;
@@ -15,9 +16,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class NotificationListDto {
 
-    private Long seq;
+    private Long notiTimeSeq;
     private String name;
     private LocalDateTime time;
+    private NotificationTimeTaken taken;
     private LocalTime takenTime;
     private Long accountSeq;
     private Long notiSeq;

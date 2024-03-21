@@ -7,8 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum CustomExceptionStatus {
     // user 관련
-    WRONG_ID(1001, "잘못된 아이디입니다"),
-    WRONG_PW(1002, "잘못된 비밀번호입니다"),
+    USER_INVALID(1001, "존재하지 않는 사용자입니다"),
+    LOGIN_WRONG(1002, "아이디 또는 비밀번호가 일치하지 않습니다"),
 
     // alarm 관련
     NOTI_INVALID(6001, "존재하지 않는 알림입니다"),

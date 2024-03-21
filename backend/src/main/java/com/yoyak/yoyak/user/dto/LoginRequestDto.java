@@ -1,6 +1,5 @@
-package com.yoyak.yoyak.notificationTime.dto;
+package com.yoyak.yoyak.user.dto;
 
-import java.time.LocalTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,8 +11,8 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MedicationDto {
+public class LoginRequestDto {
 
-    private Long notiTimeSeq;
-    private LocalTime takenTime;
+    private String userId;
+    private String password;
 }

@@ -2,13 +2,11 @@ package com.yoyak.yoyak.notificationTime.controller;
 
 import com.yoyak.yoyak.notification.dto.NotificationListDto;
 import com.yoyak.yoyak.notificationTime.dto.MedicationDto;
-import com.yoyak.yoyak.notificationTime.dto.NotificationTimeAccountSeqDto;
 import com.yoyak.yoyak.notificationTime.service.NotificationTimeService;
-import com.yoyak.yoyak.util.dto.BasicResponseDto;
-import com.yoyak.yoyak.util.dto.StatusResponseDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,51 +18,52 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/noti/check")
+@RequestMapping("/api/noti/time")
 public class NotificationTimeController {
 
     private final NotificationTimeService notificationTimeService;
 
     // 알림 목록
-    @GetMapping()
-    public BasicResponseDto notificationList(
-        @RequestBody NotificationTimeAccountSeqDto notificationTimeAccountSeqDto) {
+    @GetMapping("/{userSeq}")
+    public ResponseEntity<Object> notificationList(
+        @PathVariable Long userSeq) {
         List<NotificationListDto> notificationListDtos = notificationTimeService.findNotification(
-            notificationTimeAccountSeqDto);
+            userSeq);
 
-        BasicResponseDto basicResponseDto = BasicResponseDto.builder()
-            .count(notificationListDtos.size())
-            .result(notificationListDtos)
-            .build();
-
-        return basicResponseDto;
+        return ResponseEntity.ok().body(notificationListDtos);
     }
 
     // 알림 삭제
     @DeleteMapping("/{notiSeq}")
-    public StatusResponseDto notificationRemove(@PathVariable Long notiSeq) {
+    public ResponseEntity<Object> notificationRemove(@PathVariable Long notiSeq) {
         notificationTimeService.removeNotification(notiSeq);
 
-        StatusResponseDto statusResponseDto = StatusResponseDto.builder()
-            .code(200)
-            .message("알림 삭제 성공")
-            .build();
-
-        return statusResponseDto;
+        return ResponseEntity.ok().build();
     }
 
-    // 복용 등록
-    @PutMapping()
-    public StatusResponseDto addMedication(
+    // 복용 먹음 등록
+    @PutMapping("/taken")
+    public ResponseEntity<Object> addMedication(
         @RequestBody MedicationDto medicationDto) {
         notificationTimeService.addMedication(medicationDto);
 
-        StatusResponseDto statusResponseDto = StatusResponseDto.builder()
-            .code(200)
-            .message("복용 등록 성공")
-            .build();
+        return ResponseEntity.ok().build();
+    }
 
-        return statusResponseDto;
+    // 복용 먹지 않음 등록
+    @PutMapping("/not/{notiTimeSeq}")
+    public ResponseEntity<Object> addNotMedication(@PathVariable Long notiTimeSeq) {
+        notificationTimeService.addNotMedication(notiTimeSeq);
+
+        return ResponseEntity.ok().build();
+    }
+
+    // 복용 안 먹음 등록
+    @PutMapping("/yet/{notiTimeSeq}")
+    public ResponseEntity<Object> addYetMedication(@PathVariable Long notiTimeSeq) {
+        notificationTimeService.addYetMedication(notiTimeSeq);
+
+        return ResponseEntity.ok().build();
     }
 
 }

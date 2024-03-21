@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface NotificationTimeRepository extends JpaRepository<NotificationTime, Long> {
 
-    @Query("select n from NotificationTime n where n.notification.account.seq = :accountSeq and n.time between :startDate and :endDate")
-    List<NotificationTime> findAllByAccountSeqAndTime(Long accountSeq, LocalDateTime startDate,
+    @Query("select n from NotificationTime n where n.notification.account.user.seq = :userSeq and n.time between :startDate and :endDate")
+    List<NotificationTime> findAllByAccountSeqAndTime(Long userSeq, LocalDateTime startDate,
         LocalDateTime endDate);
 
     @Query("select n from NotificationTime n where n.notification.seq = :seq and n.time > :dateTime")

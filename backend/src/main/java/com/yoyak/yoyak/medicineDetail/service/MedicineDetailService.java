@@ -14,7 +14,6 @@ public class MedicineDetailService {
 
     final private MedicineDetailRepository medicineDetailRepository;
 
-
     public MedicineDetailDto findOrder(Long itemSeq) {
 
         MedicineDetail medicineDetail = medicineDetailRepository.findBySeq(itemSeq)

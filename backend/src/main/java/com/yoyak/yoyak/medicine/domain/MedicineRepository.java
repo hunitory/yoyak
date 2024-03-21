@@ -13,17 +13,17 @@ public interface MedicineRepository extends JpaRepository<Medicine, Integer> {
 
     @Query(
         "SELECT new com.yoyak.yoyak.medicine.dto.MedicineDto(m.seq, m.imgPath, m.itemName, m.entpName)"
-            + " FROM MedicineDetail md JOIN md.medicine m "
-            + "WHERE md.drugShape = :drugShape "
-            + "AND (:colorClass IS NULL OR md.colorClass1 = :colorClass OR md.colorClass2 = :colorClass) "
-            + "AND (:formCodeName IS NULL OR md.formCodeName LIKE CONCAT('%', :formCodeName, '%')) "
-            + "AND (:line IS NULL OR md.lineFront = :line OR md.lineBack = :line)")
-    List<MedicineDto> findByParameter(
+            + " FROM Medicine m JOIN m.medicineDetail md "
+            + "WHERE "
+            + "  (COALESCE(:searchName, null) IS NULL OR m.itemName LIKE CONCAT('%', :searchName, '%')) AND "
+            + "  (COALESCE(:drugShape, null) IS NULL OR md.drugShape = :drugShape) AND "
+            + "  (COALESCE(:colorClass, null) IS NULL OR md.colorClass1 = :colorClass OR md.colorClass2 = :colorClass) AND "
+            + "  (COALESCE(:formCodeName, null) IS NULL OR md.formCodeName = :formCodeName) AND "
+            + "  (COALESCE(:line, null) IS NULL OR md.lineFront = :line OR md.lineBack = :line)")
+    List<MedicineDto> findByParameters(
+        @Param("searchName") String searchName,
         @Param("drugShape") String drugShape,
         @Param("colorClass") String colorClass,
         @Param("formCodeName") String formCodeName,
-        @Param("line") String line
-    );
-
-
+        @Param("line") String line);
 }

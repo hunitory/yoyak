@@ -63,6 +63,7 @@ public class Notification {
         this.name = notificationModifyDto.getName();
         this.endDate = notificationModifyDto.getEndDate();
         this.period = notificationModifyDto.getPeriod();
+        this.time = notificationModifyDto.getTime();
         this.modifyDate = LocalDateTime.now();
     }
 }
