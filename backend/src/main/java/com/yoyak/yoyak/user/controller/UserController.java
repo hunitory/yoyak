@@ -21,6 +21,7 @@ public class UserController {
     // 일반 로그인
     @PostMapping("/login/origin")
     public ResponseEntity<String> loginUser(@RequestBody LoginRequestDto loginRequestDto) {
+        log.info("loginUser : {}", loginRequestDto);
         String token = userService.login(loginRequestDto);
 
         return ResponseEntity.ok().body(token);
