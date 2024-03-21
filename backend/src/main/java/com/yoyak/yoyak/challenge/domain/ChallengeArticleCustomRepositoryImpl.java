@@ -30,22 +30,6 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
     // n+1 문제 고려
     @Override
     public List<ChallengeArticleResponseDto> findArticlesExceptUserSeq(Long userSeq) {
-//        List<ChallengeArticle> challengeArticles = queryFactory.selectFrom(challengeArticle)
-//            .where(challengeArticle.user.seq.ne(userSeq))
-//            .fetch();
-//
-//        challengeArticles.stream().map((article)->{
-//            Set<User> cheeringUsers = article.getCheers().getCheeringUsers();
-//
-//
-//
-//
-//
-//        }).collect(Collectors.toList());
-
-
-
-
 
         return queryFactory.select(Projections.fields(ChallengeArticleResponseDto.class,
               challengeArticle.seq,
@@ -69,8 +53,7 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
             challengeArticle.imgUrl,
             challengeArticle.content,
             challengeArticle.user.seq.as("userSeq"),
-            challengeArticle.user.nickname.as("userNickname"),
-            challengeArticle.cheers.cheeringUsers.size().as("cheerCnt")
+            challengeArticle.user.nickname.as("userNickname")
         ))
             .from(challengeArticle)
             .where(challengeArticle.user.seq.eq(userSeq))

@@ -7,5 +7,4 @@ public interface CheerRepository extends JpaRepository<Cheer, Long>{
 
     boolean existsByUserAndChallengeArticle(User user, ChallengeArticle challengeArticle);
 
-    int countByBoard(ChallengeArticle challengeArticle);
 }

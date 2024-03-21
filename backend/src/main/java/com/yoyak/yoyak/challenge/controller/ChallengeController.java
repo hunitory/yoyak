@@ -8,6 +8,7 @@ import com.yoyak.yoyak.challenge.dto.CheerRequestDto;
 import com.yoyak.yoyak.challenge.service.ChallengeArticleService;
 import com.yoyak.yoyak.challenge.service.ChallengeService;
 import com.yoyak.yoyak.util.dto.StatusResponseDto;
+import com.yoyak.yoyak.util.exception.CustomException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -77,9 +78,18 @@ public class ChallengeController {
     }
 
     @PutMapping("/article/cheer-up")
-    public ResponseEntity<Void> cheerUp(@RequestBody CheerRequestDto cheerRequestDto){
-        challengeArticleService.cheerUp(cheerRequestDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Object> cheerUp(@RequestBody CheerRequestDto cheerRequestDto){
+        log.info("cheerRequestDto: {}", cheerRequestDto);
+        try{
+            return ResponseEntity.ok().build();
+        }catch(CustomException e){
+            StatusResponseDto statusResponseDto = StatusResponseDto.builder()
+                .code(e.getStatus().getCode())
+                .message(e.getStatus().getMessage())
+                .build();
+            return ResponseEntity.badRequest().body(statusResponseDto);
+
+        }
     }
 
 
