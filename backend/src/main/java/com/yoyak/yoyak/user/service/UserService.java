@@ -86,7 +86,7 @@ public class UserService {
 
     // 아이디 중복체크
     public void dupId(DupIdRequestDto dupIdRequestDto) {
-        userRepository.findByUserId(dupIdRequestDto.getUserId())
+        User user = userRepository.findByUserId(dupIdRequestDto.getUserId())
             .orElseThrow(() -> new CustomException(CustomExceptionStatus.ID_AVAILABLE));
 
         throw new CustomException(CustomExceptionStatus.ID_DUPLICATION);
@@ -94,7 +94,7 @@ public class UserService {
 
     // 닉네임 중복체크
     public void dupNickname(DupNicknameRequestDto dupNicknameRequestDto) {
-        userRepository.findByNickname(dupNicknameRequestDto.getNickname())
+        User user = userRepository.findByNickname(dupNicknameRequestDto.getNickname())
             .orElseThrow(() -> new CustomException(CustomExceptionStatus.NICKNAME_AVAILABLE));
 
         throw new CustomException(CustomExceptionStatus.NICKNAME_DUPLICATION);
