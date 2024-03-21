@@ -24,7 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private static final String[] AUTH_WHITELIST = {
-        "/api/user/**", "/api/recognition/**", "/api/medicine/**", "/api/medicineDetail"
+        "/api/user/**", "/api/recognition/**", "/api/medicine/**", "/api/medicineDetail/**"
     };
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService customUserDetailsService;
