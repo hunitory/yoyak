@@ -14,10 +14,10 @@ public enum CustomExceptionStatus {
     NOTI_INVALID(6001, "존재하지 않는 알림입니다"),
 
     // account 관련
-    ACCOUNT_INVALID(7001, "존재하지 않는 계정입니다");
+    ACCOUNT_INVALID(7001, "존재하지 않는 계정입니다"),
 
-
-    //
+    // security 관련
+    NO_AUTHENTICATION(9001, "No authentication information");
 
     private final Integer code;
     private final String message;

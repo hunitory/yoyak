@@ -4,7 +4,6 @@ import com.yoyak.yoyak.util.dto.UserInfoDto;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +25,7 @@ public class CustomUserDetails implements UserDetails {
 
         return roles.stream()
             .map(SimpleGrantedAuthority::new)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Override
@@ -36,7 +35,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userInfoDto.getUserId().toString();
+        return userInfoDto.getUserId();
     }
 
 

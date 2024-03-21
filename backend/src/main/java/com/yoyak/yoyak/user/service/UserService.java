@@ -40,8 +40,7 @@ public class UserService {
             .platform(user.getPlatform())
             .build();
 
-        String accessToken = jwtUtil.createAccessToken(userInfoDto);
-        return accessToken;
+        return jwtUtil.createAccessToken(userInfoDto);
     }
 
     public User findById(Long seq) {
