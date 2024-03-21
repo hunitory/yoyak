@@ -1,7 +1,7 @@
 package com.yoyak.yoyak.notification.service;
 
 import com.yoyak.yoyak.account.domain.Account;
-import com.yoyak.yoyak.account.domain.AccountRepository;
+import com.yoyak.yoyak.account.service.AccountService;
 import com.yoyak.yoyak.notification.domain.Notification;
 import com.yoyak.yoyak.notification.domain.NotificationRepository;
 import com.yoyak.yoyak.notification.dto.NotificationFindDto;
@@ -21,13 +21,12 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class NotificationService {
 
-    private final AccountRepository accountRepository;
+    private final AccountService accountService;
     private final NotificationRepository notificationRepository;
 
     // 알람 등록
     public Notification addNotification(NotificationRegistDto notificationRegistDto) {
-        Account account = accountRepository.findById(notificationRegistDto.getAccountSeq())
-            .orElseThrow(() -> new CustomException(CustomExceptionStatus.ACCOUNT_INVALID));
+        Account account = accountService.findById(notificationRegistDto.getAccountSeq());
 
         Notification notification = Notification.builder()
             .name(notificationRegistDto.getName())
