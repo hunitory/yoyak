@@ -45,7 +45,7 @@ public class RecognitionController {
 
     @GetMapping("/test")
     public ResponseEntity<Object> test() {
-        return ResponseEntity.badRequest().body("test");
+        return ResponseEntity.ok("TEST Success");
     }
     @PostMapping("/upload")
     public ResponseEntity<Object> uploadImage(@RequestParam("image") MultipartFile file) {
