@@ -15,7 +15,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AccountRegistDto {
 
-    private Long seq;
     private String name;
     private String nickname;
     private UserGender gender;

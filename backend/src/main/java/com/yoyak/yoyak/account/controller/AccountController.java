@@ -36,9 +36,9 @@ public class AccountController {
     }
 
     // 계정 목록
-    @GetMapping("/{userSeq}")
-    public ResponseEntity<Object> accountList(@PathVariable Long userSeq) {
-        List<AccountListDto> accountListDtos = accountService.findAccount(userSeq);
+    @GetMapping()
+    public ResponseEntity<Object> accountList() {
+        List<AccountListDto> accountListDtos = accountService.findAccount();
 
         return ResponseEntity.ok().body(accountListDtos);
     }
