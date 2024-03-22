@@ -6,6 +6,9 @@ import uuid
 from pathlib import Path
 import sys
 import platform
+import json
+
+
 
 from predict import run;
 app = FastAPI()
@@ -50,14 +53,23 @@ async def upload_file(image: UploadFile = File(...)):
     file_path = os.path.join(upload_path, unique_name)
     with open(file_path, "wb") as buffer:
         buffer.write(image.file.read())
-
+    
     option = {
         "weights":ROOT / './trained_model/2515_2659_2066_1224_2558_109.pt',
-        "source" : "https://yoyak.s3.ap-northeast-2.amazonaws.com/1.jpg",
+        "source" : file_path,
         "data": ROOT/'data/custom.yaml',
         "imgsz" : [640,640],
         "device" : "cpu"
     }
+
+
+    # option = {
+    #     "weights":ROOT / './trained_model/2515_2659_2066_1224_2558_109.pt',
+    #     "source" : "https://yoyak.s3.ap-northeast-2.amazonaws.com/1.jpg",
+    #     "data": ROOT/'data/custom.yaml',
+    #     "imgsz" : [640,640],
+    #     "device" : "cpu"
+    # }
     print("option", option)
     names = run(**option)
 
@@ -76,6 +88,35 @@ async def upload_file(image: UploadFile = File(...)):
         "count": len(names),
         "medicineList": medicineList
     }
+
+
+
+import pydantic
+
+
+class SummaryRequestDto(pydantic.BaseModel):
+    itemName : str
+    atpn : str
+    efficacy : str
+    useMethod : str
+    depositMethod : str
+    sideEffect : str
+
+from summary import get_content_using_llm;
+
+
+@app.post("/python/summary")
+async def summary(summaryRequestDto: SummaryRequestDto):
+
+    content = get_content_using_llm(summaryRequestDto)
+    print(type(content))
+    print(content)
+
+    return {
+        "summary" : content["summary"]
+    }
+
+
 
 
 
