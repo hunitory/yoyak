@@ -19,4 +19,5 @@ public class MedicineDetailDto {
     String atpnWarn;
     String atpn;
     String sideEffect;
+    String summary;
 }

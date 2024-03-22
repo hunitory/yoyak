@@ -23,7 +23,7 @@ public class MedicineDetailController {
         log.info("[{}.{}] itemSeq = {}", this.getClass().getName(),
             Thread.currentThread().getStackTrace()[1].getMethodName(), itemSeq);
 
-        MedicineDetailDto medicineDetailDto = medicineDetailService.findOrder(itemSeq);
+        MedicineDetailDto medicineDetailDto = medicineDetailService.findMedicineDetail(itemSeq);
 
         log.info("[{}.{}] MedicineDetailDto = {}", this.getClass().getName(),
             Thread.currentThread().getStackTrace()[1].getMethodName(), itemSeq);

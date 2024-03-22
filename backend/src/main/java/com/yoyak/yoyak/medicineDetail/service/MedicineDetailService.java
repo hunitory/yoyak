@@ -3,6 +3,7 @@ package com.yoyak.yoyak.medicineDetail.service;
 import com.yoyak.yoyak.medicineDetail.domain.MedicineDetail;
 import com.yoyak.yoyak.medicineDetail.domain.MedicineDetailRepository;
 import com.yoyak.yoyak.medicineDetail.dto.MedicineDetailDto;
+import com.yoyak.yoyak.python.service.PythonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,14 +13,17 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class MedicineDetailService {
 
-    final private MedicineDetailRepository medicineDetailRepository;
+    private final MedicineDetailRepository medicineDetailRepository;
+    private final PythonService pythonService;
 
-    public MedicineDetailDto findOrder(Long itemSeq) {
+    public MedicineDetailDto findMedicineDetail(Long itemSeq) {
 
         MedicineDetail medicineDetail = medicineDetailRepository.findBySeq(itemSeq)
             .orElseThrow(() -> new RuntimeException("MedicineDetail not found: " + itemSeq));
 
         log.info("medicineDetail ={}", medicineDetail.getMedicine().getImgPath());
+
+        String summary = pythonService.getSummary(medicineDetail);
 
         return MedicineDetailDto.builder()
             .medicineSeq(medicineDetail.getSeq())
@@ -31,6 +35,7 @@ public class MedicineDetailService {
             .atpnWarn(medicineDetail.getAtpnWarn())
             .atpn(medicineDetail.getAtpn())
             .sideEffect(medicineDetail.getSideEffect())
+            .summary(summary)
             .build();
     }
 }
