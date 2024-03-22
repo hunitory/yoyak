@@ -30,7 +30,6 @@ public class NotificationTimeService {
 
     private final NotificationTimeRepository notificationTimeRepository;
     private final NotificationService notificationService;
-    private final SecurityUtil securityUtil;
 
     // 알림 등록
     public void addNotification(NotificationRegistDto notificationRegistDto,
@@ -93,7 +92,7 @@ public class NotificationTimeService {
         LocalDateTime endDate = currentDate.plusWeeks(3).with(DayOfWeek.SATURDAY);
 
         List<NotificationTime> notificationTimes = notificationTimeRepository
-            .findAllByAccountSeqAndTime(securityUtil.getUserSeq(), startDate, endDate);
+            .findAllByAccountSeqAndTime(SecurityUtil.getUserSeq(), startDate, endDate);
 
         for (NotificationTime notificationTime : notificationTimes) {
             NotificationListDto notificationListDto = NotificationListDto.builder()
@@ -113,8 +112,7 @@ public class NotificationTimeService {
 
     // 알람 삭제
     public void removeNotification(Long notiSeq) {
-        Notification notification = notificationService.findByIdAndUserSeq(
-            securityUtil.getUserSeq(), notiSeq);
+        notificationService.findByIdAndUserSeq(SecurityUtil.getUserSeq(), notiSeq);
 
         List<NotificationTime> notificationTimes = notificationTimeRepository
             .findAllByNotificationSeq(notiSeq, LocalDateTime.now());
@@ -126,7 +124,7 @@ public class NotificationTimeService {
 
     // 복용 먹음 등록
     public void addMedication(MedicationDto medicationDto) {
-        NotificationTime notificationTime = findByIdAndNotiTimeSeq(securityUtil.getUserSeq(),
+        NotificationTime notificationTime = findByIdAndNotiTimeSeq(SecurityUtil.getUserSeq(),
             medicationDto.getNotiTimeSeq());
 
         notificationTime.takenNotificationTime(medicationDto.getTakenTime());
@@ -134,8 +132,8 @@ public class NotificationTimeService {
 
     // 복용 먹지 않음 등록
     public void addNotMedication(Long notiTimeSeq) {
-        
-        NotificationTime notificationTime = findByIdAndNotiTimeSeq(securityUtil.getUserSeq(),
+
+        NotificationTime notificationTime = findByIdAndNotiTimeSeq(SecurityUtil.getUserSeq(),
             notiTimeSeq);
 
         notificationTime.notNotificationTime();
@@ -143,7 +141,7 @@ public class NotificationTimeService {
 
     // 복용 안 먹음 등록
     public void addYetMedication(Long notiTimeSeq) {
-        NotificationTime notificationTime = findByIdAndNotiTimeSeq(securityUtil.getUserSeq(),
+        NotificationTime notificationTime = findByIdAndNotiTimeSeq(SecurityUtil.getUserSeq(),
             notiTimeSeq);
 
         notificationTime.yetNotificationTime();

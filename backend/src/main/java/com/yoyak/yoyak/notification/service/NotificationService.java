@@ -24,11 +24,10 @@ public class NotificationService {
 
     private final AccountService accountService;
     private final NotificationRepository notificationRepository;
-    private final SecurityUtil securityUtil;
 
     // 알람 등록
     public Notification addNotification(NotificationRegistDto notificationRegistDto) {
-        Account account = accountService.findByIdAndUserSeq(securityUtil.getUserSeq(),
+        Account account = accountService.findByIdAndUserSeq(SecurityUtil.getUserSeq(),
             notificationRegistDto.getAccountSeq());
 
         Notification notification = Notification.builder()
@@ -46,7 +45,7 @@ public class NotificationService {
 
     // 알림 상세 보기
     public NotificationFindDto findNotification(Long notiSeq) {
-        Notification notification = findByIdAndUserSeq(securityUtil.getUserSeq(), notiSeq);
+        Notification notification = findByIdAndUserSeq(SecurityUtil.getUserSeq(), notiSeq);
 
         return NotificationFindDto.builder()
             .accountSeq(notification.getAccount().getSeq())
@@ -62,7 +61,7 @@ public class NotificationService {
 
     // 알람 수정
     public Notification modifyNotification(NotificationModifyDto notificationModifyDto) {
-        Notification notification = findByIdAndUserSeq(securityUtil.getUserSeq(),
+        Notification notification = findByIdAndUserSeq(SecurityUtil.getUserSeq(),
             notificationModifyDto.getNotiSeq());
         notification.modifyNotification(notificationModifyDto);
 
@@ -71,7 +70,7 @@ public class NotificationService {
 
     // 알람 삭제
     public void removeNotification(Long notiSeq) {
-        Notification notification = findByIdAndUserSeq(securityUtil.getUserSeq(), notiSeq);
+        Notification notification = findByIdAndUserSeq(SecurityUtil.getUserSeq(), notiSeq);
         notificationRepository.delete(notification);
     }
 
