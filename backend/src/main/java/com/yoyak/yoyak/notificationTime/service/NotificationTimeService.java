@@ -10,6 +10,7 @@ import com.yoyak.yoyak.notificationTime.domain.NotificationTimeTaken;
 import com.yoyak.yoyak.notificationTime.dto.MedicationDto;
 import com.yoyak.yoyak.util.exception.CustomException;
 import com.yoyak.yoyak.util.exception.CustomExceptionStatus;
+import com.yoyak.yoyak.util.security.SecurityUtil;
 import jakarta.transaction.Transactional;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -29,6 +30,7 @@ public class NotificationTimeService {
 
     private final NotificationTimeRepository notificationTimeRepository;
     private final NotificationService notificationService;
+    private final SecurityUtil securityUtil;
 
     // 알림 등록
     public void addNotification(NotificationRegistDto notificationRegistDto,
@@ -83,8 +85,7 @@ public class NotificationTimeService {
     }
 
     // 알람 목록
-    public List<NotificationListDto> findNotification(
-        Long userSeq) {
+    public List<NotificationListDto> findNotification() {
         List<NotificationListDto> notificationListDtos = new ArrayList<>();
 
         LocalDateTime currentDate = LocalDateTime.now();
@@ -92,7 +93,7 @@ public class NotificationTimeService {
         LocalDateTime endDate = currentDate.plusWeeks(3).with(DayOfWeek.SATURDAY);
 
         List<NotificationTime> notificationTimes = notificationTimeRepository
-            .findAllByAccountSeqAndTime(userSeq, startDate, endDate);
+            .findAllByAccountSeqAndTime(securityUtil.getUserSeq(), startDate, endDate);
 
         for (NotificationTime notificationTime : notificationTimes) {
             NotificationListDto notificationListDto = NotificationListDto.builder()
@@ -112,7 +113,8 @@ public class NotificationTimeService {
 
     // 알람 삭제
     public void removeNotification(Long notiSeq) {
-        notificationService.findById(notiSeq);
+        Notification notification = notificationService.findByIdAndUserSeq(
+            securityUtil.getUserSeq(), notiSeq);
 
         List<NotificationTime> notificationTimes = notificationTimeRepository
             .findAllByNotificationSeq(notiSeq, LocalDateTime.now());
@@ -124,28 +126,32 @@ public class NotificationTimeService {
 
     // 복용 먹음 등록
     public void addMedication(MedicationDto medicationDto) {
-        NotificationTime notificationTime = findById(medicationDto.getNotiTimeSeq());
+        NotificationTime notificationTime = findByIdAndNotiTimeSeq(securityUtil.getUserSeq(),
+            medicationDto.getNotiTimeSeq());
 
         notificationTime.takenNotificationTime(medicationDto.getTakenTime());
     }
 
     // 복용 먹지 않음 등록
     public void addNotMedication(Long notiTimeSeq) {
-        NotificationTime notificationTime = findById(notiTimeSeq);
+        
+        NotificationTime notificationTime = findByIdAndNotiTimeSeq(securityUtil.getUserSeq(),
+            notiTimeSeq);
 
         notificationTime.notNotificationTime();
     }
 
     // 복용 안 먹음 등록
     public void addYetMedication(Long notiTimeSeq) {
-        NotificationTime notificationTime = findById(notiTimeSeq);
+        NotificationTime notificationTime = findByIdAndNotiTimeSeq(securityUtil.getUserSeq(),
+            notiTimeSeq);
 
         notificationTime.yetNotificationTime();
     }
 
     // 알람 세부 조회
-    public NotificationTime findById(Long seq) {
-        return notificationTimeRepository.findById(seq)
+    public NotificationTime findByIdAndNotiTimeSeq(Long userSeq, Long notiTimeSeq) {
+        return notificationTimeRepository.findByIdAndNotiTimeSeq(userSeq, notiTimeSeq)
             .orElseThrow(() -> new CustomException(CustomExceptionStatus.NOTI_INVALID));
     }
 }

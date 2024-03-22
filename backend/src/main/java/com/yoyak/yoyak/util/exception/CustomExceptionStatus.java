@@ -17,6 +17,7 @@ public enum CustomExceptionStatus {
 
     // alarm 관련
     NOTI_INVALID(6001, "존재하지 않는 알림입니다"),
+    NOTI_AUTHORITY(6002, "알림에 접근할 수 없습니다"),
 
     // account 관련
     ACCOUNT_INVALID(7001, "존재하지 않는 계정입니다"),

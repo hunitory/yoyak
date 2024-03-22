@@ -24,11 +24,9 @@ public class NotificationTimeController {
     private final NotificationTimeService notificationTimeService;
 
     // 알림 목록
-    @GetMapping("/{userSeq}")
-    public ResponseEntity<Object> notificationList(
-        @PathVariable Long userSeq) {
-        List<NotificationListDto> notificationListDtos = notificationTimeService.findNotification(
-            userSeq);
+    @GetMapping()
+    public ResponseEntity<Object> notificationList() {
+        List<NotificationListDto> notificationListDtos = notificationTimeService.findNotification();
 
         return ResponseEntity.ok().body(notificationListDtos);
     }

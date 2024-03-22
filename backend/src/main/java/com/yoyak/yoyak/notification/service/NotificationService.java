@@ -9,6 +9,7 @@ import com.yoyak.yoyak.notification.dto.NotificationModifyDto;
 import com.yoyak.yoyak.notification.dto.NotificationRegistDto;
 import com.yoyak.yoyak.util.exception.CustomException;
 import com.yoyak.yoyak.util.exception.CustomExceptionStatus;
+import com.yoyak.yoyak.util.security.SecurityUtil;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +24,12 @@ public class NotificationService {
 
     private final AccountService accountService;
     private final NotificationRepository notificationRepository;
+    private final SecurityUtil securityUtil;
 
     // 알람 등록
     public Notification addNotification(NotificationRegistDto notificationRegistDto) {
-        Account account = accountService.findById(notificationRegistDto.getAccountSeq());
+        Account account = accountService.findByIdAndUserSeq(securityUtil.getUserSeq(),
+            notificationRegistDto.getAccountSeq());
 
         Notification notification = Notification.builder()
             .name(notificationRegistDto.getName())
@@ -43,7 +46,7 @@ public class NotificationService {
 
     // 알림 상세 보기
     public NotificationFindDto findNotification(Long notiSeq) {
-        Notification notification = findById(notiSeq);
+        Notification notification = findByIdAndUserSeq(securityUtil.getUserSeq(), notiSeq);
 
         return NotificationFindDto.builder()
             .accountSeq(notification.getAccount().getSeq())
@@ -59,7 +62,8 @@ public class NotificationService {
 
     // 알람 수정
     public Notification modifyNotification(NotificationModifyDto notificationModifyDto) {
-        Notification notification = findById(notificationModifyDto.getNotiSeq());
+        Notification notification = findByIdAndUserSeq(securityUtil.getUserSeq(),
+            notificationModifyDto.getNotiSeq());
         notification.modifyNotification(notificationModifyDto);
 
         return notification;
@@ -67,13 +71,13 @@ public class NotificationService {
 
     // 알람 삭제
     public void removeNotification(Long notiSeq) {
-        Notification notification = findById(notiSeq);
+        Notification notification = findByIdAndUserSeq(securityUtil.getUserSeq(), notiSeq);
         notificationRepository.delete(notification);
     }
 
-    // 알람 조회
-    public Notification findById(Long seq) {
-        return notificationRepository.findById(seq)
-            .orElseThrow(() -> new CustomException(CustomExceptionStatus.NOTI_INVALID));
+    // 알람 확인
+    public Notification findByIdAndUserSeq(Long userSeq, Long notiSeq) {
+        return notificationRepository.findByIdAndUseSeq(userSeq, notiSeq)
+            .orElseThrow(() -> new CustomException(CustomExceptionStatus.NOTI_AUTHORITY));
     }
 }
