@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface MedicineRepository extends JpaRepository<Medicine, Integer> {
 
-    Optional<Medicine> findBySeq(Long Seq);
+    Optional<Medicine> findBySeq(Long seq);
 
     @Query(
         "SELECT new com.yoyak.yoyak.medicine.dto.MedicineDto(m.seq, m.imgPath, m.itemName, m.entpName)"
