@@ -21,12 +21,12 @@ public class MedicineController {
     private final MedicineService medicineService;
 
     @GetMapping("/filter")
-    public BasicResponseDto orderList(@ModelAttribute MedicineSearchParametersDto parameters) {
+    public BasicResponseDto medicineList(@ModelAttribute MedicineSearchParametersDto parameters) {
 
         log.info("[{}.{}] parmeters = {}", this.getClass().getName(),
             Thread.currentThread().getStackTrace()[1].getMethodName(), parameters);
 
-        List<MedicineDto> medicineList = medicineService.findOrderParameters(parameters);
+        List<MedicineDto> medicineList = medicineService.findMedicineByParameters(parameters);
 
         log.info("[{}.{}] medicineList = {}", this.getClass().getName(),
             Thread.currentThread().getStackTrace()[1].getMethodName(), medicineList);
