@@ -4,6 +4,7 @@ import com.yoyak.yoyak.medicineEnvelop.dto.MedicineEnvelopCreateDto;
 import com.yoyak.yoyak.medicineEnvelop.service.MedicineEnvelopService;
 import com.yoyak.yoyak.util.dto.BasicResponseDto;
 import com.yoyak.yoyak.util.dto.StatusResponseDto;
+import com.yoyak.yoyak.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -36,10 +37,9 @@ public class MedicineEnvelopController {
 
     @GetMapping
     public ResponseEntity<BasicResponseDto> medicineEnvelopList(
-        @RequestParam(name = "userSeq", required = true) Long userSeq,
         @RequestParam(name = "medicineSeq", required = false) Long itemSeq
     ) {
-
+        Long userSeq = SecurityUtil.getUserSeq();
         log.info("userSeq({})의 약 봉투 조회 {} -", userSeq, itemSeq);
 
         return ResponseEntity
