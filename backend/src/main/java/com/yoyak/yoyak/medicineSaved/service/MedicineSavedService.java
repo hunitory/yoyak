@@ -1,5 +1,8 @@
 package com.yoyak.yoyak.medicineSaved.service;
 
+import static com.yoyak.yoyak.util.exception.CustomExceptionStatus.ENVELOP_NOT_EXIST;
+import static com.yoyak.yoyak.util.exception.CustomExceptionStatus.MEDICINE_NOT_EXIST;
+
 import com.yoyak.yoyak.medicine.domain.Medicine;
 import com.yoyak.yoyak.medicine.domain.MedicineRepository;
 import com.yoyak.yoyak.medicineEnvelop.domain.MedicineEnvelop;
@@ -9,6 +12,7 @@ import com.yoyak.yoyak.medicineSaved.domain.MedicineSavedRepository;
 import com.yoyak.yoyak.medicineSaved.dto.MedicineFromEnvelopeRemovalDto;
 import com.yoyak.yoyak.medicineSaved.dto.MedicineToEnvelopRegistrationDto;
 import com.yoyak.yoyak.util.dto.StatusResponseDto;
+import com.yoyak.yoyak.util.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,12 +33,12 @@ public class MedicineSavedService {
 
         Medicine medicine = medicineRepository.
             findBySeq(requestDto.getMedicineSeq())
-            .orElseThrow();
+            .orElseThrow(() -> new CustomException(MEDICINE_NOT_EXIST));
         log.info("seq ={}, medicine ={}", requestDto.getMedicineSeq(), medicine);
 
         MedicineEnvelop envelop = medicineEnvelopRepository
             .findById(requestDto.getEnvelopeSeq())
-            .orElseThrow();
+            .orElseThrow(() -> new CustomException(ENVELOP_NOT_EXIST));
         log.info("seq ={}, envelop ={}", requestDto.getEnvelopeSeq(), envelop);
 
         MedicineSaved medicineSaved = MedicineSaved.builder()

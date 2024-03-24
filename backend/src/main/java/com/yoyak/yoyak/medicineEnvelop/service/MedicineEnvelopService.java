@@ -1,5 +1,7 @@
 package com.yoyak.yoyak.medicineEnvelop.service;
 
+import static com.yoyak.yoyak.util.exception.CustomExceptionStatus.ACCOUNT_INVALID;
+
 import com.yoyak.yoyak.account.domain.Account;
 import com.yoyak.yoyak.account.domain.AccountRepository;
 import com.yoyak.yoyak.medicineEnvelop.domain.MedicineEnvelop;
@@ -9,6 +11,7 @@ import com.yoyak.yoyak.medicineEnvelop.dto.MedicineEnvelopDto;
 import com.yoyak.yoyak.medicineEnvelop.dto.MedicineSummaryDto;
 import com.yoyak.yoyak.util.dto.BasicResponseDto;
 import com.yoyak.yoyak.util.dto.StatusResponseDto;
+import com.yoyak.yoyak.util.exception.CustomException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +28,9 @@ public class MedicineEnvelopService {
     public StatusResponseDto addMedicineEnvelop(
         MedicineEnvelopCreateDto requestDto) {
 
-        Account account = accountRepository.findById(requestDto.getAccountSeq()).orElseThrow();
+        Account account = accountRepository.
+            findById(requestDto.getAccountSeq())
+            .orElseThrow(() -> new CustomException(ACCOUNT_INVALID));
 
         MedicineEnvelop medicineEnvelop = MedicineEnvelop.builder()
             .name(requestDto.getName())

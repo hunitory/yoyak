@@ -1,9 +1,12 @@
 package com.yoyak.yoyak.medicineDetail.service;
 
+import static com.yoyak.yoyak.util.exception.CustomExceptionStatus.MEDICINE_NOT_EXIST;
+
 import com.yoyak.yoyak.medicineDetail.domain.MedicineDetail;
 import com.yoyak.yoyak.medicineDetail.domain.MedicineDetailRepository;
 import com.yoyak.yoyak.medicineDetail.dto.MedicineDetailDto;
 import com.yoyak.yoyak.python.service.PythonService;
+import com.yoyak.yoyak.util.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,13 +22,13 @@ public class MedicineDetailService {
     public MedicineDetailDto findMedicineDetail(Long itemSeq) {
 
         MedicineDetail medicineDetail = medicineDetailRepository.findBySeq(itemSeq)
-            .orElseThrow(() -> new RuntimeException("MedicineDetail not found: " + itemSeq));
+            .orElseThrow(() -> new CustomException(MEDICINE_NOT_EXIST));
 
         log.info("medicineDetail ={}", medicineDetail.getMedicine().getImgPath());
 
         String summary = pythonService.getSummary(medicineDetail);
 
-        return MedicineDetailDto.builder()
+        MedicineDetailDto build = MedicineDetailDto.builder()
             .medicineSeq(medicineDetail.getSeq())
             .itemName(medicineDetail.getMedicine().getItemName())
             .entpName(medicineDetail.getMedicine().getEntpName())
@@ -37,5 +40,9 @@ public class MedicineDetailService {
             .sideEffect(medicineDetail.getSideEffect())
             .summary(summary)
             .build();
+
+        log.info("result={}", build);
+
+        return build;
     }
 }
