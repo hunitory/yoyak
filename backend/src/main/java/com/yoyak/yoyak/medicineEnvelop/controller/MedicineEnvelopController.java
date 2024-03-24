@@ -24,6 +24,12 @@ public class MedicineEnvelopController {
 
     private final MedicineEnvelopService medicineEnvelopService;
 
+    /**
+     * 약 봉투 정보를 받아 등록하고, 등록 결과를 반환하는 메소드
+     *
+     * @param requestDto
+     * @return ResponseEntity<StatusResponseDto>
+     */
     @PostMapping
     public ResponseEntity<StatusResponseDto> medicineEnvelopAdd(
         @RequestBody MedicineEnvelopCreateDto requestDto) {
@@ -35,6 +41,12 @@ public class MedicineEnvelopController {
             .body(medicineEnvelopService.addMedicineEnvelop(requestDto));
     }
 
+    /**
+     * 지정한 약 봉투의 약 목록을 조회하는 메소드. 선택적으로 특정 약에 대한 포함여부를 조회.
+     *
+     * @param itemSeq
+     * @return ResponseEntity<BasicResponseDto>
+     */
     @GetMapping
     public ResponseEntity<BasicResponseDto> medicineEnvelopList(
         @RequestParam(name = "medicineSeq", required = false) Long itemSeq
@@ -48,6 +60,12 @@ public class MedicineEnvelopController {
     }
 
 
+    /**
+     * 특정 약 봉투의 약의 간략정보를 조회하는 메소드
+     *
+     * @param medicineEnvelopSeq
+     * @return ResponseEntity<BasicResponseDto>
+     */
     @GetMapping("/{medicineEnvelopSeq}")
     public ResponseEntity<BasicResponseDto> medicineEnvelopDetails(
         @PathVariable Long medicineEnvelopSeq) {

@@ -20,6 +20,12 @@ public class MedicineController {
 
     private final MedicineService medicineService;
 
+    /**
+     * 사용자로부터 받은 파라미터를 사용하여 약을 검색하고, 결과를 반환하는 메소드
+     *
+     * @param parameters
+     * @return BasicResponseDto
+     */
     @GetMapping("/filter")
     public BasicResponseDto medicineList(@ModelAttribute MedicineSearchParametersDto parameters) {
 

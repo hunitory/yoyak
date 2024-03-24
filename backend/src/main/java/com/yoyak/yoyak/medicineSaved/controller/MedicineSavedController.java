@@ -21,6 +21,12 @@ public class MedicineSavedController {
 
     private final MedicineSavedService medicineSavedService;
 
+    /**
+     * 약 봉투에 약을 추가하는 메소드
+     *
+     * @param requestDto
+     * @return ResponseEntity<StatusResponseDto>
+     */
     @PostMapping()
     public ResponseEntity<StatusResponseDto> addMedicineToEnvelop(
         @RequestBody MedicineToEnvelopRegistrationDto requestDto) {
@@ -31,6 +37,12 @@ public class MedicineSavedController {
             medicineSavedService.addMedicineToEnvelop(requestDto));
     }
 
+    /**
+     * 약 봉투에서 약을 삭제하는 메소드
+     *
+     * @param requestDto
+     * @return ResponseEntity<StatusResponseDto>
+     */
     @DeleteMapping
     public ResponseEntity<StatusResponseDto> deleteMedicineToEnvelop(
         @RequestBody MedicineFromEnvelopeRemovalDto requestDto) {

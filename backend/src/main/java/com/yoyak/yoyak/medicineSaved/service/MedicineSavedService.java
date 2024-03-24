@@ -27,6 +27,12 @@ public class MedicineSavedService {
     private final MedicineEnvelopRepository medicineEnvelopRepository;
     private final MedicineRepository medicineRepository;
 
+    /**
+     * 약 봉투에 약을 추가하는 서비스 메소드입니다.
+     *
+     * @param requestDto
+     * @return StatusResponseDto
+     */
     @Transactional
     public StatusResponseDto addMedicineToEnvelop(
         MedicineToEnvelopRegistrationDto requestDto) {
@@ -55,6 +61,12 @@ public class MedicineSavedService {
             .build();
     }
 
+    /**
+     * 약 봉투에서 약을 삭제하는 서비스 메소드입니다.
+     *
+     * @param requestDto
+     * @return StatusResponseDto
+     */
     public StatusResponseDto deleteMedicineToEnvelop(
         MedicineFromEnvelopeRemovalDto requestDto) {
 

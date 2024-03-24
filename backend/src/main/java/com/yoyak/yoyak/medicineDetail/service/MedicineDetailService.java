@@ -19,6 +19,12 @@ public class MedicineDetailService {
     private final MedicineDetailRepository medicineDetailRepository;
     private final PythonService pythonService;
 
+    /**
+     * 주어진 seq를 통해 약의 상세 정보를 조회하고, 그 정보를 반환
+     *
+     * @param itemSeq
+     * @return MedicineDetailDto
+     */
     public MedicineDetailDto findMedicineDetail(Long itemSeq) {
 
         MedicineDetail medicineDetail = medicineDetailRepository.findBySeq(itemSeq)

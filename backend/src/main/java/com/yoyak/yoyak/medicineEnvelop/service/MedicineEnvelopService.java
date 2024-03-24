@@ -25,6 +25,12 @@ public class MedicineEnvelopService {
     private final MedicineEnvelopRepository medicineEnvelopRepository;
     private final AccountRepository accountRepository;
 
+    /**
+     * 봉투 정보를 받아 등록
+     *
+     * @param requestDto
+     * @return StatusResponseDto
+     */
     public StatusResponseDto addMedicineEnvelop(
         MedicineEnvelopCreateDto requestDto) {
 
@@ -47,7 +53,12 @@ public class MedicineEnvelopService {
             .build();
     }
 
-    //    @Transactional(readOnly = true)
+    /**
+     * 특정 약 봉투의 약의 간략정보를 조회하는 메소드
+     *
+     * @param medicineEnvelopSeq
+     * @return BasicResponseDto
+     */
     public BasicResponseDto findMedicineSummaryList(Long medicineEnvelopSeq) {
 
         List<MedicineSummaryDto> medicineSummaryDtoList =
@@ -59,6 +70,13 @@ public class MedicineEnvelopService {
             .build();
     }
 
+    /**
+     * 지정한 약 봉투의 약 목록을 조회하는 메소드. 선택적으로 특정 약에 대한 포함여부를 조회.
+     *
+     * @param userSeq
+     * @param itemSeq
+     * @return BasicResponseDto
+     */
     public BasicResponseDto findMedicineEnvelopList(Long userSeq, Long itemSeq) {
 
         List<MedicineEnvelopDto> medicineEnvelopDtoList =

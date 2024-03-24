@@ -18,6 +18,12 @@ public class MedicineDetailController {
 
     private final MedicineDetailService medicineDetailService;
 
+    /**
+     * 주어진 seq를 통해 약의 상세 정보를 조회하고, 그 정보를 반환
+     *
+     * @param itemSeq
+     * @return ResponseEntity<MedicineDetailDto>
+     */
     @GetMapping("/{itemSeq}")
     public ResponseEntity<MedicineDetailDto> medicineDetail(@PathVariable("itemSeq") Long itemSeq) {
         log.info("[{}.{}] itemSeq = {}", this.getClass().getName(),

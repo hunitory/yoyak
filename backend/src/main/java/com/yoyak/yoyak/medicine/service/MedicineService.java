@@ -20,6 +20,12 @@ public class MedicineService {
 
     private final MedicineRepository medicineRepository;
 
+    /**
+     * 주어진 고유 번호(seq)를 사용하여 약을 조회하고, 조회된 약의 정보를 반환
+     *
+     * @param seq
+     * @return MedicineDto
+     */
     public MedicineDto findMedicine(Long seq) {
         Medicine medicine = medicineRepository.findBySeq(seq)
             .orElseThrow(() -> new CustomException(MEDICINE_NOT_EXIST));
@@ -27,6 +33,12 @@ public class MedicineService {
             medicine.getEntpName());
     }
 
+    /**
+     * 사용자가 제공한 파라미터를 기반으로 약 목록을 검색하고 결과를 반환하는 메소드
+     *
+     * @param parameters
+     * @return List<MedicineDto>
+     */
     public List<MedicineDto> findMedicineByParameters(MedicineSearchParametersDto parameters) {
         log.info("param={}", parameters.getFormCodeName());
 
