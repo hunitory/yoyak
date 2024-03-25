@@ -1,5 +1,8 @@
 package com.yoyak.yoyak.user.controller;
 
+import com.yoyak.yoyak.account.domain.AccountRole;
+import com.yoyak.yoyak.account.dto.AccountRegistDto;
+import com.yoyak.yoyak.account.service.AccountService;
 import com.yoyak.yoyak.user.dto.DupIdRequestDto;
 import com.yoyak.yoyak.user.dto.DupNicknameRequestDto;
 import com.yoyak.yoyak.user.dto.FindIdRequestDto;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+    private final AccountService accountService;
 
     // 일반 로그인
     @PostMapping("/login/origin")
@@ -37,7 +41,17 @@ public class UserController {
     // 일반 회원가입
     @PostMapping("/signin")
     public ResponseEntity<Object> signinUser(@RequestBody SignInRequestDto signInRequestDto) {
-        userService.signIn(signInRequestDto);
+        Long seq = userService.signIn(signInRequestDto);
+
+        AccountRegistDto accountRegistDto = AccountRegistDto.builder()
+            .name(signInRequestDto.getName())
+            .nickname(signInRequestDto.getNickname())
+            .gender(signInRequestDto.getGender())
+            .birth(signInRequestDto.getBirth())
+            .disease(null)
+            .profileImg(0)
+            .build();
+        accountService.createAccount(seq, accountRegistDto, AccountRole.ADMIN);
 
         return ResponseEntity.ok().build();
     }

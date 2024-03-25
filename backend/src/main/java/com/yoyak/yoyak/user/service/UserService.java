@@ -52,7 +52,7 @@ public class UserService {
     }
 
     // 일반 회원가입
-    public void signIn(SignInRequestDto signInRequestDto) {
+    public Long signIn(SignInRequestDto signInRequestDto) {
         User user = User.builder()
             .userId(signInRequestDto.getUserId())
             .password(signInRequestDto.getPassword())
@@ -64,7 +64,7 @@ public class UserService {
             .role(UserRole.USER)
             .build();
 
-        userRepository.save(user);
+        return userRepository.save(user).getSeq();
     }
 
     // 일반 아이디 찾기
