@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+
+    parameters{
+        string(name: 'NAME', defaultValue: 'python')
+    }
+
+    stages {
+        stage('SCM') {
+            steps {
+                sh "echo 'SCM...'"
+                checkout scm
+            }
+        }
+
+        stage('python'){
+            steps{
+                dir('ai'){
+                     def containerExists = sh(script: "docker ps -a --format '{{.Names}}' | grep ${params.NAME}", returnStatus: true) == 0
+
+
+                    if(containerExists){
+                        sh "docker stop ${params.NAME}"
+                        sh "docker rm ${params.NAME}"
+                        sh "docker rmi docker-python:0.0.1"
+                    }
+
+                    sh '''
+                        echo 'Dockerimage build...'
+                        docker build -t docker-python:0.0.1 .
+
+                    '''
+                }
+            }
+        }
+
+    
+
+        stage('Deploy'){
+            steps{
+                dir('ai'){
+                    sh '''
+                    echo 'Deploy BE...'
+                    docker run -d -p 8000:8000 -v ./uploads:/yolo/uploads  --name python-container docker-python:0.0.1
+                    '''
+                }
+            }
+        }
+    }
+}
