@@ -1,12 +1,16 @@
 package com.yoyak.yoyak.medicineEnvelop.controller;
 
 import com.yoyak.yoyak.medicineEnvelop.dto.MedicineEnvelopCreateDto;
+import com.yoyak.yoyak.medicineEnvelop.dto.MedicineEnvelopDto;
+import com.yoyak.yoyak.medicineEnvelop.dto.MedicineSummaryDto;
 import com.yoyak.yoyak.medicineEnvelop.service.MedicineEnvelopService;
 import com.yoyak.yoyak.util.dto.BasicResponseDto;
-import com.yoyak.yoyak.util.dto.StatusResponseDto;
 import com.yoyak.yoyak.util.security.SecurityUtil;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,17 +32,18 @@ public class MedicineEnvelopController {
      * 약 봉투 정보를 받아 등록하고, 등록 결과를 반환하는 메소드
      *
      * @param requestDto
-     * @return ResponseEntity<StatusResponseDto>
+     * @return ResponseEntity<HttpStatusCode>
      */
     @PostMapping
-    public ResponseEntity<StatusResponseDto> medicineEnvelopAdd(
+    public ResponseEntity<HttpStatusCode> medicineEnvelopAdd(
         @RequestBody MedicineEnvelopCreateDto requestDto) {
 
         log.info("약 봉투 등록 - {}", requestDto);
+        medicineEnvelopService.addMedicineEnvelop(requestDto);
 
         return ResponseEntity
-            .ok()
-            .body(medicineEnvelopService.addMedicineEnvelop(requestDto));
+            .status(HttpStatus.OK)
+            .build();
     }
 
     /**
@@ -54,9 +59,18 @@ public class MedicineEnvelopController {
         Long userSeq = SecurityUtil.getUserSeq();
         log.info("userSeq({})의 약 봉투 조회 {} -", userSeq, itemSeq);
 
+        List<MedicineEnvelopDto> medicineEnvelopList =
+            medicineEnvelopService.findMedicineEnvelopList(userSeq, itemSeq);
+
+        log.info("MedicineEnvelopDto={}", medicineEnvelopList);
+
         return ResponseEntity
-            .ok()
-            .body(medicineEnvelopService.findMedicineEnvelopList(userSeq, itemSeq));
+            .status(HttpStatus.OK)
+            .body(BasicResponseDto.builder()
+                .count(medicineEnvelopList.size())
+                .result(medicineEnvelopList)
+                .build()
+            );
     }
 
 
@@ -71,8 +85,14 @@ public class MedicineEnvelopController {
         @PathVariable Long medicineEnvelopSeq) {
         log.info("findMedicineSummaryList - medicineEnvelopSeq={}", medicineEnvelopSeq);
 
+        List<MedicineSummaryDto> medicineSummaryList =
+            medicineEnvelopService.findMedicineSummaryList(medicineEnvelopSeq);
+
         return ResponseEntity
-            .ok()
-            .body(medicineEnvelopService.findMedicineSummaryList(medicineEnvelopSeq));
+            .status(HttpStatus.OK)
+            .body(BasicResponseDto.builder()
+                .count(medicineSummaryList.size())
+                .result(medicineSummaryList)
+                .build());
     }
 }

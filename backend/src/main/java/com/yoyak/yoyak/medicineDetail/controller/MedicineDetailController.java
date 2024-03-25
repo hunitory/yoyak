@@ -4,6 +4,7 @@ import com.yoyak.yoyak.medicineDetail.dto.MedicineDetailDto;
 import com.yoyak.yoyak.medicineDetail.service.MedicineDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +34,9 @@ public class MedicineDetailController {
 
         log.info("[{}.{}] MedicineDetailDto = {}", this.getClass().getName(),
             Thread.currentThread().getStackTrace()[1].getMethodName(), itemSeq);
-        return ResponseEntity.ok()
+        
+        return ResponseEntity
+            .status(HttpStatus.OK)
             .body(medicineDetailDto);
     }
 }

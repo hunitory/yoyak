@@ -9,8 +9,6 @@ import com.yoyak.yoyak.medicineEnvelop.domain.MedicineEnvelopRepository;
 import com.yoyak.yoyak.medicineEnvelop.dto.MedicineEnvelopCreateDto;
 import com.yoyak.yoyak.medicineEnvelop.dto.MedicineEnvelopDto;
 import com.yoyak.yoyak.medicineEnvelop.dto.MedicineSummaryDto;
-import com.yoyak.yoyak.util.dto.BasicResponseDto;
-import com.yoyak.yoyak.util.dto.StatusResponseDto;
 import com.yoyak.yoyak.util.exception.CustomException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -29,13 +27,10 @@ public class MedicineEnvelopService {
      * 봉투 정보를 받아 등록
      *
      * @param requestDto
-     * @return StatusResponseDto
      */
-    public StatusResponseDto addMedicineEnvelop(
-        MedicineEnvelopCreateDto requestDto) {
+    public void addMedicineEnvelop(MedicineEnvelopCreateDto requestDto) {
 
-        Account account = accountRepository.
-            findById(requestDto.getAccountSeq())
+        Account account = accountRepository.findById(requestDto.getAccountSeq())
             .orElseThrow(() -> new CustomException(ACCOUNT_INVALID));
 
         MedicineEnvelop medicineEnvelop = MedicineEnvelop.builder()
@@ -46,28 +41,20 @@ public class MedicineEnvelopService {
 
         medicineEnvelopRepository.save(medicineEnvelop);
         log.info("medicineEnvelop={}", medicineEnvelop);
-
-        return StatusResponseDto.builder()
-            .code(200)
-            .message("success")
-            .build();
     }
 
     /**
      * 특정 약 봉투의 약의 간략정보를 조회하는 메소드
      *
      * @param medicineEnvelopSeq
-     * @return BasicResponseDto
+     * @return List<MedicineSummaryDto>
      */
-    public BasicResponseDto findMedicineSummaryList(Long medicineEnvelopSeq) {
+    public List<MedicineSummaryDto> findMedicineSummaryList(Long medicineEnvelopSeq) {
 
         List<MedicineSummaryDto> medicineSummaryDtoList =
             medicineEnvelopRepository.findMedicineSummaryByEnvelopSeq(medicineEnvelopSeq);
 
-        return BasicResponseDto.builder()
-            .count(medicineSummaryDtoList.size())
-            .result(medicineSummaryDtoList)
-            .build();
+        return medicineSummaryDtoList;
     }
 
     /**
@@ -75,16 +62,13 @@ public class MedicineEnvelopService {
      *
      * @param userSeq
      * @param itemSeq
-     * @return BasicResponseDto
+     * @return List<MedicineEnvelopDto>
      */
-    public BasicResponseDto findMedicineEnvelopList(Long userSeq, Long itemSeq) {
+    public List<MedicineEnvelopDto> findMedicineEnvelopList(Long userSeq, Long itemSeq) {
 
         List<MedicineEnvelopDto> medicineEnvelopDtoList =
             medicineEnvelopRepository.findMedicineEnvelopByUserSeq(userSeq, itemSeq);
 
-        return BasicResponseDto.builder()
-            .count(medicineEnvelopDtoList.size())
-            .result(medicineEnvelopDtoList)
-            .build();
+        return medicineEnvelopDtoList;
     }
 }
