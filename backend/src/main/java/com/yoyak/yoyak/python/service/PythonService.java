@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yoyak.yoyak.medicineDetail.domain.MedicineDetail;
 import com.yoyak.yoyak.medicineDetail.dto.SummaryRequestDto;
+
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
@@ -16,6 +19,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 @Service
+@Slf4j
 public class PythonService {
 
     @Value("${fastapi.url}")
