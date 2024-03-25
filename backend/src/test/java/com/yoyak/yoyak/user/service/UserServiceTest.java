@@ -1,10 +1,12 @@
 package com.yoyak.yoyak.user.service;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.yoyak.yoyak.user.domain.User;
@@ -22,6 +24,7 @@ import com.yoyak.yoyak.user.dto.SignInRequestDto;
 import com.yoyak.yoyak.util.dto.UserInfoDto;
 import com.yoyak.yoyak.util.exception.CustomException;
 import com.yoyak.yoyak.util.jwt.JwtUtil;
+import com.yoyak.yoyak.util.security.SecurityUtil;
 import java.time.LocalDate;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -233,7 +236,7 @@ class UserServiceTest {
 
 
     @Test
-    @DisplayName("아이디 중복체크")
+    @DisplayName("아이디 중복체크 성공 - 중복됨")
     void dupIdSuccess() {
         // dto
         DupIdRequestDto dupIdRequestDto = new DupIdRequestDto().builder()
@@ -248,7 +251,22 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("닉네임 중복체크")
+    @DisplayName("아이디 중복체크 실패 - 중복 안됨")
+    void dupIdFailed() {
+        // dto
+        DupIdRequestDto dupIdRequestDto = new DupIdRequestDto().builder()
+            .userId("testUser2")
+            .build();
+
+        // when
+        when(userRepository.findByUserId("testUser2")).thenReturn(Optional.empty());
+
+        // then
+        assertDoesNotThrow(() -> userService.dupId(dupIdRequestDto));
+    }
+
+    @Test
+    @DisplayName("닉네임 중복체크 성공 - 중복됨")
     void dupNicknameSuccess() {
         // dto
         DupNicknameRequestDto dupNicknameRequestDto = new DupNicknameRequestDto().builder()
@@ -261,4 +279,37 @@ class UserServiceTest {
         // then
         assertThrows(CustomException.class, () -> userService.dupNickname(dupNicknameRequestDto));
     }
+
+    @Test
+    @DisplayName("닉네임 중복체크 실패 - 중복 안됨")
+    void dupNicknameFailed() {
+        // dto
+        DupNicknameRequestDto dupNicknameRequestDto = new DupNicknameRequestDto().builder()
+            .nickname("TestNick2")
+            .build();
+
+        // when
+        when(userRepository.findByNickname("TestNick2")).thenReturn(Optional.empty());
+
+        // then
+        assertDoesNotThrow(() -> userService.dupNickname(dupNicknameRequestDto));
+    }
+
+    @Test
+    @DisplayName("회원탈퇴 성공")
+    void withdrawSuccess() {
+        // Given
+        Long userId = 1L;
+        User user = new User();
+        user.setSeq(userId);
+
+        // when
+        when(SecurityUtil.getUserSeq()).thenReturn(userId);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        // then
+        userService.withdraw();
+        verify(userRepository).delete(user);
+    }
+
 }
