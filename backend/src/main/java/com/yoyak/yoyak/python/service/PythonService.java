@@ -55,7 +55,7 @@ public class PythonService {
     }
 
     public JsonNode getRecognitionResponse(ByteArrayResource fileResource) throws IOException {
-        log.info("fastApiUrl = {}", fastApiUrl);
+        log.info("fastapiUrl = {}", fastApiUrl);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
