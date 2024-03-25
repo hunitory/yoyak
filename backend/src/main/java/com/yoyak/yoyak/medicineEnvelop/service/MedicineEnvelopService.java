@@ -1,15 +1,16 @@
 package com.yoyak.yoyak.medicineEnvelop.service;
 
-import static com.yoyak.yoyak.util.exception.CustomExceptionStatus.ACCOUNT_INVALID;
+import static com.yoyak.yoyak.util.exception.CustomExceptionStatus.ENVELOP_NOT_EXIST;
 
 import com.yoyak.yoyak.account.domain.Account;
-import com.yoyak.yoyak.account.domain.AccountRepository;
+import com.yoyak.yoyak.account.service.AccountService;
 import com.yoyak.yoyak.medicineEnvelop.domain.MedicineEnvelop;
 import com.yoyak.yoyak.medicineEnvelop.domain.MedicineEnvelopRepository;
 import com.yoyak.yoyak.medicineEnvelop.dto.MedicineEnvelopCreateDto;
 import com.yoyak.yoyak.medicineEnvelop.dto.MedicineEnvelopDto;
 import com.yoyak.yoyak.medicineEnvelop.dto.MedicineSummaryDto;
 import com.yoyak.yoyak.util.exception.CustomException;
+import com.yoyak.yoyak.util.security.SecurityUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Service;
 public class MedicineEnvelopService {
 
     private final MedicineEnvelopRepository medicineEnvelopRepository;
-    private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
     /**
      * 봉투 정보를 받아 등록
@@ -30,8 +31,8 @@ public class MedicineEnvelopService {
      */
     public void addMedicineEnvelop(MedicineEnvelopCreateDto requestDto) {
 
-        Account account = accountRepository.findById(requestDto.getAccountSeq())
-            .orElseThrow(() -> new CustomException(ACCOUNT_INVALID));
+        // 요청한 User이 소유한 Account인지 검증
+        Account account = verifyAccountBelongsToUser(requestDto.getAccountSeq());
 
         MedicineEnvelop medicineEnvelop = MedicineEnvelop.builder()
             .name(requestDto.getName())
@@ -43,6 +44,13 @@ public class MedicineEnvelopService {
         log.info("medicineEnvelop={}", medicineEnvelop);
     }
 
+    // 요청한 User이 소유한 Account인지 검증체크
+    private Account verifyAccountBelongsToUser(Long accountSeq) {
+        return accountService.findByIdAndUserSeq(
+            SecurityUtil.getUserSeq(),
+            accountSeq);
+    }
+
     /**
      * 특정 약 봉투의 약의 간략정보를 조회하는 메소드
      *
@@ -50,6 +58,14 @@ public class MedicineEnvelopService {
      * @return List<MedicineSummaryDto>
      */
     public List<MedicineSummaryDto> findMedicineSummaryList(Long medicineEnvelopSeq) {
+
+        // 요청한 User이 소유한 Account인지 검증
+        verifyAccountBelongsToUser(
+            medicineEnvelopRepository
+                .findById(medicineEnvelopSeq)
+                .orElseThrow(() -> new CustomException(ENVELOP_NOT_EXIST))
+                .getAccount()
+                .getSeq());
 
         List<MedicineSummaryDto> medicineSummaryDtoList =
             medicineEnvelopRepository.findMedicineSummaryByEnvelopSeq(medicineEnvelopSeq);
