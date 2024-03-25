@@ -3,4 +3,4 @@
 /uploads/*
 /runs/detect/**
 **/**/__pycache__
-/trained_model/**
+
