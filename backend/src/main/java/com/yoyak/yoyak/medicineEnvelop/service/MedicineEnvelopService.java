@@ -51,6 +51,34 @@ public class MedicineEnvelopService {
             accountSeq);
     }
 
+    // 유저가 소유한 약봉투인지 검증
+    private void verifyEnvelopeBelongsToUser(Long medicineEnvelopSeq) {
+
+        // 존재하는 약 봉투 인지 검증
+        MedicineEnvelop envelop =
+            medicineEnvelopRepository.findById(medicineEnvelopSeq)
+                .orElseThrow(() -> new CustomException(ENVELOP_NOT_EXIST));
+
+        /**
+         * 약봉투의 account_id와 AccessToken의 user_seq를 비교
+         * 약봉투의 account가 User소유인지 확인
+         */
+        verifyAccountBelongsToUser(envelop.getAccount().getSeq());
+    }
+
+    /**
+     * 요청받은 약 봉투를 삭제
+     *
+     * @param medicineEnvelopSeq
+     */
+    public void deleteMedicineEnvelop(Long medicineEnvelopSeq) {
+
+        // 유효한지 검증
+        verifyEnvelopeBelongsToUser(medicineEnvelopSeq);
+
+        medicineEnvelopRepository.deleteById(medicineEnvelopSeq);
+    }
+
     /**
      * 특정 약 봉투의 약의 간략정보를 조회하는 메소드
      *

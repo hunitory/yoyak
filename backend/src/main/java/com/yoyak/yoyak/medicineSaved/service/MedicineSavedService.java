@@ -3,7 +3,6 @@ package com.yoyak.yoyak.medicineSaved.service;
 import static com.yoyak.yoyak.util.exception.CustomExceptionStatus.ENVELOP_NOT_EXIST;
 import static com.yoyak.yoyak.util.exception.CustomExceptionStatus.MEDICINE_NOT_EXIST;
 
-import com.yoyak.yoyak.account.domain.Account;
 import com.yoyak.yoyak.account.service.AccountService;
 import com.yoyak.yoyak.medicine.domain.Medicine;
 import com.yoyak.yoyak.medicine.domain.MedicineRepository;
@@ -76,9 +75,13 @@ public class MedicineSavedService {
             requestDto.getMedicineSeq());
     }
 
-    // 요청한 User이 소유한 Account인지 검증체크
-    private Account verifyAccountBelongsToUser(Long accountSeq) {
-        return accountService.findByIdAndUserSeq(
+    /**
+     * 요청한 User이 소유한 Account인지 검증체크
+     *
+     * @param accountSeq
+     */
+    private void verifyAccountBelongsToUser(Long accountSeq) {
+        accountService.findByIdAndUserSeq(
             SecurityUtil.getUserSeq(),
             accountSeq);
     }
