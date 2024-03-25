@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MedicineDetailRepository extends JpaRepository<MedicineDetail, Long> {
 
-    Optional<MedicineDetail> findBySeq(Long Seq);
+    Optional<MedicineDetail> findBySeq(Long seq);
 
 }

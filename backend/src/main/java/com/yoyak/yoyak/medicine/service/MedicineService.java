@@ -17,11 +17,13 @@ public class MedicineService {
     private final MedicineRepository medicineRepository;
 
     public MedicineDto findMedicine(Long seq) {
-        Medicine medicine = medicineRepository.findBySeq(seq).orElseThrow(() -> new IllegalArgumentException("해당 약이 없습니다. seq=" + seq));
-        return new MedicineDto(medicine.getSeq(), medicine.getImgPath(), medicine.getItemName(), medicine.getEntpName());
+        Medicine medicine = medicineRepository.findBySeq(seq)
+            .orElseThrow(() -> new IllegalArgumentException("해당 약이 없습니다. seq=" + seq));
+        return new MedicineDto(medicine.getSeq(), medicine.getImgPath(), medicine.getItemName(),
+            medicine.getEntpName());
     }
 
-    public List<MedicineDto> findOrderParameters(MedicineSearchParametersDto parameters) {
+    public List<MedicineDto> findMedicineByParameters(MedicineSearchParametersDto parameters) {
         log.info("param={}", parameters.getFormCodeName());
         return medicineRepository.findByParameters(
             parameters.getSearchName(),
