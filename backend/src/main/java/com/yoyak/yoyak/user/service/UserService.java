@@ -15,6 +15,7 @@ import com.yoyak.yoyak.util.dto.UserInfoDto;
 import com.yoyak.yoyak.util.exception.CustomException;
 import com.yoyak.yoyak.util.exception.CustomExceptionStatus;
 import com.yoyak.yoyak.util.jwt.JwtUtil;
+import com.yoyak.yoyak.util.security.SecurityUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -87,7 +88,7 @@ public class UserService {
     // 아이디 중복체크
     public void dupId(DupIdRequestDto dupIdRequestDto) {
         User user = userRepository.findByUserId(dupIdRequestDto.getUserId())
-            .orElseThrow(() -> new CustomException(CustomExceptionStatus.ID_AVAILABLE));
+            .orElse(null);
 
         if (user != null) {
             throw new CustomException(CustomExceptionStatus.ID_DUPLICATION);
@@ -97,11 +98,18 @@ public class UserService {
     // 닉네임 중복체크
     public void dupNickname(DupNicknameRequestDto dupNicknameRequestDto) {
         User user = userRepository.findByNickname(dupNicknameRequestDto.getNickname())
-            .orElseThrow(() -> new CustomException(CustomExceptionStatus.NICKNAME_AVAILABLE));
+            .orElse(null);
 
         if (user != null) {
             throw new CustomException(CustomExceptionStatus.NICKNAME_DUPLICATION);
         }
+    }
+
+    // 회원탈퇴
+    public void withdraw() {
+        User user = findById(SecurityUtil.getUserSeq());
+
+        userRepository.delete(user);
     }
 
     public User findById(Long seq) {
