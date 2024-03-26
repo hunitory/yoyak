@@ -12,6 +12,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -31,12 +32,11 @@ public class ChallengeArticleService {
             Challenge challenge = Challenge.builder()
                 .seq(dto.getChallengeSeq())
                 .build();
-            User user = User.builder()
-                .seq(dto.getUserSeq())
-                .build();
+//            User user = User.builder()
+//                .seq(dto.getUserSeq())
+//                .build();
             ChallengeArticle article = ChallengeArticle.builder()
                 .content(dto.getContent())
-                .user(user)
                 .challenge(challenge)
                 .imgUrl(url)
                 .build();
@@ -58,6 +58,11 @@ public class ChallengeArticleService {
     public List<ChallengeArticleResponseDto> getMyChallengeArticles() {
         Long userSeq = SecurityUtil.getUserSeq();
         return challengeArticleRepository.findMyArticles(userSeq);
+    }
+
+    @Transactional
+    public int deleteByChallengeSeq(Long challengeSeq) {
+        return challengeArticleRepository.deleteByChallengeSeq(challengeSeq);
     }
 
 
