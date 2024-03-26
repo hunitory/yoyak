@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ChallengeArticleRepository extends JpaRepository<ChallengeArticle, Long>,
     ChallengeArticleCustomRepository {
 
-    List<ChallengeArticle> findByUserSeq(Long userSeq);
 
     List<ChallengeArticle> findByChallengeSeq(Long challengeSeq);
+
+    int deleteByChallengeSeq(Long challengeSeq);
 }

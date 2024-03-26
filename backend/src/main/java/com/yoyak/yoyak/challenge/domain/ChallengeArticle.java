@@ -34,9 +34,9 @@ public class ChallengeArticle {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Challenge challenge;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_seq")
-    private User user;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_seq")
+//    private User user;
 
     @Column(name = "img_url")
     private String imgUrl;
