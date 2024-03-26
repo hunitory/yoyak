@@ -12,6 +12,7 @@ import com.yoyak.yoyak.util.exception.CustomException;
 import com.yoyak.yoyak.util.exception.CustomExceptionStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class CheerService {
 
 
     // 응원하기 증가
+    @Transactional
     public void addCheer(CheerRequestDto cheerRequestDto) {
         Long userSeq = cheerRequestDto.getUserSeq();
         Long challengeArticleSeq = cheerRequestDto.getChallengeArticleSeq();
