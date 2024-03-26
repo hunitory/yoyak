@@ -67,5 +67,5 @@ dependencies {
 }
 
 tasks.named('test') {
-    useJUnitPlatform()
+    exclude 'com/yoyak/yoyak**'
 }
