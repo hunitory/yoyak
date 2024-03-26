@@ -35,20 +35,7 @@ public class AccountService {
             throw new CustomException(CustomExceptionStatus.ACCOUNT_MAXIMUM);
         }
 
-        User user = userService.findById(SecurityUtil.getUserSeq());
-
-        Account account = Account.builder()
-            .name(accountRegistDto.getName())
-            .nickname(accountRegistDto.getNickname())
-            .gender(accountRegistDto.getGender())
-            .birth(accountRegistDto.getBirth())
-            .disease(accountRegistDto.getDisease())
-            .profileImg(accountRegistDto.getProfileImg())
-            .role(accountRole)
-            .user(user)
-            .build();
-
-        accountRepository.save(account);
+        createAccount(SecurityUtil.getUserSeq(), accountRegistDto, accountRole);
     }
 
     // 계정 목록
@@ -108,6 +95,25 @@ public class AccountService {
     public Account findByIdAndUserSeq(Long userSeq, Long accountSeq) {
         return accountRepository.findByUserSeqAndId(userSeq, accountSeq)
             .orElseThrow(() -> new CustomException(CustomExceptionStatus.ACCOUNT_AUTHORITY));
+    }
+
+    // 계정 생성
+    public void createAccount(Long seq, AccountRegistDto accountRegistDto,
+        AccountRole accountRole) {
+        User user = userService.findById(seq);
+
+        Account account = Account.builder()
+            .name(accountRegistDto.getName())
+            .nickname(accountRegistDto.getNickname())
+            .gender(accountRegistDto.getGender())
+            .birth(accountRegistDto.getBirth())
+            .disease(accountRegistDto.getDisease())
+            .profileImg(accountRegistDto.getProfileImg())
+            .role(accountRole)
+            .user(user)
+            .build();
+
+        accountRepository.save(account);
     }
 
 }

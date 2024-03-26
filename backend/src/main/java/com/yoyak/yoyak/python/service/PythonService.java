@@ -24,6 +24,7 @@ public class PythonService {
     private String fastApiUrl;
 
     public String getSummary(MedicineDetail medicineDetail) {
+        log.info("fastApiUrl = {}", fastApiUrl);
         SummaryRequestDto summaryRequestDto = SummaryRequestDto.builder()
             .itemName(medicineDetail.getMedicine().getItemName())
             .atpn(medicineDetail.getAtpn())

@@ -1,5 +1,8 @@
 package com.yoyak.yoyak.user.controller;
 
+import com.yoyak.yoyak.account.domain.AccountRole;
+import com.yoyak.yoyak.account.dto.AccountRegistDto;
+import com.yoyak.yoyak.account.service.AccountService;
 import com.yoyak.yoyak.user.dto.DupIdRequestDto;
 import com.yoyak.yoyak.user.dto.DupNicknameRequestDto;
 import com.yoyak.yoyak.user.dto.FindIdRequestDto;
@@ -11,6 +14,7 @@ import com.yoyak.yoyak.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+    private final AccountService accountService;
 
     // 일반 로그인
     @PostMapping("/login/origin")
@@ -36,7 +41,17 @@ public class UserController {
     // 일반 회원가입
     @PostMapping("/signin")
     public ResponseEntity<Object> signinUser(@RequestBody SignInRequestDto signInRequestDto) {
-        userService.signIn(signInRequestDto);
+        Long seq = userService.signIn(signInRequestDto);
+
+        AccountRegistDto accountRegistDto = AccountRegistDto.builder()
+            .name(signInRequestDto.getName())
+            .nickname(signInRequestDto.getNickname())
+            .gender(signInRequestDto.getGender())
+            .birth(signInRequestDto.getBirth())
+            .disease(null)
+            .profileImg(0)
+            .build();
+        accountService.createAccount(seq, accountRegistDto, AccountRole.ADMIN);
 
         return ResponseEntity.ok().build();
     }
@@ -71,6 +86,14 @@ public class UserController {
     public ResponseEntity<Object> dupNickname(
         @RequestBody DupNicknameRequestDto dupNicknameRequestDto) {
         userService.dupNickname(dupNicknameRequestDto);
+
+        return ResponseEntity.ok().build();
+    }
+
+    // 회원탈퇴
+    @DeleteMapping("/withdraw")
+    public ResponseEntity<Object> withdrawUser() {
+        userService.withdraw();
 
         return ResponseEntity.ok().build();
     }

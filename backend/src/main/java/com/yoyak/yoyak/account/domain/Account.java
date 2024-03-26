@@ -19,6 +19,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Data
 @Builder
@@ -57,6 +59,7 @@ public class Account {
 
     @ManyToOne
     @JoinColumn(name = "user_seq", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     public void modifyAccount(AccountModifyDto accountModifyDto) {
