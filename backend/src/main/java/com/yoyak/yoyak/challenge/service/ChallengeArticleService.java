@@ -32,11 +32,10 @@ public class ChallengeArticleService {
             Challenge challenge = Challenge.builder()
                 .seq(dto.getChallengeSeq())
                 .build();
-//            User user = User.builder()
-//                .seq(dto.getUserSeq())
-//                .build();
+
             ChallengeArticle article = ChallengeArticle.builder()
                 .content(dto.getContent())
+                .userSeq(dto.getUserSeq())
                 .challenge(challenge)
                 .imgUrl(url)
                 .build();

@@ -33,6 +33,9 @@ public class ChallengeService {
         challengeRepository.save(challenge);
     }
 
-    public void deleteByUserSeq(Long userSeq) {
+    public void deleteAllConnection(Long userSeq) {
+        challengeRepository.deleteAllConnectionByUserSeq(userSeq);
     }
+
+
 }

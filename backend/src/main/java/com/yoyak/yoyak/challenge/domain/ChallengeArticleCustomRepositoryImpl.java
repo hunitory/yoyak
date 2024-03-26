@@ -60,28 +60,7 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
 
         return ret;
 
-//        List<ChallengeArticle> articles = queryFactory.select(challengeArticle)
-//            .from(challengeArticle)
-//            .where(challengeArticle.user.seq.ne(userSeq))
-//            .fetch();
-//
-//
-//
-//
-//        return articles.stream().map(article -> {
-//            int cheerCnt = article.getCheers().size();
-//
-//            return ChallengeArticleResponseDto.builder()
-//                .articleSeq(article.getSeq())
-//                .challengeSeq(article.getChallenge().getSeq())
-//                .imgUrl(article.getImgUrl())
-//                .content(article.getContent())
-//                .userNickname(article.getChallenge().getUser().getNickname())
-//                .userSeq(article.getChallenge().getUser().getSeq())
-//                .cheerCnt(cheerCnt)
-//                .build();
-//
-//        }).toList();
+
 
     }
 
@@ -115,25 +94,7 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
 
         return ret;
 
-//        List<ChallengeArticle> articles = queryFactory.select(challengeArticle)
-//            .from(challengeArticle)
-//            .where(challengeArticle.user.seq.eq(userSeq))
-//            .fetch();
-//
-//        return articles.stream().map(article -> {
-//            int cheerCnt = article.getCheers().size();
-//
-//            return ChallengeArticleResponseDto.builder()
-//                .articleSeq(article.getSeq())
-//                .challengeSeq(article.getChallenge().getSeq())
-//                .imgUrl(article.getImgUrl())
-//                .content(article.getContent())
-//                .userNickname(article.getChallenge().getUser().getNickname())
-//                .userSeq(article.getChallenge().getUser().getSeq())
-//                .cheerCnt(cheerCnt)
-//                .build();
-//
-//        }).toList();
-
     }
+
+
 }

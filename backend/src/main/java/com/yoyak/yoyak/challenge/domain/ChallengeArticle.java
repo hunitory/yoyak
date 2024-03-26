@@ -34,9 +34,9 @@ public class ChallengeArticle {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Challenge challenge;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_seq")
-//    private User user;
+
+    @Column(name = "user_seq")
+    private Long userSeq;
 
     @Column(name = "img_url")
     private String imgUrl;
@@ -45,7 +45,7 @@ public class ChallengeArticle {
     private String content;
 
 
-    @OneToMany(mappedBy = "challengeArticle")
+    @OneToMany(mappedBy = "challengeArticle", fetch = FetchType.EAGER)
     @Builder.Default
     private List<Cheer> cheers = new ArrayList<>();
 
