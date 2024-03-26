@@ -24,6 +24,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Data
 @Builder
@@ -61,6 +63,7 @@ public class Notification {
 
     @ManyToOne
     @JoinColumn(name = "account_seq", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Account account;
 
     @OneToMany(mappedBy = "notification", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)

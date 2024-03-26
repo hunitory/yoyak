@@ -17,6 +17,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Data
 @Builder
@@ -43,6 +45,7 @@ public class NotificationTime {
 
     @ManyToOne
     @JoinColumn(name = "notification_seq", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Notification notification;
 
     public void takenNotificationTime(LocalDateTime takenTime) {
