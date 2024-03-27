@@ -23,6 +23,7 @@ public enum CustomExceptionStatus {
 
     // medicine 저장 관련
     ENVELOP_NOT_EXIST(5001, "존재하지 않는 약 봉투입니다."),
+    ENVELOP_AUTHORITY(5002, "접근할 수 없는 약 봉투입니다."),
 
     // alarm 관련
     NOTI_INVALID(6001, "존재하지 않는 알림입니다"),
