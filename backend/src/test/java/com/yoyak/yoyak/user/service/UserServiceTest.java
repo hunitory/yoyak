@@ -308,7 +308,7 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
         // then
-        userService.withdraw();
+        userService.withdraw(userId);
         verify(userRepository).delete(user);
     }
 
