@@ -113,9 +113,11 @@ public class NotificationTimeService {
     // 알람 삭제
     public void removeNotification(Long notiSeq) {
         notificationService.findByIdAndUserSeq(SecurityUtil.getUserSeq(), notiSeq);
+        LocalDateTime localDateTime = LocalDateTime.now();
+        localDateTime = localDateTime.withHour(0).withMinute(0);
 
         List<NotificationTime> notificationTimes = notificationTimeRepository
-            .findAllByNotificationSeq(notiSeq, LocalDateTime.now());
+            .findAllByNotificationSeq(notiSeq, localDateTime);
 
         for (NotificationTime notificationTime : notificationTimes) {
             notificationTimeRepository.delete(notificationTime);
