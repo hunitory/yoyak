@@ -94,36 +94,20 @@ async def upload_file(image: UploadFile = File(...)):
 import pydantic
 
 
-class SummaryRequestDto(pydantic.BaseModel):
-    itemName : str
-    atpn : str
-    efficacy : str
-    useMethod : str
-    depositMethod : str
-    sideEffect : str
 
-    def __str__(self):
-        return f"itemName: {self.itemName}\n" \
-               f"atpn: {self.atpn}\n" \
-               f"efficacy: {self.efficacy}\n" \
-               f"useMethod: {self.useMethod}\n" \
-               f"depositMethod: {self.depositMethod}\n" \
-               f"sideEffect: {self.sideEffect}"
-
-
-from summary import get_content_using_llm;
+from summary import get_content_using_llm, SummaryRequestDto, SummaryResponseDto;
 
 
 @app.post("/python/summary")
 async def summary(summaryRequestDto: SummaryRequestDto):
-    print("summaryRequestDto: ", summaryRequestDto)
-    # content = get_content_using_llm(summaryRequestDto)
+    # print("summaryRequestDto: ", summaryRequestDto)
+    content = get_content_using_llm(summaryRequestDto)
     # print(type(content))
     # print(content)
 
-    # return {
-    #     "summary" : content["summary"]
-    # }
+    return {
+        "summary" : content["summary"]
+    }
 
 
 
