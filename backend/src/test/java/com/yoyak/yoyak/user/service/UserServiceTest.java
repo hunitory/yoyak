@@ -147,7 +147,7 @@ class UserServiceTest {
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
 
         // then
-        userService.signIn(signInRequestDto);
+        userService.signIn(signInRequestDto, UserPlatform.ORIGIN);
         assertNotNull(savedUser);
     }
 

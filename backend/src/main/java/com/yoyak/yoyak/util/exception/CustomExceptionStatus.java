@@ -14,6 +14,7 @@ public enum CustomExceptionStatus {
     NICKNAME_DUPLICATION(1005, "닉네임이 중복입니다"),
     NICKNAME_AVAILABLE(1006, "닉네임을 사용할 수 있습니다"),
     USER_NOTFOUND(1007, "일치하는 사용자를 찾을 수 없습니다"),
+    SIGNUP_NEEDED(1008, "카카오 회원가입이 필요합니다"),
 
 
     // medicine 검색 관련
@@ -22,7 +23,7 @@ public enum CustomExceptionStatus {
 
     // medicine 저장 관련
     ENVELOP_NOT_EXIST(5001, "존재하지 않는 약 봉투입니다."),
-    
+
     // alarm 관련
     NOTI_INVALID(6001, "존재하지 않는 알림입니다"),
     NOTI_AUTHORITY(6002, "알림에 접근할 수 없습니다"),
