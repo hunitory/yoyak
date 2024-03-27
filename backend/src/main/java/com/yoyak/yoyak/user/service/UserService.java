@@ -10,16 +10,17 @@ import com.yoyak.yoyak.user.dto.DupNicknameRequestDto;
 import com.yoyak.yoyak.user.dto.FindIdRequestDto;
 import com.yoyak.yoyak.user.dto.FindIdResponseDto;
 import com.yoyak.yoyak.user.dto.FindPwRequestDto;
+import com.yoyak.yoyak.user.dto.KakaoLoginRequestDto;
 import com.yoyak.yoyak.user.dto.LoginRequestDto;
 import com.yoyak.yoyak.user.dto.SignInRequestDto;
 import com.yoyak.yoyak.util.dto.UserInfoDto;
 import com.yoyak.yoyak.util.exception.CustomException;
 import com.yoyak.yoyak.util.exception.CustomExceptionStatus;
 import com.yoyak.yoyak.util.jwt.JwtUtil;
-import com.yoyak.yoyak.util.security.SecurityUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -31,6 +32,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final ChallengeService challengeService;
     private final JwtUtil jwtUtil;
+    @Value("${kakao.secret}")
+    private String kakaoSecret;
 
     // 일반 로그인
     public String login(LoginRequestDto loginRequestDto) {
@@ -55,6 +58,11 @@ public class UserService {
 
     // 일반 회원가입
     public Long signIn(SignInRequestDto signInRequestDto) {
+        if (signInRequestDto.getPlatform().equals(UserPlatform.KAKAO)) {
+            signInRequestDto.setUserId(signInRequestDto.getUserId() + kakaoSecret);
+            signInRequestDto.setPassword(signInRequestDto.getPassword() + kakaoSecret);
+        }
+
         User user = User.builder()
             .userId(signInRequestDto.getUserId())
             .password(signInRequestDto.getPassword())
@@ -62,11 +70,28 @@ public class UserService {
             .nickname(signInRequestDto.getNickname())
             .gender(signInRequestDto.getGender())
             .birth(signInRequestDto.getBirth())
-            .platform(UserPlatform.ORIGIN)
+            .platform(signInRequestDto.getPlatform())
             .role(UserRole.USER)
             .build();
 
         return userRepository.save(user).getSeq();
+    }
+
+    // 카카오 로그인
+    public String loginKakao(KakaoLoginRequestDto kakaoLoginRequestDto) {
+        User user = userRepository.findByUserId(kakaoLoginRequestDto.getId() + kakaoSecret)
+            .orElseThrow(() -> new CustomException(CustomExceptionStatus.SIGNUP_NEEDED));
+
+        UserInfoDto userInfoDto = UserInfoDto.builder()
+            .userSeq(user.getSeq())
+            .userId(user.getUserId())
+            .name(user.getName())
+            .nickname(user.getNickname())
+            .gender(user.getGender())
+            .birth(user.getBirth())
+            .build();
+
+        return jwtUtil.createAccessToken(userInfoDto);
     }
 
     // 일반 아이디 찾기
