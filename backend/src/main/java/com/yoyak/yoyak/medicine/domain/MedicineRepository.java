@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface MedicineRepository extends JpaRepository<Medicine, Integer> {
+public interface MedicineRepository extends JpaRepository<Medicine, Long> {
 
     Optional<Medicine> findBySeq(Long seq);
 

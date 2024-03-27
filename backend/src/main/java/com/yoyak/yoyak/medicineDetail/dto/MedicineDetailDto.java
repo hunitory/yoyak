@@ -20,4 +20,5 @@ public class MedicineDetailDto {
     String atpn;
     String sideEffect;
     String summary;
+    String keyword;
 }
