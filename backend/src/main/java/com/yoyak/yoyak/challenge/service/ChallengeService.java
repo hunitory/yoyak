@@ -16,6 +16,7 @@ public class ChallengeService {
 
     private final ChallengeRepository challengeRepository;
 
+
     public void create(ChallengeCreateDto challengeCreateDto) {
         LocalDate startDate = LocalDate.parse(challengeCreateDto.getStartDate());
         LocalDate endDate = LocalDate.parse(challengeCreateDto.getEndDate());
@@ -31,4 +32,10 @@ public class ChallengeService {
 
         challengeRepository.save(challenge);
     }
+
+    public void deleteAllConnection(Long userSeq) {
+        challengeRepository.deleteAllConnectionByUserSeq(userSeq);
+    }
+
+
 }

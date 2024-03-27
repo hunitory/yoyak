@@ -11,6 +11,7 @@ import com.yoyak.yoyak.user.dto.FindPwRequestDto;
 import com.yoyak.yoyak.user.dto.LoginRequestDto;
 import com.yoyak.yoyak.user.dto.SignInRequestDto;
 import com.yoyak.yoyak.user.service.UserService;
+import com.yoyak.yoyak.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -93,7 +94,8 @@ public class UserController {
     // 회원탈퇴
     @DeleteMapping("/withdraw")
     public ResponseEntity<Object> withdrawUser() {
-        userService.withdraw();
+        Long userSeq = SecurityUtil.getUserSeq();
+        userService.withdraw(userSeq);
 
         return ResponseEntity.ok().build();
     }

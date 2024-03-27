@@ -16,6 +16,11 @@ class ChallengeArticleCustomRepositoryImplTest {
 
     @Test
     public void excpetUserSeqTest() {
-//        challengeArticleRepsoitory.findArticlesExceptUserSeq(1L).forEach(System.out::println);
+        challengeArticleRepsoitory.findArticlesExceptUserSeq(1L).forEach(System.out::println);
+    }
+
+    @Test
+    public void myArticlesTest() {
+        challengeArticleRepsoitory.findMyArticles(1L).forEach(System.out::println);
     }
 }

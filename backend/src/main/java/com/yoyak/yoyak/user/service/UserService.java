@@ -1,5 +1,6 @@
 package com.yoyak.yoyak.user.service;
 
+import com.yoyak.yoyak.challenge.service.ChallengeService;
 import com.yoyak.yoyak.user.domain.User;
 import com.yoyak.yoyak.user.domain.UserPlatform;
 import com.yoyak.yoyak.user.domain.UserRepository;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ChallengeService challengeService;
     private final JwtUtil jwtUtil;
 
     // 일반 로그인
@@ -106,9 +108,10 @@ public class UserService {
     }
 
     // 회원탈퇴
-    public void withdraw() {
-        User user = findById(SecurityUtil.getUserSeq());
+    public void withdraw(Long useqSeq) {
 
+        User user = findById(useqSeq);
+        challengeService.deleteAllConnection(user.getSeq());
         userRepository.delete(user);
     }
 
