@@ -9,6 +9,7 @@ import com.yoyak.yoyak.python.service.PythonService;
 import com.yoyak.yoyak.util.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +19,9 @@ public class MedicineDetailService {
 
     private final MedicineDetailRepository medicineDetailRepository;
     private final PythonService pythonService;
+
+    @Value("${cloud.aws.s3.prefix}")
+    private String s3Prefix;
 
     /**
      * 주어진 seq를 통해 약의 상세 정보를 조회하고, 그 정보를 반환
@@ -38,7 +42,7 @@ public class MedicineDetailService {
             .medicineSeq(medicineDetail.getSeq())
             .itemName(medicineDetail.getMedicine().getItemName())
             .entpName(medicineDetail.getMedicine().getEntpName())
-            .imagePath(medicineDetail.getMedicine().getImgPath())
+            .imagePath(s3Prefix + medicineDetail.getMedicine().getImgPath())
             .useMethod(medicineDetail.getUseMethod())
             .depositMethod(medicineDetail.getDepositMethod())
             .atpnWarn(medicineDetail.getAtpnWarn())
