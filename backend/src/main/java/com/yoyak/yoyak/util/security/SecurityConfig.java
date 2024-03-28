@@ -25,7 +25,7 @@ public class SecurityConfig {
 
     private static final String[] AUTH_WHITELIST = {
         "/api/user/**", "/api/recognition/**", "/api/medicine/**", "/api/medicineDetail/**",
-        "/api2/test/**",
+        "/api2/test/**", "/actuator/**"
     };
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService customUserDetailsService;
