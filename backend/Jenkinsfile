@@ -30,7 +30,7 @@ pipeline {
                 dir('backend') {
                     script {
                         sh'''
-                        /var/jenkins_home/workspace/nginx-server/deploy.sh
+                        nginx-server/deploy.sh
                         '''
                     }
                 }
