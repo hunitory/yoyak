@@ -44,7 +44,7 @@ pipeline {
                 dir('backend') {
                     script {
                         sh'''
-                        sudo ./deploy.sh
+                        ./deploy.sh
                         '''
                     }
                 }
