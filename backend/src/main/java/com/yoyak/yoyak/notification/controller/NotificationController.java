@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,6 +71,13 @@ public class NotificationController {
     public ResponseEntity<Object> notificationRemove(@PathVariable Long notiSeq) {
         notificationTimeService.removeNotification(notiSeq);
 
+        return ResponseEntity.ok().build();
+    }
+
+    @Scheduled(cron = "0 * * * * ?")
+    public ResponseEntity<Object> pushNotification() {
+        log.info("알림 발송");
+        notificationService.sendFCM();
         return ResponseEntity.ok().build();
     }
 }

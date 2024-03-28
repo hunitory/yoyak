@@ -152,4 +152,6 @@ public class NotificationTimeService {
         return notificationTimeRepository.findByIdAndNotiTimeSeq(userSeq, notiTimeSeq)
             .orElseThrow(() -> new CustomException(CustomExceptionStatus.NOTI_INVALID));
     }
+
+
 }

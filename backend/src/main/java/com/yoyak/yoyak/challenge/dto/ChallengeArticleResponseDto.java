@@ -18,7 +18,7 @@ public class ChallengeArticleResponseDto {
     private Long articleSeq;
     private Long challengeSeq;
     private String imgUrl;
-    private String content;
+    private String title;
 
     private String userNickname;
     private Long userSeq;
