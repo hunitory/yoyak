@@ -20,4 +20,5 @@ public class AccountListDto {
     private UserGender gender;
     private LocalDate birth;
     private int profileImg;
+    private String disease;
 }
