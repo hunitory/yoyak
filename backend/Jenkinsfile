@@ -65,7 +65,7 @@ pipeline {
                 dir('backend'){
                     sh '''
                     echo 'Deploy BE...'
-                    docker run -d -p 8081:8080 --name springboot docker-springboot:0.0.1
+                    docker run -d -p 8081:8080 -e TZ=Asia/Seoul --name springboot docker-springboot:0.0.1
                     '''
                 }
             }

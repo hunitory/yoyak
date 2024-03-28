@@ -14,6 +14,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -30,6 +32,7 @@ public class MedicineSaved {
 
     @ManyToOne
     @JoinColumn(name = "medicine_envelop_seq", referencedColumnName = "seq")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private MedicineEnvelop medicineEnvelop;
 
     @ManyToOne(fetch = FetchType.LAZY)

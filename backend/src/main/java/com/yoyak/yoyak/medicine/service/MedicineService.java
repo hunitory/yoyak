@@ -58,11 +58,10 @@ public class MedicineService {
             throw new CustomException(CustomExceptionStatus.MEDICINE_NOT_FOUND);
         }
 
-        return medicineRepository.findByParameters(
-            parameters.getSearchName(),
-            parameters.getDrugShape(),
-            parameters.getColorClass(),
-            parameters.getFormCodeName(),
-            parameters.getLine());
+        // s3주소 넣어주기
+        result.stream()
+            .forEach(dto -> dto.setImgPath(s3Prefix + dto.getImgPath()));
+
+        return result;
     }
 }
