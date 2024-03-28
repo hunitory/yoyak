@@ -89,6 +89,13 @@ public class UserService {
         User user = userRepository.findByUserId(kakaoLoginRequestDto.getId() + kakaoSecret)
             .orElseThrow(() -> new CustomException(CustomExceptionStatus.SIGNUP_NEEDED));
 
+        DeviceToken deviceToken = DeviceToken
+            .builder()
+            .token(kakaoLoginRequestDto.getDeviceToken())
+            .build();
+
+        user.addDeviceToken(deviceToken);
+
         UserInfoDto userInfoDto = UserInfoDto.builder()
             .userSeq(user.getSeq())
             .userId(user.getUserId())
