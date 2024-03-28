@@ -8,6 +8,7 @@ import com.yoyak.yoyak.user.dto.DupNicknameRequestDto;
 import com.yoyak.yoyak.user.dto.FindIdRequestDto;
 import com.yoyak.yoyak.user.dto.FindIdResponseDto;
 import com.yoyak.yoyak.user.dto.FindPwRequestDto;
+import com.yoyak.yoyak.user.dto.KakaoLoginRequestDto;
 import com.yoyak.yoyak.user.dto.LoginRequestDto;
 import com.yoyak.yoyak.user.dto.SignInRequestDto;
 import com.yoyak.yoyak.user.service.UserService;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {
+
 
     private final UserService userService;
     private final AccountService accountService;
@@ -55,6 +57,15 @@ public class UserController {
         accountService.createAccount(seq, accountRegistDto, AccountRole.ADMIN);
 
         return ResponseEntity.ok().build();
+    }
+
+    // 카카오 로그인
+    @PostMapping("/login/kakao")
+    public ResponseEntity<String> loginKakao(
+        @RequestBody KakaoLoginRequestDto kakaoLoginRequestDto) {
+        String token = userService.loginKakao(kakaoLoginRequestDto);
+
+        return ResponseEntity.ok().body(token);
     }
 
     // 일반 아이디 찾기
