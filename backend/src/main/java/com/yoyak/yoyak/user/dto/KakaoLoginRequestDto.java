@@ -14,4 +14,5 @@ import lombok.Setter;
 public class KakaoLoginRequestDto {
 
     private String id;
+    private String deviceToken;
 }
