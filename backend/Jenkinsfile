@@ -13,20 +13,6 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                dir('backend') {
-                    script{
-                        withSonarQubeEnv('sonarqube') {
-                            sh "echo 'SonarQube Analysis...'"
-                            sh "chmod +x gradlew"
-                            sh "./gradlew sonar"
-                        }
-                    }
-                }
-            }
-        }
-
         stage('Springboot build'){
             steps{
                 dir('backend'){
@@ -44,6 +30,7 @@ pipeline {
                 dir('backend') {
                     script {
                         sh'''
+                        chmod +x deploy.sh switch.sh
                         ./deploy.sh
                         '''
                     }
