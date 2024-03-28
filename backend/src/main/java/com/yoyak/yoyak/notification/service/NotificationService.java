@@ -1,17 +1,24 @@
 package com.yoyak.yoyak.notification.service;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Message;
 import com.yoyak.yoyak.account.domain.Account;
 import com.yoyak.yoyak.account.service.AccountService;
+import com.yoyak.yoyak.deviceToken.domain.DeviceToken;
 import com.yoyak.yoyak.notification.domain.Notification;
 import com.yoyak.yoyak.notification.domain.NotificationRepository;
 import com.yoyak.yoyak.notification.dto.NotificationFindDto;
 import com.yoyak.yoyak.notification.dto.NotificationModifyDto;
 import com.yoyak.yoyak.notification.dto.NotificationRegistDto;
+import com.yoyak.yoyak.notificationTime.domain.NotificationTime;
+import com.yoyak.yoyak.notificationTime.domain.NotificationTimeRepository;
 import com.yoyak.yoyak.util.exception.CustomException;
 import com.yoyak.yoyak.util.exception.CustomExceptionStatus;
 import com.yoyak.yoyak.util.security.SecurityUtil;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +31,10 @@ public class NotificationService {
 
     private final AccountService accountService;
     private final NotificationRepository notificationRepository;
+    private final NotificationTimeRepository notificationTimeRepository;
+
+    private final FirebaseMessaging firebaseMessaging;
+
 
     // 알람 등록
     public Notification addNotification(NotificationRegistDto notificationRegistDto) {
@@ -79,4 +90,47 @@ public class NotificationService {
         return notificationRepository.findByIdAndUseSeq(userSeq, notiSeq)
             .orElseThrow(() -> new CustomException(CustomExceptionStatus.NOTI_AUTHORITY));
     }
+
+    public void sendFCM() {
+        LocalDateTime now = LocalDateTime.now();
+        now = now.withSecond(0).withNano(0);
+
+        List<NotificationTime> notificationTimes = notificationTimeRepository.findByTime(now);
+
+        for (NotificationTime notiTime : notificationTimes) {
+
+            Notification notification = notiTime.getNotification();
+            List<DeviceToken> deviceTokens = notification.getAccount().getUser().getDeviceTokens();
+
+            if (deviceTokens.isEmpty()) {
+                continue;
+            }
+
+            for (DeviceToken deviceToken : deviceTokens) {
+                // FCM 전송
+                // FCM 메시지 생성 (알림 메시지
+                String message = notification.getName() + " 알림입니다.";
+                Message fcmMessage = Message.builder()
+                    .setNotification(getNotification(message))
+                    .setToken(deviceToken.getToken())
+                    .build();
+
+                try {
+                    firebaseMessaging.send(fcmMessage);
+                } catch (FirebaseMessagingException e) {
+                    log.error("FCM 전송 실패", e);
+                }
+
+            }
+
+        }
+    }
+
+    private com.google.firebase.messaging.Notification getNotification(String message) {
+        return com.google.firebase.messaging.Notification.builder()
+            .setTitle("Yoyak 알림")
+            .setBody(message)
+            .build();
+    }
+
 }

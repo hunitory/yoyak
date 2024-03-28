@@ -17,4 +17,9 @@ public interface NotificationTimeRepository extends JpaRepository<NotificationTi
 
     @Query("select n from NotificationTime n where n.notification.account.user.seq = :userSeq and n.seq = :notiTimeSeq")
     Optional<NotificationTime> findByIdAndNotiTimeSeq(Long userSeq, Long notiTimeSeq);
+
+
+    List<NotificationTime> findByTime(LocalDateTime time);
+
+
 }

@@ -1,6 +1,7 @@
 package com.yoyak.yoyak.user.service;
 
 import com.yoyak.yoyak.challenge.service.ChallengeService;
+import com.yoyak.yoyak.deviceToken.domain.DeviceToken;
 import com.yoyak.yoyak.user.domain.User;
 import com.yoyak.yoyak.user.domain.UserPlatform;
 import com.yoyak.yoyak.user.domain.UserRepository;
@@ -16,7 +17,6 @@ import com.yoyak.yoyak.util.dto.UserInfoDto;
 import com.yoyak.yoyak.util.exception.CustomException;
 import com.yoyak.yoyak.util.exception.CustomExceptionStatus;
 import com.yoyak.yoyak.util.jwt.JwtUtil;
-import com.yoyak.yoyak.util.security.SecurityUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +40,12 @@ public class UserService {
         if (!user.getPassword().equals(loginRequestDto.getPassword())) {
             throw new CustomException(CustomExceptionStatus.LOGIN_WRONG);
         }
+
+        DeviceToken deviceToken = DeviceToken.builder()
+            .token(loginRequestDto.getDeviceToken())
+            .build();
+
+        user.addDeviceToken(deviceToken);
 
         UserInfoDto userInfoDto = UserInfoDto.builder()
             .userSeq(user.getSeq())

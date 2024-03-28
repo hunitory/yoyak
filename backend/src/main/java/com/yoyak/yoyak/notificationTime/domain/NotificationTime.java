@@ -17,6 +17,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -26,6 +27,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @AllArgsConstructor
 @Entity
 @Getter
+@Setter
 @Table(name = "notification_time")
 public class NotificationTime {
 
@@ -35,6 +37,7 @@ public class NotificationTime {
 
     @Column(nullable = false)
     private LocalDateTime time;
+
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
