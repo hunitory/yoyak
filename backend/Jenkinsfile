@@ -48,12 +48,12 @@ pipeline {
                         if (containerExists) {
                             sh "docker stop ${params.NAME}"
                             sh "docker rm ${params.NAME}"
-                            sh "docker rmi docker-springboot:0.0.1"
+                            sh "docker rmi docker-springtest:0.0.1"
                         }
 
                         sh '''
                         echo 'Dockerimage build...'
-                        docker build -t docker-springboot:0.0.1 .
+                        docker build -t docker-springtest:0.0.1 .
                         '''
                     }
                 }
@@ -65,7 +65,7 @@ pipeline {
                 dir('backend'){
                     sh '''
                     echo 'Deploy BE...'
-                    docker run -d -p 9091:9091 --name springtest docker-springboot:0.0.1
+                    docker run -d -p 9091:9091 --name springtest docker-springtest:0.0.1
                     '''
                 }
             }
