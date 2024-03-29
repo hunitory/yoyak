@@ -5,6 +5,8 @@ import com.yoyak.yoyak.challenge.domain.ChallengeRepository;
 import com.yoyak.yoyak.challenge.dto.ChallengeCreateDto;
 import com.yoyak.yoyak.challenge.dto.ChallengeResponseDto;
 import com.yoyak.yoyak.user.domain.User;
+import com.yoyak.yoyak.util.exception.CustomException;
+import com.yoyak.yoyak.util.exception.CustomExceptionStatus;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -42,21 +44,26 @@ public class ChallengeService {
     }
 
     public ChallengeResponseDto getEnrolledChallenge(Long userSeq){
-        Challenge challenge = challengeRepository.findLastByUserSeq(userSeq);
-        int articleSize = challenge.getChallengeArticles().size();
-        LocalDate startDate = challenge.getStartDate();
-        LocalDate endDate = challenge.getEndDate();
+        try{
+            Challenge challenge = challengeRepository.findLastByUserSeq(userSeq);
+            int articleSize = challenge.getChallengeArticles().size();
+            LocalDate startDate = challenge.getStartDate();
+            LocalDate endDate = challenge.getEndDate();
 
-        Period period = Period.between(startDate, endDate);
-        int day = period.getDays();
+            Period period = Period.between(startDate, endDate);
+            int day = period.getDays();
 
-        return ChallengeResponseDto.builder()
-            .title(challenge.getTitle())
-            .startDate(startDate)
-            .endDate(endDate)
-            .day(day)
-            .articleSize(articleSize)
-            .build();
+            return ChallengeResponseDto.builder()
+                .title(challenge.getTitle())
+                .startDate(startDate)
+                .endDate(endDate)
+                .day(day)
+                .articleSize(articleSize)
+                .build();
+
+        }catch(Exception e){
+            throw new CustomException(CustomExceptionStatus.THERE_IS_NO_CHALLENGE);
+        }
     }
 
     public void checkChallengeDeadline(){
