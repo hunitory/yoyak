@@ -100,6 +100,7 @@ public class NotificationService {
         for (NotificationTime notiTime : notificationTimes) {
 
             Notification notification = notiTime.getNotification();
+            String accountName = notification.getAccount().getName();
             List<DeviceToken> deviceTokens = notification.getAccount().getUser().getDeviceTokens();
 
             if (deviceTokens.isEmpty()) {
@@ -109,7 +110,7 @@ public class NotificationService {
             for (DeviceToken deviceToken : deviceTokens) {
                 // FCM 전송
                 // FCM 메시지 생성 (알림 메시지
-                String message = notification.getName() + " 알림입니다.";
+                String message = String.format("%s 님! %s 시간이에요!", accountName, notification.getName());
                 Message fcmMessage = Message.builder()
                     .setNotification(getNotification(message))
                     .setToken(deviceToken.getToken())
