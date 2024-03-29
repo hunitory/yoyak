@@ -1,0 +1,79 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.3'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.sonarqube' version '4.4.1.3373'
+}
+
+group = 'com.yoyak'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", "yoyak"
+        property "sonar.projectName", "yoyak"
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    //  lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // mysql
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    // aws s3
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    implementation 'software.amazon.awssdk:s3:2.17.285'
+
+    // queryDSL
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+
+    // firebase
+    implementation 'com.google.firebase:firebase-admin:9.2.0'
+
+
+    // ElasticSearch
+    implementation 'co.elastic.clients:elasticsearch-java:8.13.0'
+//    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+}
+
+tasks.named('test') {
+    exclude 'com/yoyak/yoyak**'
+}

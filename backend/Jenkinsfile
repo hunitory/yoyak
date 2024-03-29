@@ -1,0 +1,74 @@
+pipeline {
+    agent any
+
+    parameters{
+        string(name: 'NAME', defaultValue: 'springboot')
+    }
+
+    stages {
+        stage('SCM') {
+            steps {
+                sh "echo 'SCM...'"
+                checkout scm
+            }
+        }
+
+//         stage('SonarQube Analysis') {
+//             steps {
+//                 dir('backend') {
+//                     script{
+//                         withSonarQubeEnv('sonarqube') {
+//                             sh "echo 'SonarQube Analysis...'"
+//                             sh "chmod +x gradlew"
+//                             sh "./gradlew sonar"
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+
+        stage('Springboot build'){
+            steps{
+                dir('backend'){
+                    sh '''
+                    echo 'Springboot build...'
+                    chmod +x gradlew
+                            ./gradlew clean build
+                    '''
+                }
+            }
+        }
+
+        stage('Dockerimage build'){
+            steps {
+                dir('backend') {
+                    script {
+                        def containerExists = sh(script: "docker ps -a --format '{{.Names}}' | grep ${params.NAME}", returnStatus: true) == 0
+
+                        if (containerExists) {
+                            sh "docker stop ${params.NAME}"
+                            sh "docker rm ${params.NAME}"
+                            sh "docker rmi docker-springboot:0.0.1"
+                        }
+
+                        sh '''
+                        echo 'Dockerimage build...'
+                        docker build -t docker-springboot:0.0.1 .
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Deploy'){
+            steps{
+                dir('backend'){
+                    sh '''
+                    echo 'Deploy BE...'
+                    docker run -d -p 8081:8080 -e TZ=Asia/Seoul --name springboot docker-springboot:0.0.1
+                    '''
+                }
+            }
+        }
+    }
+}
