@@ -13,19 +13,19 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                dir('backend') {
-                    script{
-                        withSonarQubeEnv('sonarqube') {
-                            sh "echo 'SonarQube Analysis...'"
-                            sh "chmod +x gradlew"
-                            sh "./gradlew sonar"
-                        }
-                    }
-                }
-            }
-        }
+//         stage('SonarQube Analysis') {
+//             steps {
+//                 dir('backend') {
+//                     script{
+//                         withSonarQubeEnv('sonarqube') {
+//                             sh "echo 'SonarQube Analysis...'"
+//                             sh "chmod +x gradlew"
+//                             sh "./gradlew sonar"
+//                         }
+//                     }
+//                 }
+//             }
+//         }
 
         stage('Springboot build'){
             steps{
