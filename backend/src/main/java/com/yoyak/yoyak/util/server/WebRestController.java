@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api2/test")
+@RequestMapping("/api/test")
 public class WebRestController {
 
     private final Environment env;
