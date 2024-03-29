@@ -1,8 +1,8 @@
 pipeline {
     agent any
 
-    parameters{
-        string(name: 'NAME', defaultValue: 'springboot')
+    parameters {
+        string(name: 'NAME', defaultValue: 'springtest')
     }
 
     stages {
@@ -27,39 +27,31 @@ pipeline {
 //             }
 //         }
 
-        stage('Springboot build'){
-            steps{
-                dir('backend'){
+        stage('Springboot build') {
+            steps {
+                dir('backend') {
                     sh '''
                     echo 'Springboot build...'
                     chmod +x gradlew
-                            ./gradlew clean build
+                    ./gradlew clean build
                     '''
                 }
             }
         }
 
-        stage('Dockerimage build'){
+        stage('Docker deploy') {
             steps {
                 dir('backend') {
                     script {
-                        def containerExists = sh(script: "docker ps -a --format '{{.Names}}' | grep ${params.NAME}", returnStatus: true) == 0
-
-                        if (containerExists) {
-                            sh "docker stop ${params.NAME}"
-                            sh "docker rm ${params.NAME}"
-                            sh "docker rmi docker-springboot:0.0.1"
-                        }
-
-                        sh '''
-                        echo 'Dockerimage build...'
-                        docker build -t docker-springboot:0.0.1 .
+                        sh'''
+                        nginx-server/deploy.sh
                         '''
                     }
                 }
             }
         }
 
+<<<<<<< HEAD
         stage('Deploy'){
             steps{
                 dir('backend'){
@@ -68,6 +60,24 @@ pipeline {
                     docker run -d -p 8081:8080 -e TZ=Asia/Seoul --name springboot docker-springboot:0.0.1
                     '''
                 }
+=======
+        stage('SSH deploy') {
+            steps {
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: "ssh_server",
+                            verbose: true,
+                            transfers: [
+                                sshTransfer(
+                                    execCommand: "sudo systemctl reload nginx",
+                                    execTimeout: 120000
+                                )
+                            ]
+                        )
+                    ]
+                )
+>>>>>>> feature-BE/nginx
             }
         }
     }
