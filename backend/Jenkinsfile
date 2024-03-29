@@ -32,7 +32,7 @@ pipeline {
                         sh'''
                         nginx-server/deploy.sh
                         exit
-                        sudo service nginx reload
+                        sudo systemctl reload nginx
                         '''
                     }
                 }
