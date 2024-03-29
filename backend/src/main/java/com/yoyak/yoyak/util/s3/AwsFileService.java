@@ -2,6 +2,8 @@ package com.yoyak.yoyak.util.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.yoyak.yoyak.util.exception.CustomException;
+import com.yoyak.yoyak.util.exception.CustomExceptionStatus;
 import java.io.IOException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +23,7 @@ public class AwsFileService {
 
     private final AmazonS3 amazonS3;
 
-    public String saveFile(MultipartFile multipartFile) throws IOException {
+    public String saveFile(MultipartFile multipartFile){
         String originalName = multipartFile.getOriginalFilename();
         String fileExtension = originalName.substring(originalName.lastIndexOf("."));
         String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
@@ -30,7 +32,12 @@ public class AwsFileService {
         metadata.setContentLength(multipartFile.getSize());
         metadata.setContentType(multipartFile.getContentType());
 
-        amazonS3.putObject(bucket, uniqueFileName, multipartFile.getInputStream(), metadata);
-        return amazonS3.getUrl(bucket, uniqueFileName).toString();
+        try{
+            amazonS3.putObject(bucket, uniqueFileName, multipartFile.getInputStream(), metadata);
+            return amazonS3.getUrl(bucket, uniqueFileName).toString();
+        }catch (IOException e){
+            throw new CustomException(CustomExceptionStatus.FAILED_IMAGE_UPLOAD);
+        }
+
     }
 }
