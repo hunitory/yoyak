@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleCreateDto;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleResponseDto;
 import com.yoyak.yoyak.challenge.dto.ChallengeCreateDto;
+import com.yoyak.yoyak.challenge.dto.ChallengeResponseDto;
 import com.yoyak.yoyak.challenge.dto.CheerRequestDto;
 import com.yoyak.yoyak.challenge.service.ChallengeArticleService;
 import com.yoyak.yoyak.challenge.service.ChallengeService;
@@ -15,6 +16,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,6 +50,12 @@ public class ChallengeController {
         challengeService.create(challengeCreateDto);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping()
+    public ResponseEntity<ChallengeResponseDto> getEnrolledChallenge(){
+        Long userSeq = SecurityUtil.getUserSeq();
+        return ResponseEntity.ok(challengeService.getEnrolledChallenge(userSeq));
     }
 
     @PostMapping("/article")
@@ -100,6 +108,12 @@ public class ChallengeController {
             return ResponseEntity.badRequest().body(statusResponseDto);
 
         }
+    }
+
+    // 하루에 한번 날짜가 바뀌면 실행
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void checkChallengeDeadline(){
+        challengeService.checkChallengeDeadline();
     }
 
 
