@@ -50,6 +50,7 @@ public class AccountService {
                 .gender(account.getGender())
                 .birth(account.getBirth())
                 .profileImg(account.getProfileImg())
+                .disease(account.getDisease())
                 .build();
 
             accountListDtos.add(accountListDto);
