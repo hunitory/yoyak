@@ -40,9 +40,6 @@ public class MedicineDetailService {
 
         log.info("medicineDetail ={}", medicineDetail.getMedicine().getImgPath());
 
-        String summary = pythonService.getSummary(medicineDetail);
-        String keyword = mapKeywords(medicineDetail.getAtpnWarn() + medicineDetail.getAtpn());
-
         MedicineDetailDto build = MedicineDetailDto.builder()
             .medicineSeq(medicineDetail.getSeq())
             .itemName(medicineDetail.getMedicine().getItemName())
@@ -54,8 +51,8 @@ public class MedicineDetailService {
             .atpnWarn(medicineDetail.getAtpnWarn())
             .atpn(medicineDetail.getAtpn())
             .sideEffect(medicineDetail.getSideEffect())
-            .summary(summary)
-            .keyword(keyword)
+            .summary(medicineDetail.getSummary())
+            .keyword(mapKeywords(medicineDetail.getAtpnWarn() + medicineDetail.getAtpn()))
             .build();
 
         log.info("result={}", build);
