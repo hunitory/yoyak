@@ -31,11 +31,27 @@ pipeline {
                     script {
                         sh'''
                         nginx-server/deploy.sh
-                        exit
-                        sudo systemctl reload nginx
                         '''
                     }
                 }
+            }
+        }
+
+        stage('SSH deploy'){
+            steps {
+                sshPublisher(
+                publishers:[
+                    sshPublisherDesc(
+                        configName: "ssh_server",
+                        verbose: true,
+                        transfers: [
+                            sshTransfer(
+                                execCommand: "sudo systemctl reload nginx",
+                                execTimeout: 120000,
+                            )
+                        ]
+                    )
+                ]
             }
         }
     }
