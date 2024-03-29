@@ -55,7 +55,11 @@ public class ChallengeController {
     @GetMapping()
     public ResponseEntity<ChallengeResponseDto> getEnrolledChallenge(){
         Long userSeq = SecurityUtil.getUserSeq();
+        log.info("userSeq: {}", userSeq);
+
         return ResponseEntity.ok(challengeService.getEnrolledChallenge(userSeq));
+
+
     }
 
     @PostMapping("/article")

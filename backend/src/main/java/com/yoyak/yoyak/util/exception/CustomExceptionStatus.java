@@ -40,6 +40,7 @@ public enum CustomExceptionStatus {
     CHEER_ALREADY_EXIST(8002, "이미 응원한 챌린지 글입니다"),
     NO_CHALLENGE(8003, "존재하지 않는 챌린지입니다"),
     FAILED_IMAGE_UPLOAD(8004, "이미지 업로드에 실패했습니다"),
+    THERE_IS_NO_CHALLENGE(8005, "등록한 챌린지가 없습니다"),
 
     // security 관련
     NO_AUTHENTICATION(9001, "No authentication information"),
