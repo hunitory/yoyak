@@ -74,6 +74,9 @@ public class MedicineDetail {
     @Column(name = "form_code_name", length = 255)
     private String formCodeName;
 
+    @Column(name = "summary", columnDefinition = "TEXT")
+    private String summary;
+
     @OneToOne
     @MapsId
     @JoinColumn(name = "seq")
