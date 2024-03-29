@@ -1,7 +1,7 @@
 pipeline {
     agent any
 
-    parameters{
+    parameters {
         string(name: 'NAME', defaultValue: 'springtest')
     }
 
@@ -13,19 +13,19 @@ pipeline {
             }
         }
 
-        stage('Springboot build'){
-            steps{
-                dir('backend'){
+        stage('Springboot build') {
+            steps {
+                dir('backend') {
                     sh '''
                     echo 'Springboot build...'
                     chmod +x gradlew
-                            ./gradlew clean build
+                    ./gradlew clean build
                     '''
                 }
             }
         }
 
-        stage('Docker deploy'){
+        stage('Docker deploy') {
             steps {
                 dir('backend') {
                     script {
@@ -37,21 +37,22 @@ pipeline {
             }
         }
 
-        stage('SSH deploy'){
+        stage('SSH deploy') {
             steps {
                 sshPublisher(
-                publishers:[
-                    sshPublisherDesc(
-                        configName: "ssh_server",
-                        verbose: true,
-                        transfers: [
-                            sshTransfer(
-                                execCommand: "sudo systemctl reload nginx",
-                                execTimeout: 120000,
-                            )
-                        ]
-                    )
-                ]
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: "ssh_server",
+                            verbose: true,
+                            transfers: [
+                                sshTransfer(
+                                    execCommand: "sudo systemctl reload nginx",
+                                    execTimeout: 120000
+                                )
+                            ]
+                        )
+                    ]
+                )
             }
         }
     }
