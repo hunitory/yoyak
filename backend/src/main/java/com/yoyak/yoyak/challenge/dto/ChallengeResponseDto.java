@@ -18,4 +18,5 @@ public class ChallengeResponseDto {
     private LocalDate endDate;
     private int day;
     private int articleSize;
+    private Long challengeSeq;
 }
