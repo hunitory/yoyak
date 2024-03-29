@@ -16,6 +16,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -107,6 +108,12 @@ public class ChallengeController {
             return ResponseEntity.badRequest().body(statusResponseDto);
 
         }
+    }
+
+    // 하루에 한번 날짜가 바뀌면 실행
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void checkChallengeDeadline(){
+        challengeService.checkChallengeDeadline();
     }
 
 

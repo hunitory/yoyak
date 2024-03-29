@@ -6,6 +6,7 @@ import com.yoyak.yoyak.challenge.dto.ChallengeCreateDto;
 import com.yoyak.yoyak.challenge.dto.ChallengeResponseDto;
 import com.yoyak.yoyak.user.domain.User;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +57,11 @@ public class ChallengeService {
             .day(day)
             .articleSize(articleSize)
             .build();
+    }
+
+    public void checkChallengeDeadline(){
+        LocalDate now = LocalDate.now();
+        challengeRepository.deleteAfterEndDate(now);
     }
 
 }
