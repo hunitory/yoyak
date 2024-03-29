@@ -68,6 +68,10 @@ dependencies {
     // firebase
     implementation 'com.google.firebase:firebase-admin:9.2.0'
   
+
+    // ElasticSearch
+    implementation 'co.elastic.clients:elasticsearch-java:8.13.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
 }
 
 tasks.named('test') {
