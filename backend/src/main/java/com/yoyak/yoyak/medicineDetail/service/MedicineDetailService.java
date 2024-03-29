@@ -48,6 +48,7 @@ public class MedicineDetailService {
             .itemName(medicineDetail.getMedicine().getItemName())
             .entpName(medicineDetail.getMedicine().getEntpName())
             .imagePath(s3Prefix + medicineDetail.getMedicine().getImgPath())
+            .efficacy(medicineDetail.getEfficacy())
             .useMethod(medicineDetail.getUseMethod())
             .depositMethod(medicineDetail.getDepositMethod())
             .atpnWarn(medicineDetail.getAtpnWarn())
