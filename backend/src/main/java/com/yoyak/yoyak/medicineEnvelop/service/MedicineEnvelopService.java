@@ -14,6 +14,7 @@ import com.yoyak.yoyak.util.security.SecurityUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,6 +24,8 @@ public class MedicineEnvelopService {
 
     private final MedicineEnvelopRepository medicineEnvelopRepository;
     private final AccountService accountService;
+    @Value("${cloud.aws.s3.prefix}")
+    private String s3Prefix;
 
     /**
      * 봉투 정보를 받아 등록
@@ -97,6 +100,11 @@ public class MedicineEnvelopService {
 
         List<MedicineSummaryDto> medicineSummaryDtoList =
             medicineEnvelopRepository.findMedicineSummaryByEnvelopSeq(medicineEnvelopSeq);
+
+        medicineSummaryDtoList.stream()
+            .forEach(data -> {
+                data.setImgPath(s3Prefix + data.getImgPath());
+            });
 
         return medicineSummaryDtoList;
     }
