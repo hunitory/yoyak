@@ -3,9 +3,12 @@ package com.yoyak.yoyak.challenge.service;
 import com.yoyak.yoyak.challenge.domain.Challenge;
 import com.yoyak.yoyak.challenge.domain.ChallengeArticle;
 import com.yoyak.yoyak.challenge.domain.ChallengeArticleRepository;
+import com.yoyak.yoyak.challenge.domain.ChallengeRepository;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleCreateDto;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleResponseDto;
 import com.yoyak.yoyak.user.domain.User;
+import com.yoyak.yoyak.util.exception.CustomException;
+import com.yoyak.yoyak.util.exception.CustomExceptionStatus;
 import com.yoyak.yoyak.util.s3.AwsFileService;
 import com.yoyak.yoyak.util.security.SecurityUtil;
 import java.util.List;
@@ -24,28 +27,27 @@ public class ChallengeArticleService {
 
     private final AwsFileService awsFileService;
 
+    private final ChallengeRepository challengeRepository;
+
     public void create(ChallengeArticleCreateDto dto, MultipartFile image) {
         log.info("dto: {}", dto);
         log.info("image: {}", image.getOriginalFilename());
-        try {
+
             String url = awsFileService.saveFile(image);
-            Challenge challenge = Challenge.builder()
-                .seq(dto.getChallengeSeq())
-                .build();
+            Challenge challenge = challengeRepository.findById(dto.getChallengeSeq())
+                .orElseThrow(() -> new CustomException(CustomExceptionStatus.NO_CHALLENGE));
+
 
             ChallengeArticle article = ChallengeArticle.builder()
                 .content(dto.getContent())
                 .userSeq(dto.getUserSeq())
-                .challenge(challenge)
                 .imgUrl(url)
                 .build();
 
-            challengeArticleRepository.save(article);
-
+            article = challengeArticleRepository.save(article);
+            challenge.addArticle(article);
             log.info("url: {}", url);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
 
     }
 

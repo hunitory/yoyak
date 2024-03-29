@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleCreateDto;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleResponseDto;
 import com.yoyak.yoyak.challenge.dto.ChallengeCreateDto;
+import com.yoyak.yoyak.challenge.dto.ChallengeResponseDto;
 import com.yoyak.yoyak.challenge.dto.CheerRequestDto;
 import com.yoyak.yoyak.challenge.service.ChallengeArticleService;
 import com.yoyak.yoyak.challenge.service.ChallengeService;
@@ -48,6 +49,12 @@ public class ChallengeController {
         challengeService.create(challengeCreateDto);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping()
+    public ResponseEntity<ChallengeResponseDto> getEnrolledChallenge(){
+        Long userSeq = SecurityUtil.getUserSeq();
+        return ResponseEntity.ok(challengeService.getEnrolledChallenge(userSeq));
     }
 
     @PostMapping("/article")
