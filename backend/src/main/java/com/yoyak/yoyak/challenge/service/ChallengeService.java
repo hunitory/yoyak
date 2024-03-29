@@ -57,6 +57,7 @@ public class ChallengeService {
                 .title(challenge.getTitle())
                 .startDate(startDate)
                 .endDate(endDate)
+                .challengeSeq(challenge.getSeq())
                 .day(day)
                 .articleSize(articleSize)
                 .build();
