@@ -31,6 +31,7 @@ pipeline {
                     script {
                         sh'''
                         nginx-server/deploy.sh
+                        exit
                         sudo service nginx reload
                         '''
                     }
