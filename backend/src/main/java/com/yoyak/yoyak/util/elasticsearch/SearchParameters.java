@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class SearchParameters<T> {
 
-    private static final int DEFAULT_SIZE = 10;
+    private static final int DEFAULT_SIZE = 100;
 
     private String index;
     private String keyword;
@@ -21,12 +21,15 @@ public class SearchParameters<T> {
     private int size;
     private List<String> fieldsToSearch;
     private Class<T> tClass;
+    private List<String> sourceIncludes;
 
 
     private static final String DEFAULT_MEDICINE_INDEX = "medicine";
     private static final Class DEFAULT_MEDICINE_CLASS = MedicineFullTextDto.class;
     private static final List<String> DEFAULT_MEDICINE_FIELDS =
         Arrays.asList("item_name", "atpn", "atpn_warn", "class_name", "efficacy", "side_effect");
+    private static final List<String> DEFAULT_MEDICINE_SOURCE_FIELDS =
+        Arrays.asList("seq", "img_path", "item_name", "entp_name");
 
     /**
      * 약품 검색을 위한 검색 파라미터를 생성합니다. 페이지네이션과 검색 키워드를 포함합니다.
@@ -47,6 +50,7 @@ public class SearchParameters<T> {
             .size(DEFAULT_SIZE)
             .fieldsToSearch(DEFAULT_MEDICINE_FIELDS)
             .tClass(DEFAULT_MEDICINE_CLASS)
+            .sourceIncludes(DEFAULT_MEDICINE_SOURCE_FIELDS) // SourceConfig에 포함할 필드 설정
             .build();
     }
 }
