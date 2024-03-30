@@ -42,6 +42,7 @@ public class ChallengeArticleService {
                 .content(dto.getContent())
                 .userSeq(dto.getUserSeq())
                 .imgUrl(url)
+                .challenge(challenge)
                 .build();
 
             article = challengeArticleRepository.save(article);
