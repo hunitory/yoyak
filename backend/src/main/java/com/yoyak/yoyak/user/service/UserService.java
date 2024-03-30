@@ -49,7 +49,9 @@ public class UserService {
             .token(loginRequestDto.getDeviceToken())
             .build();
 
-        user.addDeviceToken(deviceToken);
+        if(!user.getDeviceTokens().contains(deviceToken)){
+            user.addDeviceToken(deviceToken);
+        }
 
         UserInfoDto userInfoDto = UserInfoDto.builder()
             .userSeq(user.getSeq())
