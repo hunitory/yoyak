@@ -89,13 +89,23 @@ public class MedicineService {
 
             resultList = hits.stream()
                 .map(this::mapToMedicineDto)
-                .peek(medicineDto -> log.info("MedicineDto: {}", medicineDto))
                 .collect(Collectors.toList());
         } catch (IOException e) {
             log.error("Error executing full text search", e);
         }
 
         return resultList;
+    }
+
+    /**
+     * 사용자가 제공한 검색 파라미터를 기반으로 sql에서 약에 대한 전체 텍스트 검색을 수행
+     *
+     * @param keyword 사용자로부터 받은 검색값
+     * @return 검색 결과에 해당하는 MedicineDto 객체의 리스트. 결과가 없거나 오류가 발생한 경우 빈 리스트 반환.
+     */
+    @Deprecated
+    public List<MedicineDto> findMedicineByKeyword(String keyword) {
+        return medicineRepository.findByKeyword(keyword);
     }
 
     /**
@@ -106,7 +116,6 @@ public class MedicineService {
      */
     private MedicineDto mapToMedicineDto(Hit<MedicineFullTextDto> hit) {
         MedicineFullTextDto searchResult = hit.source();
-        log.info("SearchResult: {}", searchResult);
         return MedicineDto.builder()
             .medicineSeq(searchResult.getMedicineSeq())
             .imgPath(s3Prefix + searchResult.getImgPath())

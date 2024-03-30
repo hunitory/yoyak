@@ -73,4 +73,20 @@ public class MedicineController {
                 .result(medicineDtoList)
                 .build());
     }
+
+    @GetMapping("/search-keyword")
+    public ResponseEntity<BasicResponseDto> findkeyword(
+        @RequestParam(name = "keyword") String keyword) {
+
+        log.info("[{}.{}] parmeters = {}", this.getClass().getName(),
+            Thread.currentThread().getStackTrace()[1].getMethodName(),
+            "keyword: " + keyword);
+
+        List<MedicineDto> medicineDtoList = medicineService.findMedicineByKeyword(keyword);
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(BasicResponseDto.builder()
+                .count(medicineDtoList.size())
+                .result(medicineDtoList)
+                .build());
+    }
 }
