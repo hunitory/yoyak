@@ -94,10 +94,10 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
     }
 
     @Override
-    public boolean existsBySameCreateDate(LocalDate createDate) {
+    public boolean existsBySameCreateDateAndSameUser(LocalDate createDate, Long userSeq) {
 
         return !queryFactory.selectFrom(challenge)
-                .where(challenge.startDate.eq(createDate))
+                .where(challenge.startDate.eq(createDate).and(challenge.user.seq.eq(userSeq)))
                 .fetch().isEmpty();
     }
 

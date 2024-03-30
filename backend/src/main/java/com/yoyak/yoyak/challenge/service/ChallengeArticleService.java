@@ -6,7 +6,6 @@ import com.yoyak.yoyak.challenge.domain.ChallengeArticleRepository;
 import com.yoyak.yoyak.challenge.domain.ChallengeRepository;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleCreateDto;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleResponseDto;
-import com.yoyak.yoyak.user.domain.User;
 import com.yoyak.yoyak.util.exception.CustomException;
 import com.yoyak.yoyak.util.exception.CustomExceptionStatus;
 import com.yoyak.yoyak.util.s3.AwsFileService;
@@ -42,7 +41,7 @@ public class ChallengeArticleService {
         Challenge challenge = challengeRepository.findById(dto.getChallengeSeq())
             .orElseThrow(() -> new CustomException(CustomExceptionStatus.NO_CHALLENGE));
 
-        if(challengeArticleRepository.existsBySameCreateDate(createdDate) ){
+        if(challengeArticleRepository.existsBySameCreateDateAndSameUser(createdDate, dto.getUserSeq()) ){
             throw new CustomException(CustomExceptionStatus.ALREADY_POST);
         }
 
