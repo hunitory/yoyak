@@ -24,6 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -45,13 +48,22 @@ public class UserService {
             throw new CustomException(CustomExceptionStatus.LOGIN_WRONG);
         }
 
+        Set<String> tokens = new HashSet<>();
+        Set<DeviceToken> deviceTokens = user.getDeviceTokens();
+        for (DeviceToken deviceToken : deviceTokens) {
+            tokens.add(deviceToken.getToken());
+        }
+
+
+
         DeviceToken deviceToken = DeviceToken.builder()
             .token(loginRequestDto.getDeviceToken())
             .build();
 
-        if(!user.getDeviceTokens().contains(deviceToken)){
+        if(!tokens.contains(loginRequestDto.getDeviceToken())) {
             user.addDeviceToken(deviceToken);
         }
+
 
         UserInfoDto userInfoDto = UserInfoDto.builder()
             .userSeq(user.getSeq())
