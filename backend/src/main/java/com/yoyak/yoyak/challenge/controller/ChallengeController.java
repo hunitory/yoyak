@@ -82,15 +82,10 @@ public class ChallengeController {
             challengeArticleService.create(dto, image);
 
             return ResponseEntity.ok().build();
-        } catch (JsonProcessingException e) {
-
+        } catch(Exception e){
+            log.error("error: {}", e);
             return ResponseEntity.badRequest().build();
-        } catch(CustomException e){
-            StatusResponseDto statusResponseDto = StatusResponseDto.builder()
-                .code(e.getStatus().getCode())
-                .message(e.getStatus().getMessage())
-                .build();
-            return ResponseEntity.badRequest().body(statusResponseDto);
+
         }
 
     }
