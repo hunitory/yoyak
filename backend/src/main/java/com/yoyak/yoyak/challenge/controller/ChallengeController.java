@@ -1,5 +1,7 @@
 package com.yoyak.yoyak.challenge.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleCreateDto;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleResponseDto;
@@ -63,7 +65,7 @@ public class ChallengeController {
     }
 
     @PostMapping("/article")
-    public ResponseEntity<Void> postChallengeArticle(@RequestPart("image") MultipartFile image,
+    public ResponseEntity<Object> postChallengeArticle(@RequestPart("image") MultipartFile image,
         @RequestPart("challengeArticleCreateDto") String challengeArticleCreateDto) {
         log.info("image: {}", image.getOriginalFilename());
         log.info("createDto: {}", challengeArticleCreateDto);
@@ -80,10 +82,17 @@ public class ChallengeController {
             challengeArticleService.create(dto, image);
 
             return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (JsonProcessingException e) {
+
             return ResponseEntity.badRequest().build();
+        } catch(CustomException e){
+            StatusResponseDto statusResponseDto = StatusResponseDto.builder()
+                .code(e.getStatus().getCode())
+                .message(e.getStatus().getMessage())
+                .build();
+            return ResponseEntity.badRequest().body(statusResponseDto);
         }
+
     }
 
     @GetMapping("/article")
