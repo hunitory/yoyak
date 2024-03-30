@@ -83,9 +83,10 @@ public class ChallengeController {
 
             return ResponseEntity.ok().build();
         } catch (JsonProcessingException e) {
-
+            log.error("JsonProcessingException: {}", e.getMessage());
             return ResponseEntity.badRequest().build();
         } catch(CustomException e){
+            log.error("CustomException: {}", e.getMessage());
             StatusResponseDto statusResponseDto = StatusResponseDto.builder()
                 .code(e.getStatus().getCode())
                 .message(e.getStatus().getMessage())
