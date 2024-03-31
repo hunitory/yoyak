@@ -71,13 +71,13 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
 
             for(ChallengeArticle article : articles){
                 int cheerCnt = 0;
-                boolean isCheered = false;
+                boolean cheered = false;
                 
                 if (article.getCheers() != null) {
                     cheerCnt = article.getCheers().size();
                     for(Cheer cheer: article.getCheers()){
                         if(cheer.getUser().getSeq() == userSeq){
-                            isCheered = true;
+                            cheered = true;
                             break;
                         }
                     }
@@ -92,7 +92,7 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
                     .userNickname(challenge1.getUser().getNickname())
                     .userSeq(challenge1.getUser().getSeq())
                     .cheerCnt(cheerCnt)
-                    .isCheered(isCheered)
+                    .cheered(cheered)
                     .createdDate(article.getCreatedDate())
                     .build());
             }
