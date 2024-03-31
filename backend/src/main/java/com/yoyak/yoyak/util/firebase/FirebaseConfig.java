@@ -19,7 +19,7 @@ public class FirebaseConfig {
     @Bean
     FirebaseMessaging firebaseMessaging() throws IOException {
 
-        ClassPathResource resource = new ClassPathResource("serviceAccountKey.json");
+        ClassPathResource resource = new ClassPathResource("/serviceAccountKey.json");
 
         InputStream serviceAccount = resource.getInputStream();
 

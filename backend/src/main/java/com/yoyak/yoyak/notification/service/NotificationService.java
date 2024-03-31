@@ -19,6 +19,8 @@ import com.yoyak.yoyak.util.security.SecurityUtil;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -101,7 +103,7 @@ public class NotificationService {
 
             Notification notification = notiTime.getNotification();
             String accountName = notification.getAccount().getName();
-            List<DeviceToken> deviceTokens = notification.getAccount().getUser().getDeviceTokens();
+            Set<DeviceToken> deviceTokens = notification.getAccount().getUser().getDeviceTokens();
 
             if (deviceTokens.isEmpty()) {
                 continue;

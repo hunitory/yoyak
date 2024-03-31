@@ -14,7 +14,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -66,7 +69,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Builder.Default
-    private List<DeviceToken> deviceTokens = new ArrayList<>();
+    private Set<DeviceToken> deviceTokens = new HashSet<>();
 
     public void addDeviceToken(DeviceToken deviceToken) {
         this.deviceTokens.add(deviceToken);

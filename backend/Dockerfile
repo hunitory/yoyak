@@ -1,5 +1,6 @@
 FROM openjdk:17
-ADD /build/libs/*.jar app.jar
-ARG JAR_FILE=build/libs/*.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+ARG IDLE_PROFILE
+ENV ENV_IDLE_PROFILE=$IDLE_PROFILE
+COPY build/libs/yoyak-0.0.1-SNAPSHOT.jar /app/app.jar
+RUN echo $ENV_IDLE_PROFILE
+ENTRYPOINT ["java", "-Dspring.profiles.active=${ENV_IDLE_PROFILE}", "-jar", "/app/app.jar"]
