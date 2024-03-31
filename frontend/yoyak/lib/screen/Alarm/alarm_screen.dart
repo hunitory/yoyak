@@ -31,7 +31,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay = DateTime.now();
   MediaQueryData? queryData;
-  String selectedAccountSeq = '모두';
+  int? selectedAccountSeq;
 
   @override
   Widget build(BuildContext context) {
@@ -52,26 +52,22 @@ class _AlarmScreenState extends State<AlarmScreen> {
           }).toList()
         : alarmList;
 
-    // 드롭다운에서 선택된 accountSeq에 따라 추가 필터링
     List<AlarmModel> finalFilteredAlarmList;
-    if (selectedAccountSeq == '모두') {
+    if (selectedAccountSeq == null) {
+      // '모두'가 선택되었을 때
       finalFilteredAlarmList = filteredAlarmList;
     } else {
-      // 드롭다운에서 선택된 계정의 seq를 찾음
-      var selectedSeq = accountList
-          .firstWhere((account) => account.nickname == selectedAccountSeq,
-              orElse: () => AccountModel(seq: null))
-          .seq;
-
-      // 선택된 seq와 일치하는 alarmList 필터링
+      // 특정 계정이 선택되었을 때, 선택된 seq와 일치하는 alarmList를 필터링합니다.
       finalFilteredAlarmList = filteredAlarmList.where((alarm) {
-        return alarm.accountSeq == selectedSeq;
+        return alarm.accountSeq == selectedAccountSeq;
       }).toList();
     }
     // 드롭다운 메뉴 아이템 목록 생성: '모두' + 모든 계정의 닉네임
-    List<String> dropdownItems = ['모두'];
-    dropdownItems
-        .addAll(accountList.map((account) => account.nickname ?? 'Unknown'));
+    // 이전에는 닉네임만 추가했었는데 이제는 seq와 닉네임을 모두 추가합니다.
+    List<AccountModel> dropdownItems = [
+      AccountModel(seq: null, nickname: '모두')
+    ];
+    dropdownItems.addAll(accountList);
 
     return Scaffold(
       // 배경색
@@ -160,7 +156,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 if (accountList.length > 1)
-                  DropdownButton(
+                  DropdownButton<int?>(
                     elevation: 6,
                     style: const TextStyle(
                       color: Palette.MAIN_BLACK,
@@ -176,26 +172,25 @@ class _AlarmScreenState extends State<AlarmScreen> {
                     iconEnabledColor: Palette.MAIN_BLACK,
                     borderRadius: BorderRadius.circular(10),
                     value: selectedAccountSeq,
-                    onChanged: (String? newValue) {
+                    onChanged: (int? newValue) {
                       setState(() {
-                        selectedAccountSeq = newValue ?? '모두';
+                        selectedAccountSeq = newValue;
                       });
                     },
-                    items: dropdownItems.map<DropdownMenuItem<String>>(
-                      (String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: const TextStyle(
-                              fontSize: 15,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w500,
-                            ),
+                    items: dropdownItems
+                        .map<DropdownMenuItem<int?>>((AccountModel account) {
+                      return DropdownMenuItem<int?>(
+                        value: account.seq,
+                        child: Text(
+                          account.nickname ?? '없음',
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
                           ),
-                        );
-                      },
-                    ).toList(),
+                        ),
+                      );
+                    }).toList(),
                   ),
               ],
             ),

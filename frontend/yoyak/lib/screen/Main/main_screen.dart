@@ -7,6 +7,7 @@ import 'package:yoyak/screen/Alarm/alarm_screen.dart';
 import 'package:yoyak/screen/Challenge/challenge_screen.dart';
 import 'package:yoyak/store/alarm_store.dart';
 import 'package:yoyak/store/login_store.dart';
+import '../../store/challenge_store.dart';
 import '../Home/home_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // MainScreen
@@ -22,7 +23,6 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final storage = const FlutterSecureStorage(); // FlutterSecureStorage storage 저장
-
 
   var curTabIdx = 1;
   final mainTabs = [
@@ -86,11 +86,14 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String accessToken = context.read<LoginStore>().accessToken;
     context.read<LoginStore>().getAccountData();
     context.read<AlarmStore>().getAlarmDatas(context);
     context.read<LoginStore>().getDeviceToken();
+    context.read<ChallengeStore>().getMyChallengeList(accessToken);
     print(context.read<LoginStore>().accessToken);
     print("device 토큰 : ${context.read<LoginStore>().deviceToken}");
+
     return Scaffold(
       body: mainTabs[curTabIdx],
       bottomNavigationBar: BottomBar(

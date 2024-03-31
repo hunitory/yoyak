@@ -113,6 +113,9 @@ class _AlarmCreateState extends State<AlarmCreate> {
     List<String> formattedAlarmTimes = _alarmTime.map((datetime) {
       return '${datetime.hour.toString().padLeft(2, '0')}:${datetime.minute.toString().padLeft(2, '0')}';
     }).toList();
+    print(
+      '$_alarmAccountSeq, $_alarmName, $_alarmStartDate, $_alarmEndDate, $_alarmDays, $formattedAlarmTimes',
+    );
 
     // 서버에 보낼 데이터 준비
     Map<String, dynamic> alarmData = {
@@ -827,14 +830,18 @@ class _AlarmCreateState extends State<AlarmCreate> {
                     color: Palette.MAIN_BLUE,
                     child: TextButton(
                       onPressed: () {
-                        // 선택된 시간을 DateTime 객체로 변환
+                        int hour;
+                        if (selectedPeriodIndex == 0) {
+                          hour = selectedHour % 12;
+                        } else {
+                          hour = selectedHour + (selectedHour == 12 ? 0 : 12);
+                        }
+
                         DateTime selectedTime = DateTime(
                           _alarmStartDate.year,
                           _alarmStartDate.month,
                           _alarmStartDate.day,
-                          selectedPeriodIndex == 0
-                              ? selectedHour
-                              : selectedHour + 12,
+                          hour,
                           selectedMinute,
                         );
 

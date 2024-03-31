@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -11,6 +13,7 @@ import 'package:yoyak/store/alarm_store.dart';
 import 'package:yoyak/store/camera_store.dart';
 import 'package:yoyak/store/challenge_store.dart';
 import 'package:yoyak/store/login_store.dart';
+import 'package:yoyak/store/pill_bag_store.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'firebase_options.dart';
@@ -19,9 +22,7 @@ import 'firebase_options.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp();
 
   print("Handling a background message: ${message.messageId}");
 }
@@ -44,6 +45,10 @@ void main() async {
   await initializeDateFormatting();
   await dotenv.load(fileName: "assets/config/.env");
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   runApp(
@@ -53,6 +58,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => LoginStore()),
         ChangeNotifierProvider(create: (context) => AlarmStore()),
         ChangeNotifierProvider(create: (context) => ChallengeStore()),
+        ChangeNotifierProvider(create: (context) => PillBagStore()),
         // 다른 스토어도 이렇게 넣으면 됨
       ],
       child: const MyApp(),
