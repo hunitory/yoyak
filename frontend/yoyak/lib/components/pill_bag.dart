@@ -36,19 +36,6 @@ class _PillBagState extends State<PillBag> {
 
   @override
   Widget build(BuildContext context) {
-    // return ListTile(
-    //   leading: Checkbox(
-    //       value: widget.isSavedMedicine,
-    //       onChanged: (bool? value) {
-    //         // 체크박스 클릭할때마다 상태 변경
-    //         setState(() {
-    //           isSavedMedicine = value!;
-    //         });
-    //         widget.onClick(); // 부모 위젯에 이벤트 알림
-    //       }),
-    //   title: Text(widget.envelopName),
-    //   subtitle: Text(widget.nickname),
-    // );
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.only(bottom: 5),
@@ -62,6 +49,7 @@ class _PillBagState extends State<PillBag> {
           scale: 1.5, // 체크박스 크기 조절
           child: Checkbox(
             value: isSavedMedicine,
+            // 체크 박스
             onChanged: (bool? value) {
               // 체크박스 클릭할때마다 상태 변경
               // api 연결해서 수정하기 !

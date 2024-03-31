@@ -9,8 +9,8 @@ import 'package:yoyak/models/user/account_models.dart';
 
 class LoginStore extends ChangeNotifier {
   dynamic userInfo = ""; // storage에 있는 유저 정보 저장
+  final storage = const FlutterSecureStorage();
   List<AccountModel> alarmAccounts = [];
-  final storage = FlutterSecureStorage();
 
   String accessToken = '';
   String? deviceToken = "";
@@ -40,7 +40,6 @@ class LoginStore extends ChangeNotifier {
 
   Future login(BuildContext context, String email, String password,
       Widget destination) async {
-
     String url = "${API.yoyakUrl}/user/login/origin"; // 바꾸기
     print('$email $password');
     var response = await http.post(Uri.parse(url),
@@ -65,7 +64,6 @@ class LoginStore extends ChangeNotifier {
       storage.write(key: 'accessToken', value: accessToken); // accessToken 저장
       storage.write(key: 'deviceToken', value: deviceToken); // deviceToken 저장
       notifyListeners();
-
 
       Navigator.pushAndRemoveUntil(
         context,

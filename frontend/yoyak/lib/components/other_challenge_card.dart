@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
-
 import '../store/challenge_store.dart';
 import '../styles/colors/palette.dart';
-import 'challenge_card.dart';
+import 'look_around_challenge_card.dart';
 
 class OtherChallengeCard extends StatelessWidget {
   const OtherChallengeCard(
@@ -20,7 +19,7 @@ class OtherChallengeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double cardListWidth = MediaQuery.of(context).size.width * 0.9;
-    var myChallengeList = context.watch<ChallengeStore>().myChallengeList;
+    var othersChallengeList = context.watch<ChallengeStore>().othersChallengeList;
     // 응원했으면 배경 색, 글씨 색 바꾸기
     return RoundedRectangle(
       width: ScreenSize.getWidth(context),
@@ -72,9 +71,9 @@ class OtherChallengeCard extends StatelessWidget {
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
-                itemCount: myChallengeList?.length, // 개수 고치기 배열의 길이로
+                itemCount: othersChallengeList?.length, // 개수 고치기 배열의 길이로
                 itemBuilder: (context, i) {
-                  return ChallengeCard(challenge: myChallengeList[i]);
+                  return LookAroundChallengeCard(challenge: othersChallengeList[i]);
                 }),
           )
         ]),

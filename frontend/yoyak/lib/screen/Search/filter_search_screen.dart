@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:yoyak/apis/url.dart';
 import 'package:flutter/material.dart';
 import 'package:yoyak/components/base_button.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
@@ -73,6 +74,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
       'default': '제형     전체',
       'type': 'formCodeName',
     },
+    // 분할선 없음
     {
       'options': {
         '분할선 전체': null,
@@ -88,21 +90,24 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
 
   // 검색하기 api
   Future<void> searchPills() async {
-    var uri = Uri.https(
-      // 호스트와 경로를 분리(FomatException 오류 유발)
-      'j10b102.p.ssafy.io',
-      'api/medicine/filter',
-      selectedOptions,
-    );
+    String yoyakURL = API.yoyakUrl;
+    String modifiedUrl = yoyakURL.substring(8, yoyakURL.length - 4);
+    String path = '/api/medicine/filter';
+
+    print('modifiedUrl: $modifiedUrl');
+
+    final uri = Uri.https(modifiedUrl, path, selectedOptions);
+
     try {
       var response = await http.get(uri);
       // 잘 가져옴
       if (response.statusCode == 200) {
+        print('api는 성공했는데 decodinf은?');
         // 결과를 변수에 저장
         // 문자열로 옴 => Map<String, dynamic>으로 변환
         var data = jsonDecode(utf8.decode(response.bodyBytes));
         print(data);
-        print('api 호출 성공');
+        print('디코딩도 성공 !');
         // 결과를 props로 전달
         // 검색 결과 화면으로 이동
         Navigator.push(
@@ -130,11 +135,6 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
       // 요청 실패 처리
       print('요청 안됐음: $e');
     }
-    // api 호출
-    // selectedOptions를 이용하여 api 호출
-    // 결과를 변수에 저장
-    // 결과를 props로 전달
-    // 검색 결과 화면으로 이동
   }
 
   @override

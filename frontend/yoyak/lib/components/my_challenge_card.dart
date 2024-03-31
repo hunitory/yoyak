@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/store/challenge_store.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
-
 import '../styles/colors/palette.dart';
 import 'challenge_card.dart';
 
@@ -22,9 +21,10 @@ class MyChallengeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     double cardListWidth = MediaQuery.of(context).size.width * 0.9;
     var myChallengeList = context.watch<ChallengeStore>().myChallengeList;
+    var myChallengeCard = context.watch<ChallengeStore>().myChallengeCard;
     return RoundedRectangle(
       width: ScreenSize.getWidth(context),
-      height: 300,
+      height: 330,
       color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(15),
@@ -66,10 +66,12 @@ class MyChallengeCard extends StatelessWidget {
             ),
 
           // 챌린지 시작했을 때, 안했을 때 분기
-          myChallengeList.isNotEmpty
-              ? SizedBox(
+          myChallengeCard.isNotEmpty
+              ?
+          myChallengeList.isNotEmpty ?
+          SizedBox(
                   width: cardListWidth,
-                  height: 300,
+                  height: 235,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
@@ -79,6 +81,25 @@ class MyChallengeCard extends StatelessWidget {
                         return ChallengeCard(challenge: myChallengeList[i]);
                       }),
                 )
+              : SizedBox(
+            width: ScreenSize.getWidth(context),
+            height: 200,
+            child: Center(child: Column(
+              children: [
+                Lottie.asset('assets/lotties/cat.json',
+                    width: 120, height: 120),
+                Text("${myChallengeCard?['title'] ?? ""} 챌린지의 인증샷을 올려보세요!",
+                  style: const TextStyle(
+                      fontFamily: "Pretendard",
+                      color: Palette.SUB_BLACK,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15
+                  ),
+                ),
+              ],
+            )),
+          )
+
               : SizedBox(
                   width: ScreenSize.getWidth(context),
                   height: 200,

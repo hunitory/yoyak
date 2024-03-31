@@ -23,22 +23,22 @@ class _CameraScreenState extends State<CameraScreen> {
       color: Palette.BG_BLUE,
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           showImageArea(),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           cameraAndImageButton(),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           ElevatedButton(
               onPressed: () {
                 sendImageToServer();
               },
-              child: Text("서버로 사진 전송"))
+              child: const Text("서버로 사진 전송"))
         ],
       ),
     );
@@ -48,9 +48,9 @@ class _CameraScreenState extends State<CameraScreen> {
     var image = context.watch<CameraStore>().image;
     return image != null
         ? RoundedRectangle(
-            child: Image.file(File(image.path)),
             width: 400,
             height: 300,
+            child: Image.file(File(image.path)),
           )
         : RoundedRectangle(
             width: 400,
@@ -78,13 +78,13 @@ class _CameraScreenState extends State<CameraScreen> {
           },
         ),
         RoundedRectangle(
-          child: Text("이미지 선택"),
           width: 200,
           height: 200,
           onTap: () {
             print("카메라 열기");
             getImage(ImageSource.gallery);
           },
+          child: Text("이미지 선택"),
         )
       ],
     );

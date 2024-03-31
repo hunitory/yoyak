@@ -4,8 +4,8 @@ import 'package:yoyak/styles/screenSize/screen_size.dart';
 import '../styles/colors/palette.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
-class ChallengeCard extends StatelessWidget {
-  const ChallengeCard({super.key, this.challenge});
+class LookAroundChallengeCard extends StatelessWidget {
+  const LookAroundChallengeCard({super.key, this.challenge});
   final challenge;
 
   @override
@@ -22,7 +22,7 @@ class ChallengeCard extends StatelessWidget {
             border: Border.all(width: 0.4, color: Palette.SHADOW_GREY),
           ),
           width: cardWidth,
-          // height: 270,
+          height: 270,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -64,9 +64,35 @@ class ChallengeCard extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
+                    // Progress Bar
+                    AnimatedProgressBar(
+                      width: cardWidth * 0.9,
+                      height: 10,
+                      value: 0.4,
+                      duration: const Duration(seconds: 1),
+                      gradient: const LinearGradient(
+                        colors: [
+                          Colors.lightBlue,
+                          Palette.MAIN_BLUE,
+                        ],
+                      ),
+                      backgroundColor: Palette.BG_BLUE,
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
+                    BaseButton(
+                      width: cardWidth,
+                      height: 40,
+                      fontSize: 15,
+                      borderWidth: 1.0,
+                      onPressed: () {
+
+                      },
+                      text: "응원하기",
+                      colorMode: 'white',
+                      borderRadius: BorderRadius.circular(10),
+                    )
                   ],
                 ),
               )

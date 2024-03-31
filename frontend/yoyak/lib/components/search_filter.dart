@@ -75,10 +75,10 @@ class _FilterComponentState extends State<FilterComponent> {
   void _scrollLeft() {
     if (_scrollController.hasClients) {
       final currentPosition = _scrollController.offset;
-      final scrollPosition = currentPosition - 260.0; // 화살표를 눌렀을 대 스크롤 하려는 픽셀 수
+      final scrollPosition = currentPosition - 250.0; // 화살표를 눌렀을 대 스크롤 하려는 픽셀 수
       _scrollController.animateTo(
         scrollPosition > 0 ? scrollPosition : 0,
-        duration: const Duration(milliseconds: 300), // 움직이는 속도
+        duration: const Duration(milliseconds: 250), // 움직이는 속도
         curve: Curves.easeIn,
       );
     }
@@ -89,10 +89,10 @@ class _FilterComponentState extends State<FilterComponent> {
     if (_scrollController.hasClients) {
       final currentPosition = _scrollController.offset;
       final maxScrollExtent = _scrollController.position.maxScrollExtent;
-      final scrollPosition = currentPosition + 260.0; // 화살표를 눌렀을 대 스크롤 하려는 픽셀 수
+      final scrollPosition = currentPosition + 250.0; // 화살표를 눌렀을 대 스크롤 하려는 픽셀 수
       _scrollController.animateTo(
         scrollPosition < maxScrollExtent ? scrollPosition : maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 250),
         curve: Curves.easeIn,
       );
     }
