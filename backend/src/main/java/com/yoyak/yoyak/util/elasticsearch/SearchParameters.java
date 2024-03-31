@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class SearchParameters<T> {
 
-    private static final int DEFAULT_SIZE = 100;
+    private static final int DEFAULT_SIZE = 10;
 
     private String index;
     private String keyword;
