@@ -52,6 +52,7 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
                         .userNickname(challenge.getUser().getNickname())
                         .userSeq(challenge.getUser().getSeq())
                         .cheerCnt(cheerCnt)
+                        .createdDate(article.getCreatedDate())
                         .build());
                 });
         });
