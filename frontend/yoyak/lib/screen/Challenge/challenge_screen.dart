@@ -21,7 +21,7 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
+    var userName = context.read<LoginStore>().userName;
     context.read<ChallengeStore>().getMyChallenge(); // 내 챌린지 호출
     context.read<ChallengeStore>().getMyChallengeList(); // 내 챌린지 덱 호출
     context.read<ChallengeStore>().getOthersChallenge(); // 챌린지 둘러보기 호출
@@ -44,22 +44,22 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                 child: _ChallengeTitleSection(),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(15, 30, 15, 25),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 30, 15, 25),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   MyChallengeCard(
-                    title: "성현님이 진행 중인 챌린지",
+                    title: "$userName님이 진행 중인 챌린지",
                     titleImagePath: "assets/images/medal.png",
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
-                  OtherChallengeCard(
+                  const OtherChallengeCard(
                     title: "챌린지 둘러보기",
                     titleImagePath: "assets/images/medal.png",
                   ),
@@ -92,6 +92,15 @@ class _ChallengeTitleSection extends StatelessWidget {
       return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Text(
+                "꾸준한 복용을 위해",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Palette.SUB_BLACK.withOpacity(0.5),
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Pretendard',
+                ),
+              ),
               RichText(
                   text: const TextSpan(children: [
                 TextSpan(

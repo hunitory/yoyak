@@ -1,3 +1,4 @@
+import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/components/main_appbar.dart';
@@ -11,6 +12,7 @@ import 'package:yoyak/screen/Search/photo_search_screen.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 import '../../components/icon_in_rectangle.dart';
 import '../../store/login_store.dart';
+import 'package:video_player/video_player.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,13 +22,32 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late final FlickManager flickManager;
+
+  @override
+  void initState() {
+    super.initState();
+    flickManager = FlickManager(
+      autoPlay: true,
+      videoPlayerController: VideoPlayerController.asset(
+        'assets/videos/hangang.mp4',
+      )
+        ..setLooping(true)
+        ..setVolume(0), // 비디오 반복 재생 설정
+      onVideoEnd: () {
+        // 비디오가 끝나면 다시 처음부터 재생
+        flickManager.flickControlManager?.seekTo(Duration.zero);
+        flickManager.flickControlManager?.play();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double rectangleSize = MediaQuery.of(context).size.width * 0.44;
     // LoginStore에서 alarmAccounts 가져오기
-    List<AccountModel> alarmAccounts =
-        context.watch<LoginStore>().accountList;
+    List<AccountModel> alarmAccounts = context.watch<LoginStore>().accountList;
 
     // account 변수를 선언하고 조건에 따라 할당
     AccountModel? account =
@@ -40,94 +61,129 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return Scaffold(
-      appBar: const MainAppBar(
-        color: Palette.MAIN_BLUE,
-      ),
+      // appBar: const MainAppBar(
+      //   color: Palette.MAIN_BLUE,
+      // ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              width: screenWidth,
-              height: 180,
-              color: Palette.MAIN_BLUE,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (account != null) ...[
-                      Text(
-                        "${account.nickname} 님! 안녕하세요.",
-                        style: const TextStyle(
-                          fontSize: 24,
-                          color: Palette.MAIN_WHITE,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Pretendard',
-                        ),
-                      ),
-                      const SizedBox(height: 10), // SizedBox로 간격 조정
-                      RichText(
-                        text: const TextSpan(
-                          style: TextStyle(
-                            color: Palette.MAIN_WHITE,
+            Stack(
+              children: [
+                Container(
+                  width: screenWidth,
+                  height: 250,
+                  color: Palette.MAIN_BLUE,
+                ),
+                Positioned.fill(
+                  child: FlickVideoPlayer(
+                    flickManager: flickManager,
+                    flickVideoWithControls: FlickVideoWithControls(
+                      controls: Container(), // 컨트롤을 비어 있는 컨테이너로 설정하여 숨깁니다.
+                    ),
+                    flickVideoWithControlsFullscreen: FlickVideoWithControls(
+                      controls: Container(), // 전체 화면 모드에서도 컨트롤을 숨깁니다.
+                    ),
+                  ),
+                ),
+                MainAppBar(
+                  color: Colors.black.withOpacity(0),
+                ),
+                Positioned(
+                  bottom: 20, // 원하는 위치로 조정
+                  left: 20, // 원하는 위치로 조정
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (account != null) ...[
+                        Text(
+                          "안녕하세요 ${account.nickname}님",
+                          style: const TextStyle(
                             fontSize: 20,
-                            fontWeight: FontWeight.w500,
+                            color: Palette.MAIN_WHITE,
+                            fontWeight: FontWeight.w600,
                             fontFamily: 'Pretendard',
                           ),
+                        ),
+                        const SizedBox(height: 3), // SizedBox로 간격 조정
+                        RichText(
+                          text: const TextSpan(
+                            style: TextStyle(
+                              color: Palette.MAIN_WHITE,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Pretendard',
+                            ),
+                            children: [
+                              TextSpan(
+                                text: "오늘도 ",
+                                style: TextStyle(
+                                  fontFamily: 'Pretendard',
+                                ),
+                              ),
+                              TextSpan(
+                                text: "요약",
+                                style: TextStyle(
+                                  fontSize: 23,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.yellow,
+                                  fontFamily: 'Pretendard',
+                                ),
+                              ),
+                              TextSpan(
+                                text: " 하세요!",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Pretendard',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ] else ...[
+                        const Row(
                           children: [
-                            TextSpan(
-                              text: "오늘도 건강한 ",
+                            Text(
+                              "약이 궁금할 땐, ",
+                              style: TextStyle(
+                                fontSize: 22,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Pretendard',
+                              ),
                             ),
-                            TextSpan(
-                              text: "'요약'",
-                              style: TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                            TextSpan(
-                              text: " 하세요.",
+                            Text(
+                              "요약",
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: Palette.MAIN_BLUE,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Pretendard',
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    ] else ...[
-                      const Text(
-                        "안녕하세요, 요약입니다.",
-                        style: TextStyle(
-                          fontSize: 22,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Pretendard',
-                        ),
-                      ),
-                      const SizedBox(height: 10), // SizedBox로 간격 조정
-                      const Text(
-                        "로그인 하시면,",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Pretendard',
-                        ),
-                      ),
-                      const Text(
-                        "더 많은 서비스를 이용하실 수 있습니다.",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Pretendard',
-                        ),
-                      )
-                    ]
-                  ],
+                        const SizedBox(height: 3), // SizedBox로 간격 조정
+
+                        // const Text(
+                        //   "더 많은 서비스를 이용하실 수 있습니다.",
+                        //   style: TextStyle(
+                        //     fontSize: 18,
+                        //     color: Colors.white,
+                        //     fontWeight: FontWeight.w600,
+                        //     fontFamily: 'Pretendard',
+                        //   ),
+                        // )
+                      ]
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
             Container(
-              color: Colors.blueAccent,
+              color: Palette.MAIN_WHITE,
               child: Container(
                   decoration: BoxDecoration(
-                    color: Palette.BG_BLUE,
+                    color: Palette.MAIN_WHITE,
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(20),
                         topRight: Radius.circular(20)),
@@ -226,5 +282,11 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    flickManager.dispose(); // FlickManager 리소스 해제
+    super.dispose();
   }
 }

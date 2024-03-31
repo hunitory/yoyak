@@ -112,21 +112,13 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   Lottie.asset('assets/lotties/cat.json',
                       width: 200, height: 200),
                   RichText(
-                    text: TextSpan(
+                    text: const TextSpan(
                       children: [
-                        const TextSpan(
-                          text: '안녕하세요 ',
+                        TextSpan(
+                          text: '회원가입을 위해 ',
                           style: TextStyle(
                             fontSize: 22,
                             color: Palette.MAIN_BLACK,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        TextSpan(
-                          text: '${context.watch<LoginStore>().userName}님',
-                          style: const TextStyle(
-                            color: Palette.MAIN_BLUE, // 영양이 부분의 색상을 빨간색으로 지정
-                            fontSize: 21,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -142,7 +134,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     ),
                   ),
                   const Text(
-                    "아래 정보를 입력해주세요",
+                    "아래의 정보를 입력해주세요",
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w600,

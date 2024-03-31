@@ -195,4 +195,11 @@ class ChallengeStore extends ChangeNotifier {
       print("챌린지 등록 실패");
     }
   }
+
+  void clearChallenges() {
+    myChallengeList.clear();
+    myChallengeCard.clear();
+    othersChallengeList.clear();
+    notifyListeners(); // UI에 변경사항을 알림
+  }
 }

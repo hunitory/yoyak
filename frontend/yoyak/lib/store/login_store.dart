@@ -18,7 +18,7 @@ class LoginStore extends ChangeNotifier {
   var UserDetail; // 회원정보 페이지에 뿌려줄 데이터
 
   // 회원가입 정보
-  String userName = '성현';
+  String userName = '';
   String userEmail = '';
   String password = '';
 
