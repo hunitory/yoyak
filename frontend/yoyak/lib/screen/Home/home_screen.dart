@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/components/main_appbar.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
+import 'package:yoyak/models/user/account_models.dart';
+import 'package:yoyak/screen/Alarm/alarm_screen.dart';
 import 'package:yoyak/screen/Challenge/challenge_screen.dart';
 import 'package:yoyak/screen/Login/kakao_login_screen.dart';
 import 'package:yoyak/screen/Search/filter_search_screen.dart';
@@ -22,7 +24,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double rectangleSize = MediaQuery.of(context).size.width * 0.44;
-    String userName = context.read<LoginStore>().userName;
+    // LoginStore에서 alarmAccounts 가져오기
+    List<AccountModel> alarmAccounts =
+        context.watch<LoginStore>().alarmAccounts;
+
+    // account 변수를 선언하고 조건에 따라 할당
+    AccountModel? account =
+        alarmAccounts.isNotEmpty ? alarmAccounts.first : null;
 
     goTo(destination) {
       Navigator.push(
@@ -48,45 +56,69 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "$userName님 건강하세요",
-                      style: const TextStyle(
-                        fontSize: 24,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Pretendard',
-                      ),
-                    ),
-                    RichText(
-                        text: const TextSpan(children: [
-                      TextSpan(
-                        text: '오늘 드실 약은 ',
-                        style: TextStyle(
+                    if (account != null) ...[
+                      Text(
+                        "${account.nickname} 님! 안녕하세요.",
+                        style: const TextStyle(
                           fontSize: 24,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
+                          color: Palette.MAIN_WHITE,
+                          fontWeight: FontWeight.w600,
                           fontFamily: 'Pretendard',
                         ),
                       ),
-                      TextSpan(
-                        text: '3개',
+                      const SizedBox(height: 10), // SizedBox로 간격 조정
+                      RichText(
+                        text: const TextSpan(
+                          style: TextStyle(
+                            color: Palette.MAIN_WHITE,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Pretendard',
+                          ),
+                          children: [
+                            TextSpan(
+                              text: "오늘도 건강한 ",
+                            ),
+                            TextSpan(
+                              text: "'요약'",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            TextSpan(
+                              text: " 하세요.",
+                            ),
+                          ],
+                        ),
+                      ),
+                    ] else ...[
+                      const Text(
+                        "안녕하세요, 요약입니다.",
                         style: TextStyle(
-                          fontSize: 26,
-                          color: Colors.yellow,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'Pretendard',
-                        ),
-                      ),
-                      TextSpan(
-                        text: '에요',
-                        style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 22,
                           color: Colors.white,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                           fontFamily: 'Pretendard',
                         ),
                       ),
-                    ])),
+                      const SizedBox(height: 10), // SizedBox로 간격 조정
+                      const Text(
+                        "로그인 하시면,",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Pretendard',
+                        ),
+                      ),
+                      const Text(
+                        "더 많은 서비스를 이용하실 수 있습니다.",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Pretendard',
+                        ),
+                      )
+                    ]
                   ],
                 ),
               ),
@@ -115,36 +147,30 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           const Spacer(),
                           RoundedRectangle(
-                              width: rectangleSize,
-                              height: rectangleSize,
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const FilterSearchScreen()));
-                              },
-                              child: const IconInRectangle(
-                                subTitle: "사진 찍기 힘들다면",
-                                title: "검색하기",
-                                imagePath: "assets/images/search.png",
-                              )),
+                            width: rectangleSize,
+                            height: rectangleSize,
+                            onTap: () {
+                              goTo(const PhotoSearchScreen());
+                            },
+                            child: const IconInRectangle(
+                              subTitle: "AI가 약을 찾아줘요",
+                              title: "사진 찍기",
+                              imagePath: "assets/images/camera.png",
+                            ),
+                          ),
                           const Spacer(),
                           RoundedRectangle(
-                              width: rectangleSize,
-                              height: rectangleSize,
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const PhotoSearchScreen()));
-                              },
-                              child: const IconInRectangle(
-                                subTitle: "AI가 약을 찾아줘요",
-                                title: "사진 찍기",
-                                imagePath: "assets/images/camera.png",
-                              )),
+                            width: rectangleSize,
+                            height: rectangleSize,
+                            onTap: () {
+                              goTo(const FilterSearchScreen());
+                            },
+                            child: const IconInRectangle(
+                              subTitle: "사진 찍기 힘들다면",
+                              title: "검색하기",
+                              imagePath: "assets/images/search.png",
+                            ),
+                          ),
                           const Spacer(),
                         ],
                       ),
@@ -169,11 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: rectangleSize,
                               height: rectangleSize,
                               onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const FilterSearchScreen()));
+                                goTo(const AlarmScreen());
                               },
                               child: const IconInRectangle(
                                 subTitle: "복약 시간 알려드려요",

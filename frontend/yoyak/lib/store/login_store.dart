@@ -1,15 +1,15 @@
 import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:http/http.dart' as http;
 import 'package:yoyak/models/user/account_models.dart';
+import '../auto_login/singleton_secure_storage.dart';
 
 class LoginStore extends ChangeNotifier {
   dynamic userInfo = ""; // storage에 있는 유저 정보 저장
-  final storage = const FlutterSecureStorage();
+  final storage = SingletonSecureStorage().storage;
   List<AccountModel> alarmAccounts = [];
 
   String accessToken = '';
@@ -42,6 +42,7 @@ class LoginStore extends ChangeNotifier {
       Widget destination) async {
     String url = "${API.yoyakUrl}/user/login/origin"; // 바꾸기
     print('$email $password');
+
     var response = await http.post(Uri.parse(url),
         headers: {
           'Content-Type': 'application/json',
@@ -54,15 +55,22 @@ class LoginStore extends ChangeNotifier {
 
     print(response.body);
     var accessToken = response.body; // 액세스 토큰 저장
+    print("accessToken asdfasdf: $accessToken");
     if (response.statusCode == 200) {
       print("로그인 성공");
-      context
-          .read<LoginStore>()
-          .setAccessToken(accessToken); // provider에 받은 토큰 저장
+
+      // 로그인 성공 시 storage에 저장
+      await storage.write(key: 'userId', value: email);
+      await storage.write(key: 'password', value: password);
+      await storage.write(key: 'accessToken', value: accessToken);
+      // await storage.write(
+      //     key: 'userNickname', value: userInfo['nickname']); // 수정 가능성 있음
+      var tmpToken = await storage.read(key: 'accessToken');
+      setAccessToken(tmpToken); // provider에 받은 토큰 저장
 
       storage.deleteAll(); // 기존 토큰 삭제
       storage.write(key: 'accessToken', value: accessToken); // accessToken 저장
-      storage.write(key: 'deviceToken', value: deviceToken); // deviceToken 저장
+      print("이게 로그인 accessToken 이다 가즈아 $tmpToken");
       notifyListeners();
 
       Navigator.pushAndRemoveUntil(
@@ -80,7 +88,8 @@ class LoginStore extends ChangeNotifier {
   Future<void> getAccountData() async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
     String url = '$yoyakURL/account'; // 요청할 URL
-
+    String? accessToken = await storage.read(key: 'accessToken');
+    print("account시발의 accessToken $accessToken");
     try {
       final response = await http.get(
         Uri.parse(url),

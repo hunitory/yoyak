@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/styles/colors/palette.dart';
@@ -118,6 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
       password = passwordInput;
     }
     var inputWidth = MediaQuery.of(context).size.width * 0.82;
+
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF), // 0xFFF5F6F9
       body: Center(

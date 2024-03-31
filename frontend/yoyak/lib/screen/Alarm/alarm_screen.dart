@@ -196,36 +196,54 @@ class _AlarmScreenState extends State<AlarmScreen> {
             ),
             if (accountList.length > 1)
               SizedBox(height: ScreenSize.getHeight(context) * 0.01),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(children: [
-                  ...finalFilteredAlarmList.map<Widget>((alarm) {
-                    int notiTimeSeq = alarm.notiTimeSeq ?? 0;
-                    String name = alarm.name ?? '';
-                    DateTime time = alarm.time ?? DateTime.now();
-                    String taken = alarm.taken ?? '';
-                    DateTime? takenTime = alarm.takenTime;
-                    int accountSeq = alarm.accountSeq ?? 0;
-                    int notiSeq = alarm.notiSeq ?? 0;
+            if (accountList.length > 1)
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ...finalFilteredAlarmList.map<Widget>((alarm) {
+                        int notiTimeSeq = alarm.notiTimeSeq ?? 0;
+                        String name = alarm.name ?? '';
+                        DateTime time = alarm.time ?? DateTime.now();
+                        String taken = alarm.taken ?? '';
+                        DateTime? takenTime = alarm.takenTime;
+                        int accountSeq = alarm.accountSeq ?? 0;
+                        int notiSeq = alarm.notiSeq ?? 0;
 
-                    return AlarmItem(
-                      notiTimeSeq: notiTimeSeq,
-                      name: name,
-                      time: time,
-                      taken: taken,
-                      takenTime: takenTime,
-                      accountSeq: accountSeq,
-                      notiSeq: notiSeq,
-                    );
-                  }),
-                  SizedBox(
-                    // 없으면 카드 좌우 그림자가 짤림
-                    width: ScreenSize.getWidth(context) * 0.9,
-                    height: ScreenSize.getHeight(context) * 0.09,
+                        return AlarmItem(
+                          notiTimeSeq: notiTimeSeq,
+                          name: name,
+                          time: time,
+                          taken: taken,
+                          takenTime: takenTime,
+                          accountSeq: accountSeq,
+                          notiSeq: notiSeq,
+                        );
+                      }),
+                      SizedBox(
+                        // 없으면 카드 좌우 그림자가 짤림
+                        width: ScreenSize.getWidth(context) * 0.9,
+                        height: ScreenSize.getHeight(context) * 0.09,
+                      ),
+                    ],
                   ),
-                ]),
+                ),
               ),
-            ),
+            if (accountList.isEmpty)
+              Column(
+                children: [
+                  SizedBox(height: ScreenSize.getHeight(context) * 0.3),
+                  const Text(
+                    '현재 등록된 알림이 없습니다.',
+                    style: TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontSize: 15,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              )
           ],
         ),
       ),
@@ -1087,7 +1105,7 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
                                     borderRadius: BorderRadius.circular(10),
                                     color: Palette.SUB_BLUE.withOpacity(0.5),
                                   ),
-                                  width: ScreenSize.getWidth(context) * 0.85,
+                                  width: ScreenSize.getWidth(context) * 0.75,
                                   height: 40,
                                 ),
                                 Row(
