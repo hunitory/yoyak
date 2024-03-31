@@ -28,5 +28,7 @@ public class ChallengeArticleResponseDto {
     private int cheerCnt;
     private LocalDate createdDate;
 
+    private boolean cheered;
+
 
 }
