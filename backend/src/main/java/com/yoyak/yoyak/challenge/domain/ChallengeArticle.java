@@ -53,6 +53,9 @@ public class ChallengeArticle {
     @Column(name = "content")
     private String content;
 
+    @Column(name = "created_date")
+    private LocalDate createdDate;
+
 
     @OneToMany(mappedBy = "challengeArticle", fetch = FetchType.EAGER)
     @Builder.Default
@@ -60,7 +63,6 @@ public class ChallengeArticle {
 
     public void changeCheers(Cheer cheer) {
         cheers.add(cheer);
-
     }
 
 

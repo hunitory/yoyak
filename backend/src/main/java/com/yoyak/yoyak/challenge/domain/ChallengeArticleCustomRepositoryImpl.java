@@ -6,6 +6,8 @@ import static com.yoyak.yoyak.challenge.domain.QChallengeArticle.challengeArticl
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleResponseDto;
 import jakarta.persistence.EntityManager;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -89,6 +91,18 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
 
         return ret;
 
+    }
+
+    @Override
+    public boolean existsBySameCreateDateAndSameUser(LocalDate createDate, Long userSeq) {
+
+         List<ChallengeArticle> articles = queryFactory.select(challengeArticle)
+            .from(challengeArticle)
+            .where(challengeArticle.createdDate.eq(createDate)
+                .and(challengeArticle.userSeq.eq(userSeq)))
+            .fetch();
+
+         return !(articles.isEmpty() || articles == null);
     }
 
 

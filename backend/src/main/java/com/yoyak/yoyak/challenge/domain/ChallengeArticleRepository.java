@@ -18,4 +18,6 @@ public interface ChallengeArticleRepository extends JpaRepository<ChallengeArtic
     @Query("select a from ChallengeArticle a where a.seq = :challengeArticleSeq")
     @Transactional
     Optional<ChallengeArticle> findById(Long challengeArticleSeq);
+
+
 }

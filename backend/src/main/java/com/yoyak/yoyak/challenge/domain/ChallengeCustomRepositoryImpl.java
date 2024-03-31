@@ -4,6 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.yoyak.yoyak.challenge.domain.QChallenge.challenge;
@@ -50,4 +51,6 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository{
 
         });
     }
+
+
 }
