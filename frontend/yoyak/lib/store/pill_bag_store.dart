@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,10 +9,11 @@ import 'package:yoyak/store/login_store.dart';
 
 class PillBagStore extends ChangeNotifier {
   Map<String, dynamic> pillBag = {}; // 약 봉투 목록
+  final storage = FlutterSecureStorage();
 
   Future<void> getPillBagDatas(BuildContext context) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = context.read<LoginStore>().accessToken;
+    String? accessToken = await storage.read(key: 'accessToken');
     String url = '$yoyakURL/medicineEnvelop'; // path
 
     // API 호출
@@ -47,7 +49,7 @@ class PillBagStore extends ChangeNotifier {
   Future<void> createPillBag(
       BuildContext context, int accountSeq, String name) async {
     String yoyakURL = API.yoyakUrl; // 호스트 URL
-    String accessToken = context.read<LoginStore>().accessToken;
+    String? accessToken = await storage.read(key: 'accessToken');
     String url = '$yoyakURL/medicineEnvelop'; // path
     // 색상 리스트
     List<String> colors = [

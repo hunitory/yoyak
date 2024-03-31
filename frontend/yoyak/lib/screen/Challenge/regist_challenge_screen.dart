@@ -167,7 +167,7 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
         ),
         onPressed: () {
           // 챌린지 등록
-          context.read<ChallengeStore>().registChallenge(name, _alarmStartDate, _alarmEndDate, context.read<LoginStore>().accessToken, context);
+          context.read<ChallengeStore>().registChallenge(name, _alarmStartDate, _alarmEndDate, context);
         },
         child: const Center(
           child: Text(

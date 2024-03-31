@@ -26,7 +26,7 @@ class ChallengeaAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     var storage = context.read<LoginStore>().storage;
     var getImageAndNavigate = context.read<CameraStore>().getImageAndNavigate;
-    Map<String, dynamic> myChallengeCard = context.watch<ChallengeStore>().myChallengeCard;
+    Map<dynamic, dynamic> myChallengeCard = context.watch<ChallengeStore>().myChallengeCard;
     return AppBar(
         centerTitle: true,
         automaticallyImplyLeading: false,

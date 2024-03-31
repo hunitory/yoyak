@@ -56,6 +56,7 @@ dependencies:
   firebase_messaging: ^14.6.5
   firebase_core: ^2.15.0
   permission_handler: ^11.3.1
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -126,3 +127,11 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_icons:
+  android: true # Android용 아이콘을 생성
+  ios: true # iOS용 아이콘을 생성
+  remove_alpha_ios: true # iOS용 아이콘에서 알파 채널 제거
+  image_path: "assets/launcher_icon/logo.png" # 아이콘 이미지 경로
+  adaptive_icon_background: "#5A87FF" # Android용 적응형 아이콘 배경색
+  adaptive_icon_foreground: "assets/launcher_icon/logo.png" # Android용 적응형 아이콘 전경 이미지
