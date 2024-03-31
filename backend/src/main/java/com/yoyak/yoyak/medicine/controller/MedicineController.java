@@ -60,18 +60,12 @@ public class MedicineController {
             Thread.currentThread().getStackTrace()[1].getMethodName(),
             "keyword: " + keyword + " page: " + page);
 
-        List<MedicineDto> medicineDtoList =
+        BasicResponseDto responseDto =
             medicineService.findMedicineByFullText(
                 SearchParameters.createMedicineSearchParameters(page, keyword));
 
-        log.info("[{}.{}] medicineList = {}", this.getClass().getName(),
-            Thread.currentThread().getStackTrace()[1].getMethodName(), medicineDtoList);
-
         return ResponseEntity.status(HttpStatus.OK)
-            .body(BasicResponseDto.builder()
-                .count(medicineDtoList.size())
-                .result(medicineDtoList)
-                .build());
+            .body(responseDto);
     }
 
     @GetMapping("/search-keyword")
