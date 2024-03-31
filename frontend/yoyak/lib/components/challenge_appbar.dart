@@ -26,7 +26,7 @@ class ChallengeaAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     var storage = context.read<LoginStore>().storage;
     var getImageAndNavigate = context.read<CameraStore>().getImageAndNavigate;
-    bool hasOwnChallenge = context.watch<ChallengeStore>().hasOwnChallenge;
+    Map<String, dynamic> myChallengeCard = context.watch<ChallengeStore>().myChallengeCard;
     return AppBar(
         centerTitle: true,
         automaticallyImplyLeading: false,
@@ -39,7 +39,7 @@ class ChallengeaAppBar extends StatelessWidget implements PreferredSizeWidget {
 
             // 챌린지 등록을 안했다면
 
-            !hasOwnChallenge
+            myChallengeCard.isEmpty
                 ? GestureDetector(
                     onTap: () {
                       Navigator.push(

@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @Builder
@@ -24,5 +26,7 @@ public class ChallengeArticleResponseDto {
     private Long userSeq;
 
     private int cheerCnt;
+    private LocalDate createdDate;
+
 
 }
