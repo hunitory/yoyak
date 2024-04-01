@@ -26,14 +26,11 @@ class MypageScreen extends StatelessWidget {
     final List<AccountModel> accountList =
         context.watch<LoginStore>().accountList;
 
-    final AccountModel accountitem =
-        context.read<LoginStore>().accountList[0];
+    final AccountModel accountitem = context.read<LoginStore>().accountList[0];
 
-    final String userName =
-        context.read<LoginStore>().accountList[0].nickname!;
+    final String userName = context.read<LoginStore>().accountList[0].nickname!;
 
-    final String userGender =
-        context.read<LoginStore>().accountList[0].gender!;
+    final String userGender = context.read<LoginStore>().accountList[0].gender!;
     String gender = userGender == 'F' ? '여자' : '남자';
 
     final String userBirth = context.read<LoginStore>().accountList[0].birth!;
@@ -71,8 +68,8 @@ class MypageScreen extends StatelessWidget {
           '내 정보',
           style: TextStyle(
             color: Palette.MAIN_BLACK,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ),
@@ -297,11 +294,11 @@ class MypageScreen extends StatelessWidget {
                         ],
                       ),
                       AccountList(accountList: accountList.sublist(1)),
-                      if (accountList.length < 4)
+                      if (accountList.length < 3)
                         const SizedBox(
                           height: 10,
                         ),
-                      if (accountList.length < 4)
+                      if (accountList.length < 3)
                         GestureDetector(
                           onTap: () {
                             goToAccountUpdate(null, false);

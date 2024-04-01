@@ -70,8 +70,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
                     child: SizedBox(
                       width: 35,
                       height: 35,
-                      child: Image.asset(
-                          "assets/images/profiles/profile${account.first.profileImg}.png"),
+                      child: Image.asset("assets/images/person2.png"),
                     ),
                   );
                 }
