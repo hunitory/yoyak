@@ -51,8 +51,8 @@ class PillBagStore extends ChangeNotifier {
         // print("쿼리잘갔니? : $medicineSeq");
         // print("주소를 보자!!!! : $uri");
         // print("약 봉투 데이터 api 호출 성공 잘 담김 : $pillBags.");
-        print("되니.... : ${pillBags.runtimeType}");
-        print("되니.... : $pillBags");
+        // print("되니.... : ${pillBags.runtimeType}");
+        // print("되니.... : $pillBags");
       } else {
         // 오류 처리
         print('약 봉투 데이터 api 오류 ${response.statusCode}, $response');

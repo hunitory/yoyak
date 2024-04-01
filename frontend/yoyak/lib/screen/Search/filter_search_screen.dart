@@ -74,18 +74,6 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
       'default': '제형 전체',
       'type': 'formCodeName',
     },
-    // 분할선 없음
-    {
-      'options': {
-        '분할선 전체': null,
-        '없음': 'assets/images/lines/none.png',
-        '(-)형': 'assets/images/lines/minus.png',
-        '(+)형': 'assets/images/lines/plus.png',
-        '기타': 'assets/images/lines/etc2.png',
-      },
-      'default': '분할선 전체',
-      'type': 'LINE',
-    },
   ];
 
   // 검색하기 api
@@ -238,7 +226,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
               ),
             ),
             const SizedBox(
-              height: 10,
+              height: 20,
             ),
 
             // filterOptions 순회하면서 FilterComponent 출력
@@ -303,52 +291,53 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
               );
             }),
             // 초기화, 검색하기 버튼
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 30),
-              child: Row(
-                children: [
-                  BaseButton(
-                    onPressed: () {
-                      setState(() {
-                        // _resetSelectedOptions();
-                        // 초기화 버튼을 누르면 다시 rebuild
-                        Navigator.pushReplacement(
-                          // 현재 화면을 스택에서 제거하고 새로운 화면을 띄움
-                          context,
-                          PageRouteBuilder(
-                            // 커스텀 페이지 전환
-                            // context : 현재의 build context
-                            pageBuilder: (context, animation1, animation2) =>
-                                const FilterSearchScreen(),
-                            transitionDuration:
-                                const Duration(seconds: 0), // 화면전환 애니메이션 X
-                          ),
-                        );
-                      });
-                    },
-                    text: '초기화',
-                    // colorMode: 'blue',
-                    colorMode: 'white',
-                  ),
-                  const SizedBox(
-                    width: 40,
-                  ),
-                  BaseButton(
-                    // selectedOptions을 get으로 보내기
-                    // 결과를 변수에 저장 -> props로 전달
-                    // 그 후 검색 결과 화면으로 이동
-                    onPressed: () {
-                      searchPills();
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => const FilterResult()));
-                    },
-                    text: '검색하기',
-                    colorMode: 'blue',
-                  ),
-                ],
-              ),
+            const SizedBox(
+              height: 40,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                BaseButton(
+                  onPressed: () {
+                    setState(() {
+                      // _resetSelectedOptions();
+                      // 초기화 버튼을 누르면 다시 rebuild
+                      Navigator.pushReplacement(
+                        // 현재 화면을 스택에서 제거하고 새로운 화면을 띄움
+                        context,
+                        PageRouteBuilder(
+                          // 커스텀 페이지 전환
+                          // context : 현재의 build context
+                          pageBuilder: (context, animation1, animation2) =>
+                              const FilterSearchScreen(),
+                          transitionDuration:
+                              const Duration(seconds: 0), // 화면전환 애니메이션 X
+                        ),
+                      );
+                    });
+                  },
+                  text: '초기화',
+                  // colorMode: 'blue',
+                  colorMode: 'white',
+                ),
+                const SizedBox(
+                  width: 40,
+                ),
+                BaseButton(
+                  // selectedOptions을 get으로 보내기
+                  // 결과를 변수에 저장 -> props로 전달
+                  // 그 후 검색 결과 화면으로 이동
+                  onPressed: () {
+                    searchPills();
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const FilterResult()));
+                  },
+                  text: '검색하기',
+                  colorMode: 'blue',
+                ),
+              ],
             )
           ],
         ),
