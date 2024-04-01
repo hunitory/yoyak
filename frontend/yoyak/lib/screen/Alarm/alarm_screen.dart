@@ -193,9 +193,9 @@ class _AlarmScreenState extends State<AlarmScreen> {
                   ),
               ],
             ),
-            if (accountList.length > 1)
+            if (accountList.isNotEmpty)
               SizedBox(height: ScreenSize.getHeight(context) * 0.01),
-            if (accountList.length > 1)
+            if (accountList.isNotEmpty)
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
