@@ -6,21 +6,21 @@ import 'package:http/http.dart' as http;
 import 'package:yoyak/hooks/goto_screen.dart';
 import 'package:yoyak/screen/Main/main_screen.dart';
 import 'package:http_parser/http_parser.dart';
+import '../auto_login/singleton_secure_storage.dart';
 
 class ChallengeStore extends ChangeNotifier {
   var yoyakUrl = API.yoyakUrl;
   dynamic myChallengeCard = {};
-  bool hasOwnChallenge = false; // 챌린지 시작했는지 여부
   int challengeSeq = 0;
   String challengeContent = "";
   List<dynamic> myChallengeList = [];
   List<dynamic> othersChallengeList = [];
-  setHasOwnChallenge() {
-    hasOwnChallenge = true;
-  }
-
-  Future getMyChallengeList(accessToken) async {
+  var storage = SingletonSecureStorage().storage;
+  var accessToken = "";
+  Future getMyChallengeList() async {
     try {
+      String? accessToken = await storage.read(key: 'accessToken');
+      print("덱에서 accessToken 잘 들어오나: $accessToken");
       var response = await http.get(Uri.parse('$yoyakUrl/challenge'), headers: {
         'Authorization': 'Bearer $accessToken',
       });
@@ -39,15 +39,16 @@ class ChallengeStore extends ChangeNotifier {
         notifyListeners();
       } else {
         print("내 챌린지 덱 목록 조회 실패");
-        hasOwnChallenge = false;
       }
     } catch (error) {
       print(error);
     }
   }
 
-  Future getMyChallenge(accessToken) async {
+  Future getMyChallenge() async {
     try {
+      String? accessToken = await storage.read(key: 'accessToken');
+      print("내 챌린지 목록에서 accessToken 잘 들어오나: $accessToken");
       var response =
           await http.get(Uri.parse('$yoyakUrl/challenge/article/my'), headers: {
         'Authorization': 'Bearer $accessToken',
@@ -69,8 +70,9 @@ class ChallengeStore extends ChangeNotifier {
   }
 
   Future registChallenge(String name, DateTime startDate, DateTime endDate,
-      String accessToken, BuildContext context) async {
+      BuildContext context) async {
     try {
+      String? accessToken = await storage.read(key: 'accessToken');
       String startMonth = "${startDate.month}".padLeft(2, "0");
       String startDay = "${startDate.day}".padLeft(2, "0");
       String endMonth = "${endDate.month}".padLeft(2, "0");
@@ -89,7 +91,6 @@ class ChallengeStore extends ChangeNotifier {
       print(response.statusCode);
       if (response.statusCode == 200) {
         print("챌린지 등록 성공");
-        setHasOwnChallenge();
         goToScreen(context, const MainScreen());
       } else {
         print("챌린지 등록 실패");
@@ -146,10 +147,12 @@ class ChallengeStore extends ChangeNotifier {
   }
 
   // 챌린지 둘러보기 get
-  Future getOthersChallenge(accessToken) async {
+  Future getOthersChallenge() async {
     try {
+      String? accessToken = await storage.read(key: 'accessToken');
+      print("다른 사람 챌린지 목록에서 accessToken 잘 들어오나: $accessToken");
       var response =
-      await http.get(Uri.parse('$yoyakUrl/challenge/article'), headers: {
+          await http.get(Uri.parse('$yoyakUrl/challenge/article'), headers: {
         'Authorization': 'Bearer $accessToken',
       });
 
@@ -167,6 +170,36 @@ class ChallengeStore extends ChangeNotifier {
     }
   }
 
+  // 응원하기
+  Future cheerUp(var articleSeq) async {
+    try {
+      String? accessToken = await storage.read(key: 'accessToken');
+      var response =
+          await http.put(Uri.parse("$yoyakUrl/challenge/article/cheer-up"),
+              headers: {
+                'Authorization': 'Bearer $accessToken',
+                'Content-Type': 'application/json',
+              },
+              body: json.encode({
+                "challengeArticleSeq": articleSeq,
+              }));
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        print("챌린지 응원하기 성공");
+      } else {
+        print("챌린지 응원하기 실패");
+      }
+// DateTime(int.parse(year), int.parse(month), int.parse(day)).toIso8601String()
+    } catch (error) {
+      print(error);
+      print("챌린지 등록 실패");
+    }
+  }
 
-
+  void clearChallenges() {
+    myChallengeList.clear();
+    myChallengeCard.clear();
+    othersChallengeList.clear();
+    notifyListeners(); // UI에 변경사항을 알림
+  }
 }

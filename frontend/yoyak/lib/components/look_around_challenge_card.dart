@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:yoyak/components/base_button.dart';
+import 'package:yoyak/store/challenge_store.dart';
+import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 import '../styles/colors/palette.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
@@ -81,13 +84,15 @@ class LookAroundChallengeCard extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
+
+
                     BaseButton(
                       width: cardWidth,
                       height: 40,
                       fontSize: 15,
                       borderWidth: 1.0,
                       onPressed: () {
-
+                        context.read<ChallengeStore>().cheerUp(challenge?['articleSeq']);
                       },
                       text: "응원하기",
                       colorMode: 'white',

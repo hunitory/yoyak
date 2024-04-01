@@ -26,11 +26,11 @@ class _CameraScreenState extends State<CameraScreen> {
           const SizedBox(
             height: 20,
           ),
-          showImageArea(),
+          showImageArea(), // 이미지 미리보기
           const SizedBox(
             height: 20,
           ),
-          cameraAndImageButton(),
+          cameraAndImageButton(), // 카메라 및 이미지 버튼
           const SizedBox(
             height: 20,
           ),
@@ -44,6 +44,7 @@ class _CameraScreenState extends State<CameraScreen> {
     );
   }
 
+  // 이미지를 보여주는 위젯
   Widget showImageArea() {
     var image = context.watch<CameraStore>().image;
     return image != null
@@ -52,6 +53,7 @@ class _CameraScreenState extends State<CameraScreen> {
             height: 300,
             child: Image.file(File(image.path)),
           )
+        // 이미지가 없을 때
         : RoundedRectangle(
             width: 400,
             height: 300,
@@ -65,17 +67,17 @@ class _CameraScreenState extends State<CameraScreen> {
 
   // 카메라 및 이미지 버튼
   Widget cameraAndImageButton() {
-    var getImage = context.read<CameraStore>().getImage;
+    var getImage = context.read<CameraStore>().getImage; // 이미지를 가져오는 함수를 가져오기
     return Row(
       children: [
         RoundedRectangle(
-          child: Text("카메라"),
           width: 200,
           height: 200,
           onTap: () {
             print("카메라 열기");
-            getImage(ImageSource.camera);
+            getImage(ImageSource.camera); // 카머라 열기
           },
+          child: const Text("카메라"),
         ),
         RoundedRectangle(
           width: 200,
@@ -84,7 +86,7 @@ class _CameraScreenState extends State<CameraScreen> {
             print("카메라 열기");
             getImage(ImageSource.gallery);
           },
-          child: Text("이미지 선택"),
+          child: const Text("이미지 선택"),
         )
       ],
     );

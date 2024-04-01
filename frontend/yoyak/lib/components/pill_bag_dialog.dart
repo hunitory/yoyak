@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:yoyak/main.dart';
 import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/store/pill_bag_store.dart';
 import '../../styles/colors/palette.dart';
@@ -13,7 +14,12 @@ import 'package:yoyak/apis/url.dart';
 
 // 약 봉투 생성 다이얼로그
 class PillBagDialog extends StatefulWidget {
-  const PillBagDialog({super.key});
+  final int medicineSeq;
+
+  const PillBagDialog({
+    super.key,
+    required this.medicineSeq,
+  });
 
   @override
   State<PillBagDialog> createState() => _PillBagDialogState();
@@ -66,7 +72,11 @@ class _PillBagDialogState extends State<PillBagDialog> {
         if (mounted) {
           Navigator.pop(context);
         }
-        context.read<PillBagStore>().getPillBagDatas(context);
+        // 실시간 반영을 위한 약 봉투 데이터 다시 불러오기
+        context.read<PillBagStore>().getPillBagDatas(
+              context,
+              widget.medicineSeq,
+            );
       } else {
         print("약 봉투 생성 실패: ${response.body}");
       }
@@ -77,7 +87,7 @@ class _PillBagDialogState extends State<PillBagDialog> {
 
   @override
   Widget build(BuildContext context) {
-    var accountList = context.watch<LoginStore>().alarmAccounts;
+    var accountList = context.watch<LoginStore>().accountList;
 
     return Dialog(
       backgroundColor: Palette.MAIN_WHITE,

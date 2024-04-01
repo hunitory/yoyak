@@ -1,5 +1,3 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 class API {
-  static String yoyakUrl = dotenv.get('Yoyak_URL');
+  static String yoyakUrl = 'https://j10b102.p.ssafy.io/api';
 }

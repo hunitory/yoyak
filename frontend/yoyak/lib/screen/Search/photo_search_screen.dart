@@ -1,12 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:yoyak/components/base_button.dart';
+import 'dart:io';
 import 'package:yoyak/components/rounded_rectangle.dart';
+import 'package:yoyak/screen/Camera/Camera.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:yoyak/screen/Search/photo_result_screen.dart';
+import 'package:yoyak/store/camera_store.dart';
 import '../../styles/colors/palette.dart';
 
-class PhotoSearchScreen extends StatelessWidget {
+class PhotoSearchScreen extends StatefulWidget {
   const PhotoSearchScreen({super.key});
 
   @override
+  State<PhotoSearchScreen> createState() => _PhotoSearchScreenState();
+}
+
+class _PhotoSearchScreenState extends State<PhotoSearchScreen> {
+  @override
   Widget build(BuildContext context) {
+    var sendImageToServer = context.read<CameraStore>().sendImageToServer;
+    var getImage = context.read<CameraStore>().getImage; // 이미지를 가져오는 함수를 가져오기
+    var image = context.watch<CameraStore>().image;
+    var photoResults = context.watch<CameraStore>().photoResults;
+
     double rectangleWidth = MediaQuery.of(context).size.width * 0.8;
     double rectangleHeight = MediaQuery.of(context).size.width * 0.5;
 
@@ -60,7 +77,7 @@ class PhotoSearchScreen extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                   fontSize: 15),
             ),
-            // Spacer(),
+            // 가이드 사진
             Container(
               margin: const EdgeInsets.only(top: 50, bottom: 40),
               child: RoundedRectangle(
@@ -73,22 +90,25 @@ class PhotoSearchScreen extends StatelessWidget {
                     offset: Offset(0, 2),
                   )
                 ],
-                child: const Image(
-                  image: AssetImage('assets/images/guide.png'),
-                ),
+                // 가이드 사진 && 사진 미리보기
+                child: image != null // 사용자가 사진을 선택한 후!
+                    ? Image.file(File(image.path))
+                    : const Image(
+                        image: AssetImage('assets/images/guide.png'),
+                      ),
               ),
             ),
-            // => 이미지, 촬영 일러스트 변경하기!
+            // 이미지, 카메라 버튼
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
                   margin: const EdgeInsets.only(),
                   child: Column(
                     children: [
                       RoundedRectangle(
-                        width: MediaQuery.of(context).size.width * 0.35,
-                        height: MediaQuery.of(context).size.width * 0.35,
+                        width: MediaQuery.of(context).size.width * 0.30,
+                        height: MediaQuery.of(context).size.width * 0.30,
                         boxShadow: const [
                           BoxShadow(
                             color: Palette.SHADOW_GREY,
@@ -100,10 +120,14 @@ class PhotoSearchScreen extends StatelessWidget {
                           // 이미지 크기 조절
                           child: Image.asset(
                             'assets/images/mountain.png',
-                            width: rectangleHeight * 0.55,
+                            width: rectangleHeight * 0.45,
                             fit: BoxFit.cover,
                           ),
                         ),
+                        onTap: () {
+                          print("갤러리 열기");
+                          getImage(ImageSource.gallery);
+                        },
                       ),
                       const SizedBox(height: 10),
                       const Text(
@@ -117,28 +141,35 @@ class PhotoSearchScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+                const SizedBox(
+                  width: 10,
+                ),
                 Container(
                   margin: const EdgeInsets.only(),
                   child: Column(
                     children: [
                       RoundedRectangle(
-                        width: MediaQuery.of(context).size.width * 0.35,
-                        height: MediaQuery.of(context).size.width * 0.35,
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Palette.SHADOW_GREY,
-                            blurRadius: 3,
-                            offset: Offset(0, 2),
-                          )
-                        ],
-                        child: Center(
-                          child: Image.asset(
-                            'assets/images/camera.png',
-                            fit: BoxFit.cover,
-                            width: rectangleHeight * 0.55,
+                          width: MediaQuery.of(context).size.width * 0.30,
+                          height: MediaQuery.of(context).size.width * 0.30,
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Palette.SHADOW_GREY,
+                              blurRadius: 3,
+                              offset: Offset(0, 2),
+                            )
+                          ],
+                          child: Center(
+                            child: Image.asset(
+                              'assets/images/camera.png',
+                              fit: BoxFit.cover,
+                              width: rectangleHeight * 0.45,
+                            ),
                           ),
-                        ),
-                      ),
+                          onTap: () {
+                            print("카메라 열기");
+                            getImage(ImageSource.camera);
+                            // 데이터가 담기면 다음 페이지로 이동
+                          }),
                       const SizedBox(height: 10),
                       const Text(
                         "촬영하기",
@@ -147,12 +178,59 @@ class PhotoSearchScreen extends StatelessWidget {
                             fontFamily: 'Pretendard',
                             fontWeight: FontWeight.w500,
                             fontSize: 16),
-                      )
+                      ),
+                      // RoundedRectangle(
+                      //   width: 50,
+                      //   height: 50,
+                      //   child: const Text("카메라"),
+                      //   onTap: () {
+                      //     Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //             builder: (context) => const CameraScreen()));
+                      //   },
+                      // ),
                     ],
                   ),
                 ),
               ],
             ),
+            //  검색하기 버튼
+            // 스탈 입히기..
+            if (image != null) ...[
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.04,
+              ),
+              Center(
+                child: BaseButton(
+                  onPressed: () async {
+                    // 함수가 완료 될 때까지 기다렸다가 결과 페이지로 이동 async await
+                    await sendImageToServer();
+                    // 약 검색 결과 담기면 사진 결과 페이지로 이동
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PhotoResultScreen(
+                                  photoResults: photoResults,
+                                )));
+                  },
+                  text: "검색하기",
+                  colorMode: "white",
+                ),
+              )
+            ],
+            // SizedBox(
+            //   height: MediaQuery.of(context).size.height * 0.04,
+            // ),
+            // Center(
+            //   child: BaseButton(
+            //     onPressed: () {
+            //       sendImageToServer();
+            //     },
+            //     text: "검색하기",
+            //     colorMode: "white",
+            //   ),
+            // )
           ],
         ),
       ),

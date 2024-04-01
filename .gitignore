@@ -436,6 +436,11 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+backend/src/test/resources/serviceAccountKey.json
+backend/src/test/resources/application.yml
+backend/src/main/resources/serviceAccountKey.json
+backend/src/main/resources/application.yml
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,linux,macos,java,flutter,intellij,visualstudiocode,node
 backend/src/main/resources/application.yml
 backend/src/main/resources/serviceAccountKey.json
