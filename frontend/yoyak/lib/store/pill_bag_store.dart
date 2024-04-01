@@ -8,6 +8,7 @@ import 'package:yoyak/store/login_store.dart';
 
 class PillBagStore extends ChangeNotifier {
   Map<String, dynamic> pillBags = {}; // 약 봉투 목록
+  Map<String, dynamic> pillBagDetail = {}; // 약 봉투 저장된 약 목록
   var storage = SingletonSecureStorage().storage;
 
   // 약 봉투 목록 가져오기 api
@@ -236,7 +237,12 @@ class PillBagStore extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        print("약 봉투 저장된 약 목록 조회 성공 : ${response.body}");
+        var decodedBody = utf8.decode(response.bodyBytes);
+        // Map<String, dynamic>으로 변환
+        // API 호출 결과를 pillBag에 저장
+        // pillBagList = json.decode(decodedBody); // type이 맞나?
+        pillBagDetail = jsonDecode(decodedBody); // type이 맞나?
+        print("약 봉투 저장된 약 목록 조회 성공 : $pillBagDetail");
       } else {
         print("약 봉투 저장된 약 목록 조회 오류: ${response.body}");
       }
