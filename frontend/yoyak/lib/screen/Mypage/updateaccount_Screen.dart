@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:yoyak/apis/url.dart';
+import 'package:yoyak/auto_login/singleton_secure_storage.dart';
 import 'package:yoyak/components/base_button.dart';
 import 'package:yoyak/components/base_input.dart';
 import 'package:yoyak/models/user/account_models.dart';
@@ -147,7 +148,7 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
-  Future<void> deleteAlarmData(int accountSeq) async {
+  Future<void> deleteAccountData(int accountSeq) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
     String accessToken = context.read<LoginStore>().accessToken;
     String url = '$yoyakURL/account/$accountSeq'; // 서버 URL
@@ -180,17 +181,22 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
 
   Future<void> updateAlarmData() async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = context.read<LoginStore>().accessToken;
+    // String accessToken = context.read<LoginStore>().accessToken;
+    final storage = SingletonSecureStorage().storage;
+    String? accessToken = await storage.read(key: 'accessToken');
+
     String url = '$yoyakURL/account'; // 서버 URL
+    String formattedMonth = monthController.text.length == 1
+        ? '0${monthController.text}'
+        : monthController.text;
 
     // 서버에 보낼 데이터 준비
     Map<String, dynamic> accountData = {
       'seq': widget.accountitem.seq,
-      // 'name': _userNameController.text,
+      'name': _userNameController.text,
       'nickname': _userNameController.text,
       'gender': gender,
-      'birth':
-          '${yearController.text}-${monthController.text}-${dayController.text}',
+      'birth': '${yearController.text}-$formattedMonth-${dayController.text}',
       'disease': _userDiseaseController.text,
       'profileImg': widget.accountitem.profileImg,
     };
@@ -214,7 +220,8 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
         }
       } else {
         // 오류 처리
-        print(accountData);
+        print('수정 엑세스 토큰 $accessToken');
+        print('뭐지 뭐가 잘못됨? $accountData');
         print(
             'Failed to send account data, status code: ${response.statusCode}');
       }
@@ -226,16 +233,20 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
 
   Future<void> createAlarmData() async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = context.read<LoginStore>().accessToken;
+    // String accessToken = context.read<LoginStore>().accessToken;
+    final storage = SingletonSecureStorage().storage;
+    String? accessToken = await storage.read(key: 'accessToken');
     String url = '$yoyakURL/account'; // 서버 URL
+    String formattedMonth = monthController.text.length == 1
+        ? '0${monthController.text}'
+        : monthController.text;
 
     // 서버에 보낼 데이터 준비
     Map<String, dynamic> accountData = {
       'name': _userNameController.text,
       'nickname': _userNameController.text,
       'gender': gender,
-      'birth':
-          '${yearController.text}-${monthController.text}-${dayController.text}',
+      'birth': '${yearController.text}-$formattedMonth-${dayController.text}',
       'disease': _userDiseaseController.text,
       'profileImg': widget.accountitem.profileImg,
     };
@@ -360,7 +371,7 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
                 width: 104,
                 height: 35,
                 onPressed: () {
-                  deleteAlarmData(widget.accountitem.seq!);
+                  deleteAccountData(widget.accountitem.seq!);
                   Navigator.pop(context);
                 },
                 text: '삭제하기',
