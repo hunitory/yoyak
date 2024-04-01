@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 import 'package:yoyak/auto_login/singleton_secure_storage.dart';
 import 'package:yoyak/components/my_challenge_card.dart';
@@ -25,16 +26,61 @@ class ChallengeScreen extends StatefulWidget {
   State<ChallengeScreen> createState() => _ChallengeScreenState();
 }
 
-class _ChallengeScreenState extends State<ChallengeScreen> {
+class _ChallengeScreenState extends State<ChallengeScreen> with WidgetsBindingObserver {
+  String accessToken = '';
+
+
+
+  Future<void> getAccessToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      accessToken = prefs.getString('accessToken') ?? ''; // accessToken state 업데이트
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getAccessToken();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        print('resumed123');
+        break;
+      case AppLifecycleState.inactive:
+        print('inactive123');
+        break;
+      case AppLifecycleState.detached:
+        print('detached123');
+        // DO SOMETHING!
+        break;
+      case AppLifecycleState.paused:
+        print('paused123');
+        break;
+      default:
+        break;
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    context.read<ChallengeStore>().getMyChallenge(accessToken); // 내 챌린지 호출
+    context.read<ChallengeStore>().getMyChallengeList(accessToken); // 내 챌린지 덱 호출
+    context.read<ChallengeStore>().getOthersChallenge(accessToken); // 챌린지 둘러보기 호출
 
-    context.read<ChallengeStore>().getMyChallenge(); // 내 챌린지 호출
-    context.read<ChallengeStore>().getMyChallengeList(); // 내 챌린지 덱 호출
-    context.read<ChallengeStore>().getOthersChallenge(); // 챌린지 둘러보기 호출
-
-    // storage에서 사용자 이름 불러오기
+    // storage에서 사용자 이름 불러오기 - 수정하기
     Future<String?> getUserName() async {
       var storage = SingletonSecureStorage().storage;
       var userName = await storage.read(key: 'userName');
