@@ -34,13 +34,13 @@ public class MedicineController {
     public ResponseEntity<BasicResponseDto> searchMedicineByFilter(
         @ModelAttribute MedicineSearchParametersDto parameters) {
 
-        log.info("[{}.{}] parmeters = {}", this.getClass().getName(),
-            Thread.currentThread().getStackTrace()[1].getMethodName(), parameters);
+//        log.info("[{}.{}] parmeters = {}", this.getClass().getName(),
+//            Thread.currentThread().getStackTrace()[1].getMethodName(), parameters);
 
         List<MedicineDto> medicineList = medicineService.findMedicineByParameters(parameters);
 
-        log.info("[{}.{}] medicineList = {}", this.getClass().getName(),
-            Thread.currentThread().getStackTrace()[1].getMethodName(), medicineList);
+//        log.info("[{}.{}] medicineList.get(0) = {}", this.getClass().getName(),
+//            Thread.currentThread().getStackTrace()[1].getMethodName(), medicineList.get(0));
 
         return ResponseEntity
             .status(HttpStatus.OK)
@@ -56,9 +56,9 @@ public class MedicineController {
         @RequestParam(name = "page", defaultValue = "1") int page
     ) {
 
-        log.info("[{}.{}] parmeters = {}", this.getClass().getName(),
-            Thread.currentThread().getStackTrace()[1].getMethodName(),
-            "keyword: " + keyword + " page: " + page);
+//        log.info("[{}.{}] parmeters = {}", this.getClass().getName(),
+//            Thread.currentThread().getStackTrace()[1].getMethodName(),
+//            "keyword: " + keyword + " page: " + page);
 
         BasicResponseDto responseDto =
             medicineService.findMedicineByFullText(
@@ -73,9 +73,9 @@ public class MedicineController {
     public ResponseEntity<BasicResponseDto> searchMedicineByKeyword(
         @RequestParam(name = "keyword") String keyword) {
 
-        log.info("[{}.{}] parmeters = {}", this.getClass().getName(),
-            Thread.currentThread().getStackTrace()[1].getMethodName(),
-            "keyword: " + keyword);
+//        log.info("[{}.{}] parmeters = {}", this.getClass().getName(),
+//            Thread.currentThread().getStackTrace()[1].getMethodName(),
+//            "keyword: " + keyword);
 
         List<MedicineDto> medicineDtoList = medicineService.findMedicineByKeyword(keyword);
         return ResponseEntity.status(HttpStatus.OK)
