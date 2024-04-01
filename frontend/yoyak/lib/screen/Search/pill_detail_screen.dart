@@ -23,15 +23,23 @@ class PillDetailScreen extends StatefulWidget {
 class _PillDetailScreenState extends State<PillDetailScreen> {
   @override
   Widget build(BuildContext context) {
-// 로그인 되어있으면 약 봉투 목록 여기서 불러오기
-    var isLogined = context.watch<LoginStore>().accessToken != '';
-    if (isLogined) {
-      // 약 봉투 api get 요청
+    List<dynamic> Logined = context.watch<LoginStore>().accountList;
+    if (Logined.isNotEmpty) {
       context.read<PillBagStore>().getPillBagDatas(
             context,
             medicineSeq: widget.medicineInfo["medicineSeq"]!,
           );
     }
+
+// 로그인 되어있으면 약 봉투 목록 여기서 불러오기
+    // var isLogined = context.watch<LoginStore>().accessToken != '';
+    // if (isLogined) {
+    //   // 약 봉투 api get 요청
+    //   context.read<PillBagStore>().getPillBagDatas(
+    //         context,
+    //         medicineSeq: widget.medicineInfo["medicineSeq"]!,
+    //       );
+    // }
 
     // medicineSeq를 이용해서 DB에서 알약 정보를 가져오기
     return DefaultTabController(
@@ -65,7 +73,7 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
                 ),
                 child: RoundedRectangle(
                   width: double.infinity,
-                  height: isLogined
+                  height: Logined.isNotEmpty
                       ? MediaQuery.of(context).size.width * 0.90
                       : MediaQuery.of(context).size.width * 0.80,
                   boxShadow: const [
@@ -132,7 +140,7 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
                       ),
                       // 저장하기 버튼
                       // 로그인 안됐을 때는 로그인 창으로 이동
-                      if (isLogined)
+                      if (Logined.isNotEmpty)
                         BaseButton(
                           onPressed: () {
                             // 약 봉투 api get 요청
