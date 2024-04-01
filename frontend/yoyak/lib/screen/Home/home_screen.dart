@@ -72,6 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
     double rectangleSize = MediaQuery.of(context).size.width * 0.44;
     // LoginStore에서 alarmAccounts 가져오기
     List<AccountModel> alarmAccounts = context.watch<LoginStore>().accountList;
+    print("accountList: $alarmAccounts");
     // 약 봉투 read 요청 - 로그인 됐을 때
     if (alarmAccounts.isNotEmpty) {
       context.read<PillBagStore>().getPillBagDatas(context, medicineSeq: 0);
@@ -136,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             if (accessToken != null) ...[
                               Text(
-                                "안녕하세요 $userName님",
+                                "안녕하세요 $accessToken님",
                                 style: const TextStyle(
                                   fontSize: 20,
                                   color: Palette.MAIN_WHITE,

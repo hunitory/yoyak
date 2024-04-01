@@ -118,6 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setPassword(passwordInput) {
       password = passwordInput;
     }
+
     var inputWidth = MediaQuery.of(context).size.width * 0.82;
 
     return Scaffold(
@@ -133,129 +134,133 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 30,
                 ),
-            Column(
-              children: [
-                // SizedBox(height: 10),
-                SizedBox(
-                  width: inputWidth,
-                  height: 55,
-                  child: TextField(
-                    controller: emailController,
-                    focusNode: emailFocusNode,
-                    onChanged: (value) {
-                      setEmail(value); // 이 부분에서 이름을 state에 저장합니다.
-                    },
-                    onEditingComplete: () {
-                      FocusScope.of(context).requestFocus(passwordFocusNode);
-                    },
-                    decoration: InputDecoration(
-                        hintText: "이메일",
-                        hintStyle: TextStyle(
-                            color: Colors.grey.shade400, fontWeight: FontWeight.w400),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide.none),
-                        fillColor: Palette.SHADOW_GREY.withOpacity(0.3),
-                        filled: true,
-                        prefixIcon:
-                        Icon(Icons.email_outlined, color: Colors.grey.shade500)),
-                  ),
-                ),
-                const SizedBox(height: 15),
-                SizedBox(
-                  width: inputWidth,
-                  height: 55,
-                  child: TextField(
-                    controller: passwordController,
-                    focusNode: passwordFocusNode,
-                    onChanged: (value) {
-                      setPassword(value);
-                    },
-                    decoration: InputDecoration(
-                      hintText: "비밀번호",
-                      hintStyle: TextStyle(
-                          color: Colors.grey.shade400, fontWeight: FontWeight.w400),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide.none),
-                      fillColor: Palette.SHADOW_GREY.withOpacity(0.3),
-                      filled: true,
-                      prefixIcon:
-                      Icon(Icons.password_outlined, color: Colors.grey.shade500),
-                    ),
-                    obscureText: true,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                const SizedBox(height: 30),
-                //로그인 버튼
-                SizedBox(
-                  width: inputWidth,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (isValidate()) {
-                        try {
-                          context.read<LoginStore>().login(
-                              context, email, password, const MainScreen());
-                          print('로그인 버튼 눌림');
-                          // 로그인 확인
-                          // if (loginCheck == '-1') {
-                          //   print('로그인 실패');
-                          //   showDialog(
-                          //     context: context,
-                          //     builder: (BuildContext context) {
-                          //       return AlertDialog(
-                          //         title: const Text('알림'),
-                          //         content: const Text('아이디 또는 비밀번호가 올바르지 않습니다.'),
-                          //         actions: [
-                          //           TextButton(
-                          //             child: const Text('닫기'),
-                          //             onPressed: () {
-                          //               Navigator.of(context).pop();
-                          //             },
-                          //           ),
-                          //         ],
-                          //       );
-                          //     },
-                          //   );
-                          // }
-                        } catch (error) {
-                          print(error);
-                          // Vibration.vibrate(duration: 300); // 진동
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            shape: RoundedRectangleBorder(
-                              // ShapeDecoration을 사용하여 borderRadius 적용
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(15),
-                                  topRight: Radius.circular(15)),
-                            ),
-                            content: Text(
-                              "로그인 되었습니다",
-                              style: TextStyle(color: Palette.MAIN_BLACK),
-                            ),
-                            backgroundColor: Colors.yellow,
-                            duration: Duration(milliseconds: 1100),
-                          ));
-                        }
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
+                Column(
+                  children: [
+                    // SizedBox(height: 10),
+                    SizedBox(
+                      width: inputWidth,
+                      height: 55,
+                      child: TextField(
+                        controller: emailController,
+                        focusNode: emailFocusNode,
+                        onChanged: (value) {
+                          setEmail(value); // 이 부분에서 이름을 state에 저장합니다.
+                        },
+                        onEditingComplete: () {
+                          FocusScope.of(context)
+                              .requestFocus(passwordFocusNode);
+                        },
+                        decoration: InputDecoration(
+                            hintText: "이메일",
+                            hintStyle: TextStyle(
+                                color: Colors.grey.shade400,
+                                fontWeight: FontWeight.w400),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: BorderSide.none),
+                            fillColor: Palette.SHADOW_GREY.withOpacity(0.3),
+                            filled: true,
+                            prefixIcon: Icon(Icons.email_outlined,
+                                color: Colors.grey.shade500)),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      backgroundColor: Palette.MAIN_BLUE,
                     ),
-                    child: const Text(
-                      "로그인",
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    const SizedBox(height: 15),
+                    SizedBox(
+                      width: inputWidth,
+                      height: 55,
+                      child: TextField(
+                        controller: passwordController,
+                        focusNode: passwordFocusNode,
+                        onChanged: (value) {
+                          setPassword(value);
+                        },
+                        decoration: InputDecoration(
+                          hintText: "비밀번호",
+                          hintStyle: TextStyle(
+                              color: Colors.grey.shade400,
+                              fontWeight: FontWeight.w400),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide.none),
+                          fillColor: Palette.SHADOW_GREY.withOpacity(0.3),
+                          filled: true,
+                          prefixIcon: Icon(Icons.password_outlined,
+                              color: Colors.grey.shade500),
+                        ),
+                        obscureText: true,
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 5),
+                    const SizedBox(height: 30),
+                    //로그인 버튼
+                    SizedBox(
+                      width: inputWidth,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (isValidate()) {
+                            try {
+                              context.read<LoginStore>().login(
+                                  context, email, password, const MainScreen());
+                              print('로그인 버튼 눌림');
+                              // 로그인 확인
+                              // if (loginCheck == '-1') {
+                              //   print('로그인 실패');
+                              //   showDialog(
+                              //     context: context,
+                              //     builder: (BuildContext context) {
+                              //       return AlertDialog(
+                              //         title: const Text('알림'),
+                              //         content: const Text('아이디 또는 비밀번호가 올바르지 않습니다.'),
+                              //         actions: [
+                              //           TextButton(
+                              //             child: const Text('닫기'),
+                              //             onPressed: () {
+                              //               Navigator.of(context).pop();
+                              //             },
+                              //           ),
+                              //         ],
+                              //       );
+                              //     },
+                              //   );
+                              // }
+                            } catch (error) {
+                              print('로그인에서 난 에러 $error');
+                              // Vibration.vibrate(duration: 300); // 진동
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                shape: RoundedRectangleBorder(
+                                  // ShapeDecoration을 사용하여 borderRadius 적용
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(15),
+                                      topRight: Radius.circular(15)),
+                                ),
+                                content: Text(
+                                  "로그인 되었습니다",
+                                  style: TextStyle(color: Palette.MAIN_BLACK),
+                                ),
+                                backgroundColor: Colors.yellow,
+                                duration: Duration(milliseconds: 1100),
+                              ));
+                            }
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          backgroundColor: Palette.MAIN_BLUE,
+                        ),
+                        child: const Text(
+                          "로그인",
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    // const SizedBox(height: 10,),
+                    // _forgotPassword(context),
+                  ],
                 ),
-                // const SizedBox(height: 10,),
-                // _forgotPassword(context),
-              ],
-            ),
               ],
             ),
           ),

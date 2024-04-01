@@ -53,21 +53,18 @@ class LoginStore extends ChangeNotifier {
           'deviceToken': context.read<LoginStore>().deviceToken,
         }));
 
-    print(response.body);
+    print('너 뭔데 정체가 ${response.body}');
     var accessToken = response.body; // 액세스 토큰 저장
-    print("accessToken asdfasdf: $accessToken");
     if (response.statusCode == 200) {
-      print("로그인 성공");
-
-
       // 로그인 성공 시 storage에 저장
       await storage.write(key: 'userId', value: email);
       await storage.write(key: 'password', value: password);
       await storage.write(key: 'accessToken', value: accessToken);
       // await storage.write(
       //     key: 'userNickname', value: userInfo['nickname']); // 수정 가능성 있음
-      var tmpToken = await storage.read(key: 'accessToken');
-      setAccessToken(tmpToken); // provider에 받은 토큰 저장
+
+      // var tmpToken = await storage.read(key: 'accessToken');
+      // setAccessToken(tmpToken); // provider에 받은 토큰 저장
 
       storage.deleteAll(); // 기존 토큰 삭제
       storage.write(key: 'accessToken', value: accessToken); // accessToken 저장
@@ -88,7 +85,7 @@ class LoginStore extends ChangeNotifier {
   Future<void> getAccountData() async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
     String url = '$yoyakURL/account'; // 요청할 URL
-    String? accessToken = await storage.read(key: 'accessToken');
+    final storage = SingletonSecureStorage().storage;
     try {
       String? accesstoken = await storage.read(key: 'accessToken');
       final response = await http.get(
@@ -100,12 +97,12 @@ class LoginStore extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        print('유저야 ${response.statusCode}.');
         var decodedBody = utf8.decode(response.bodyBytes);
         List<dynamic> data = json.decode(decodedBody);
-        accountList =
-            data.map((json) => AccountModel.fromJson(json)).toList();
-        await storage.write(key: 'userName', value: accountList.first.nickname); // storage에 유저 닉네임 저장
+        accountList = data.map((json) => AccountModel.fromJson(json)).toList();
+        await storage.write(
+            key: 'userName',
+            value: accountList.first.nickname); // storage에 유저 닉네임 저장
         notifyListeners();
       } else {
         // 오류 처리
@@ -166,5 +163,10 @@ class LoginStore extends ChangeNotifier {
   setAccessToken(token) {
     accessToken = token;
     notifyListeners();
+  }
+
+  void clearAccounts() {
+    accountList.clear();
+    notifyListeners(); // UI에 변경사항을 알림
   }
 }

@@ -24,7 +24,6 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<AccountModel> account = context.watch<LoginStore>().accountList;
     return AppBar(
       centerTitle: true,
       automaticallyImplyLeading: false,
@@ -39,7 +38,6 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.data == null) {
-                  print("snapshot 데이터 ${snapshot.data}");
                   // 토큰이 없을 경우 로그인 버튼을 표시합니다.
                   return MainAppBarButton(
                       text: "로그인",
@@ -57,9 +55,6 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
                       });
                 } else {
                   // 토큰이 있을 경우 프로필 이미지를 표시합니다.
-                  List<AccountModel> account =
-                      context.watch<LoginStore>().accountList;
-                  print("account 후: $account");
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(

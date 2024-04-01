@@ -37,4 +37,9 @@ class AlarmStore extends ChangeNotifier {
       print('알림 데이터야 $error');
     }
   }
+
+  void clearAlarms() {
+    alarms.clear();
+    notifyListeners(); // UI에 변경사항을 알림
+  }
 }
