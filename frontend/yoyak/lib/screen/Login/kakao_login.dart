@@ -45,7 +45,6 @@ class KakaoLogin extends StatelessWidget implements SocialLogin {
         print(kakaoToken.accessToken);
         // sendKakaoId(kakaoToken);
 
-
         return true;
       } catch (error) {
         print('카카오계정으로 로그인 실패 $error');

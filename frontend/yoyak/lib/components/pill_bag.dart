@@ -124,7 +124,10 @@ class _PillBagState extends State<PillBag> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
-                border: Border.all(color: Color(int.parse(widget.color))),
+                border: Border.all(
+                  color: Color(int.parse(widget.color)),
+                  width: 1.5,
+                ),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(

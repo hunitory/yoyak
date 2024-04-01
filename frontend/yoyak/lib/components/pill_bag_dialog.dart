@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:yoyak/auto_login/singleton_secure_storage.dart';
 import 'package:yoyak/main.dart';
 import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/store/pill_bag_store.dart';
@@ -26,6 +27,7 @@ class PillBagDialog extends StatefulWidget {
 }
 
 class _PillBagDialogState extends State<PillBagDialog> {
+  var storage = SingletonSecureStorage().storage; // AccessToken 저장소
   final TextEditingController _nameController =
       TextEditingController(); // 약 봉투 이름 관리
   // selectedAccountSeq 초기에 null값인거 바꾸기
@@ -40,7 +42,7 @@ class _PillBagDialogState extends State<PillBagDialog> {
   // 약 봉투 생성 api
   Future<void> createPillBag(int accountSeq, String name) async {
     String yoyakURL = API.yoyakUrl; // 호스트 URL
-    String accessToken = context.read<LoginStore>().accessToken;
+    String? accessToken = await storage.read(key: 'accessToken');
     String url = '$yoyakURL/medicineEnvelop'; // path
     // 색상 리스트
     List<String> colors = [
@@ -75,7 +77,7 @@ class _PillBagDialogState extends State<PillBagDialog> {
         // 실시간 반영을 위한 약 봉투 데이터 다시 불러오기
         context.read<PillBagStore>().getPillBagDatas(
               context,
-              widget.medicineSeq,
+              medicineSeq: widget.medicineSeq,
             );
       } else {
         print("약 봉투 생성 실패: ${response.body}");

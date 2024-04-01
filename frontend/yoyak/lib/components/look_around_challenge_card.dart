@@ -65,39 +65,33 @@ class LookAroundChallengeCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(
-                      height: 20,
-                    ),
-                    // Progress Bar
-                    AnimatedProgressBar(
-                      width: cardWidth * 0.9,
                       height: 10,
-                      value: 0.4,
-                      duration: const Duration(seconds: 1),
-                      gradient: const LinearGradient(
-                        colors: [
-                          Colors.lightBlue,
-                          Palette.MAIN_BLUE,
-                        ],
+                    ),
+                    Text(
+                      "${challenge?['cheerCnt']}명이 좋아해요",
+                      style: const TextStyle(
+                        color: Palette.SUB_BLACK,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 15,
                       ),
-                      backgroundColor: Palette.BG_BLUE,
-                    ),
+                    ), //
                     const SizedBox(
-                      height: 20,
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.favorite_border, size: 23, color: Palette.MAIN_RED.withOpacity(0.5),),
+                          onPressed: () {
+                            context.read<ChallengeStore>().cheerUp(challenge?['articleSeq']);
+                            context.watch<ChallengeStore>().othersChallengeList;
+                          },
+                        ),
+                      ],
                     ),
 
-
-                    BaseButton(
-                      width: cardWidth,
-                      height: 40,
-                      fontSize: 15,
-                      borderWidth: 1.0,
-                      onPressed: () {
-                        context.read<ChallengeStore>().cheerUp(challenge?['articleSeq']);
-                      },
-                      text: "응원하기",
-                      colorMode: 'white',
-                      borderRadius: BorderRadius.circular(10),
-                    )
                   ],
                 ),
               )
