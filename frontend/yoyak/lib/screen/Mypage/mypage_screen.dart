@@ -107,8 +107,11 @@ class MypageScreen extends StatelessWidget {
                         padding: EdgeInsets.symmetric(
                             horizontal: ScreenSize.getWidth(context) * 0.05),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Image(
+                              width :86,
+                              height: 86,
                               image: AssetImage(
                                   'assets/images/profiles/profile$profileImg.png'),
                             ),
