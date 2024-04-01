@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:yoyak/components/accountlist_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/hooks/goto_screen.dart';
 import 'package:yoyak/models/user/account_models.dart';
-import 'package:yoyak/models/user/accountdetail_models.dart';
 import 'package:yoyak/screen/Main/main_screen.dart';
 import 'package:yoyak/screen/Mypage/privacy_policy.dart';
 import 'package:yoyak/screen/Mypage/updateaccount_Screen.dart';
@@ -13,28 +12,59 @@ import 'package:yoyak/store/alarm_store.dart';
 import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
-
-import '../../auto_login/singleton_secure_storage.dart';
 import '../../store/challenge_store.dart';
 
-class MypageScreen extends StatelessWidget {
+class MypageScreen extends StatefulWidget {
   const MypageScreen({super.key});
 
   @override
+  State<MypageScreen> createState() => _MypageScreenState();
+}
+
+class _MypageScreenState extends State<MypageScreen> {
+  // States
+  List<String?> accountList = [];
+  String userName = '';
+  String gender = '';
+  String birth = '';
+  String disease = '';
+  int profileImage = 0;
+
+  Future<void> loadUserInfo() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      accountList = prefs.getStringList('accountList')!;
+      gender = prefs.getString('gender') ?? '';
+      birth = prefs.getString('birth') ?? '';
+      disease = prefs.getString('disease') ?? '';
+      profileImage = prefs.getInt('profileImage') ?? 0;
+    });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        print('resumed123');
+        break;
+      case AppLifecycleState.inactive:
+        print('inactive123');
+        break;
+      case AppLifecycleState.detached:
+        print('detached123');
+        // DO SOMETHING!
+        break;
+      case AppLifecycleState.paused:
+        print('paused123');
+        break;
+      default:
+        break;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final storage = SingletonSecureStorage().storage;
-
-    final List<AccountModel> accountList =
-        context.watch<LoginStore>().accountList;
-
-    final AccountModel accountitem = context.read<LoginStore>().accountList[0];
-
-    final String userName = context.read<LoginStore>().accountList[0].nickname!;
-
-    final String userGender = context.read<LoginStore>().accountList[0].gender!;
-    String gender = userGender == 'F' ? '여자' : '남자';
-
-    final String userBirth = context.read<LoginStore>().accountList[0].birth!;
+    loadUserInfo();
 
     final String userdisease =
         context.read<LoginStore>().accountList[0].disease ?? '없음';
@@ -42,9 +72,6 @@ class MypageScreen extends StatelessWidget {
     String displayDisease = userdisease.length > 5
         ? '${userdisease.substring(0, 5)}...'
         : userdisease;
-
-    final int profileImg =
-        context.read<LoginStore>().accountList[0].profileImg!;
 
     void goToAccountUpdate(AccountModel? accountitem, bool isUser) {
       accountitem ??= AccountModel();
@@ -99,7 +126,7 @@ class MypageScreen extends StatelessWidget {
                             iconSize: 28,
                             onPressed: () {
                               // 내 정보 수정 페이지로 이동
-                              goToAccountUpdate(accountitem, true);
+                              goToAccountUpdate(accountList as AccountModel?, true);
                             },
                           ),
                         ],
@@ -111,10 +138,10 @@ class MypageScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Image(
-                              width :86,
+                              width: 86,
                               height: 86,
                               image: AssetImage(
-                                  'assets/images/profiles/profile$profileImg.png'),
+                                  'assets/images/profiles/profile$profileImage`1.png'),
                             ),
                             SizedBox(
                                 width: ScreenSize.getWidth(context) * 0.04),
@@ -239,7 +266,7 @@ class MypageScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 6),
                                 Text(
-                                  userBirth,
+                                  birth,
                                   style: const TextStyle(
                                     color: Palette.MAIN_BLACK,
                                     fontSize: 16,
@@ -297,7 +324,7 @@ class MypageScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      AccountList(accountList: accountList.sublist(1)),
+                      // AccountList(accountList: accountList.sublist(1)),
                       if (accountList.length < 3)
                         const SizedBox(
                           height: 10,
@@ -391,9 +418,10 @@ class MypageScreen extends StatelessWidget {
               RoundedRectangle(
                 width: double.infinity,
                 height: 50,
-                onTap: () {
+                onTap: () async {
                   // 로그아웃
-                  storage.deleteAll();
+                  final prefs = await SharedPreferences.getInstance();
+                  prefs.clear();
                   context.read<ChallengeStore>().clearChallenges();
                   context.read<LoginStore>().clearAccounts();
                   context.read<AlarmStore>().clearAlarms();
