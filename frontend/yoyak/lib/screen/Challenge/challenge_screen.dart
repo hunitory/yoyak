@@ -120,8 +120,6 @@ class _ChallengeTitleSection extends StatelessWidget {
     var storage = context.read<LoginStore>().storage;
     var getImageAndNavigate = context.read<CameraStore>().getImageAndNavigate;
 
-    print("내 챌린지 목록 길이: ${myChallengeList.length}");
-    print("내 챌린지 목록: $myChallengeList");
 
     var totalDay = (myChallengeCard?["day"]?? 0) + 1;
     var articleSize = myChallengeCard?["articleSize"];
