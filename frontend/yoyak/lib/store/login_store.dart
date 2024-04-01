@@ -59,6 +59,7 @@ class LoginStore extends ChangeNotifier {
     if (response.statusCode == 200) {
       print("로그인 성공");
 
+
       // 로그인 성공 시 storage에 저장
       await storage.write(key: 'userId', value: email);
       await storage.write(key: 'password', value: password);
@@ -70,7 +71,6 @@ class LoginStore extends ChangeNotifier {
 
       storage.deleteAll(); // 기존 토큰 삭제
       storage.write(key: 'accessToken', value: accessToken); // accessToken 저장
-      print("이게 로그인 accessToken 이다 가즈아 $tmpToken");
       notifyListeners();
 
       Navigator.pushAndRemoveUntil(
@@ -89,7 +89,6 @@ class LoginStore extends ChangeNotifier {
     String yoyakURL = API.yoyakUrl; // 서버 URL
     String url = '$yoyakURL/account'; // 요청할 URL
     String? accessToken = await storage.read(key: 'accessToken');
-    print("account시발의 accessToken $accessToken");
     try {
       String? accesstoken = await storage.read(key: 'accessToken');
       final response = await http.get(
@@ -106,6 +105,7 @@ class LoginStore extends ChangeNotifier {
         List<dynamic> data = json.decode(decodedBody);
         accountList =
             data.map((json) => AccountModel.fromJson(json)).toList();
+        await storage.write(key: 'userName', value: accountList.first.nickname); // storage에 유저 닉네임 저장
         notifyListeners();
       } else {
         // 오류 처리
