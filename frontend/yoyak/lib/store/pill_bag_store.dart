@@ -8,6 +8,7 @@ import 'package:yoyak/store/login_store.dart';
 
 class PillBagStore extends ChangeNotifier {
   Map<String, dynamic> pillBags = {}; // 약 봉투 목록
+  Map<String, dynamic> pillBagDetail = {}; // 약 봉투 저장된 약 목록
   var storage = SingletonSecureStorage().storage;
 
   // 약 봉투 목록 가져오기 api
@@ -116,7 +117,7 @@ class PillBagStore extends ChangeNotifier {
     int envelopeSeq,
   ) async {
     String yoyakURL = API.yoyakUrl; // 호스트 URL
-    String accessToken = context.read<LoginStore>().accessToken;
+    String? accessToken = await storage.read(key: 'accessToken');
     String url = '$yoyakURL/medicineSaved'; // path
 
     try {
@@ -156,7 +157,7 @@ class PillBagStore extends ChangeNotifier {
     int envelopeSeq,
   ) async {
     String yoyakURL = API.yoyakUrl; // 호스트 URL
-    String accessToken = context.read<LoginStore>().accessToken;
+    String? accessToken = await storage.read(key: 'accessToken');
     String url = '$yoyakURL/medicineSaved'; // path
 
     try {
@@ -182,6 +183,71 @@ class PillBagStore extends ChangeNotifier {
       }
     } catch (e) {
       print("약 삭제 에러: $e");
+    }
+    notifyListeners();
+  }
+
+  // 약 봉투 삭제 api
+  Future<void> deletePillBag(
+    BuildContext context,
+    int medicineEnvelopSeq,
+  ) async {
+    String yoyakURL = API.yoyakUrl; // 호스트 URL
+    String? accessToken = await storage.read(key: 'accessToken');
+    String url = '$yoyakURL/medicineEnvelop/$medicineEnvelopSeq'; // path
+
+    try {
+      final response = await http.delete(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print("약 봉투 삭제 성공");
+        await getPillBagDatas(context, medicineSeq: 0);
+        print('약봉투 목록 다시 불러왔나? - 약 봉투 삭제');
+      } else {
+        print("약 봉투 삭제 실패: ${response.body}");
+      }
+    } catch (e) {
+      print("약 봉투 삭제 에러: $e");
+    }
+    notifyListeners();
+  }
+
+  // 약 봉투 저장된 약 목록 조회 api
+  Future<void> getPillBagDetail(
+    BuildContext context,
+    int medicineEnvelopSeq,
+  ) async {
+    String yoyakURL = API.yoyakUrl; // 호스트 URL
+    String? accessToken = await storage.read(key: 'accessToken');
+    String url = '$yoyakURL/medicineEnvelop/$medicineEnvelopSeq'; // path
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        var decodedBody = utf8.decode(response.bodyBytes);
+        // Map<String, dynamic>으로 변환
+        // API 호출 결과를 pillBag에 저장
+        // pillBagList = json.decode(decodedBody); // type이 맞나?
+        pillBagDetail = jsonDecode(decodedBody); // type이 맞나?
+        print("약 봉투 저장된 약 목록 조회 성공 : $pillBagDetail");
+      } else {
+        print("약 봉투 저장된 약 목록 조회 오류: ${response.body}");
+      }
+    } catch (e) {
+      print("약 봉투 저장된 약 목록 조회 에러: $e");
     }
     notifyListeners();
   }
