@@ -5,6 +5,8 @@ import com.yoyak.yoyak.medicineEnvelop.dto.MedicineEnvelopDto;
 import com.yoyak.yoyak.medicineEnvelop.dto.MedicineSummaryDto;
 import com.yoyak.yoyak.medicineEnvelop.service.MedicineEnvelopService;
 import com.yoyak.yoyak.util.dto.BasicResponseDto;
+import com.yoyak.yoyak.util.exception.CustomException;
+import com.yoyak.yoyak.util.exception.CustomExceptionStatus;
 import com.yoyak.yoyak.util.security.SecurityUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +40,10 @@ public class MedicineEnvelopController {
     @PostMapping
     public ResponseEntity<HttpStatusCode> medicineEnvelopAdd(
         @RequestBody MedicineEnvelopCreateDto requestDto) {
+
+        if (requestDto.getName().trim().equals("") || requestDto.getAccountSeq() == null) {
+            throw new CustomException(CustomExceptionStatus.ENVELOP_INVALID_REQUEST);
+        }
 
         log.info("약 봉투 등록 - {}", requestDto);
         medicineEnvelopService.addMedicineEnvelop(requestDto);

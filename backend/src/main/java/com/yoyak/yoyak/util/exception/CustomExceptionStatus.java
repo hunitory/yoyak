@@ -24,6 +24,7 @@ public enum CustomExceptionStatus {
     // medicine 저장 관련
     ENVELOP_NOT_EXIST(5001, "존재하지 않는 약 봉투입니다."),
     ENVELOP_AUTHORITY(5002, "접근할 수 없는 약 봉투입니다."),
+    ENVELOP_INVALID_REQUEST(5003, "요청값을 확인하세요"),
 
     // alarm 관련
     NOTI_INVALID(6001, "존재하지 않는 알림입니다"),
@@ -33,7 +34,6 @@ public enum CustomExceptionStatus {
     ACCOUNT_INVALID(7001, "존재하지 않는 계정입니다"),
     ACCOUNT_MAXIMUM(7002, "계정을 더 이상 생성할 수 없습니다"),
     ACCOUNT_AUTHORITY(7003, "계정에 접근할 수 없습니다"),
-
 
 
     ARTICLE_INVALID(8001, "존재하지 않는 챌린지 글입니다"),
