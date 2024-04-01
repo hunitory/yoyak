@@ -19,7 +19,7 @@ public class MedicineEnvelopDto {
     public MedicineEnvelopDto(Long medicineEnvelopSeq, String envelopName, String color,
         Long accountSeq, String nickname, Boolean isSavedMedicine) {
         this.medicineEnvelopSeq = medicineEnvelopSeq;
-        EnvelopName = envelopName;
+        this.EnvelopName = envelopName;
         this.color = color;
         this.accountSeq = accountSeq;
         this.nickname = nickname;
@@ -29,7 +29,7 @@ public class MedicineEnvelopDto {
     public MedicineEnvelopDto(Long medicineEnvelopSeq, String envelopName, String color,
         Long accountSeq, String nickname) {
         this.medicineEnvelopSeq = medicineEnvelopSeq;
-        EnvelopName = envelopName;
+        this.EnvelopName = envelopName;
         this.color = color;
         this.accountSeq = accountSeq;
         this.nickname = nickname;

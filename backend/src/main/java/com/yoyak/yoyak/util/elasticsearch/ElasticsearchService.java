@@ -3,6 +3,7 @@ package com.yoyak.yoyak.util.elasticsearch;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
+import co.elastic.clients.elasticsearch.core.search.SourceConfig;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
 import java.io.IOException;
@@ -27,6 +28,11 @@ public class ElasticsearchService {
             .index(parameters.getIndex())
             .from(parameters.getStart())
             .size(parameters.getSize())
+            .source(SourceConfig.of(src -> src
+                .filter(f -> f
+                    .includes(parameters.getSourceIncludes())
+                )
+            ))
             .query(q -> q
                 .bool(b -> {
                     parameters.getFieldsToSearch().forEach(field ->
