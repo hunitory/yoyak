@@ -11,7 +11,9 @@ import com.yoyak.yoyak.util.exception.CustomException;
 import com.yoyak.yoyak.util.exception.CustomExceptionStatus;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,21 +72,29 @@ public class RecognitionController {
                 throw new CustomException(CustomExceptionStatus.MEDICINE_NO_RECOGNITION);
             }
             List<MedicineDto> medicineDtos = new ArrayList<>();
-            for (JsonNode medicine : medicineList) {
-                Long medicineCode = medicine.get("medicineCode").asLong();
-                String medicineName = medicine.get("medicineName").asText();
-                try {
+
+            Map<Long, String> code2Name = new HashMap<>();
+
+            for(JsonNode mecidine : medicineList){
+                Long medicineCode = mecidine.get("medicineCode").asLong();
+                String medicineName = mecidine.get("medicineName").asText();
+                code2Name.put(medicineCode, medicineName);
+            }
+
+            for(Long medicineCode : code2Name.keySet()){
+                try{
                     MedicineDto dto = medicineService.findMedicine(medicineCode);
                     medicineDtos.add(dto);
-                } catch (IllegalArgumentException e) {
+                }catch (IllegalArgumentException e){
                     MedicineDto dto = MedicineDto.builder().medicineSeq(medicineCode)
-                        .itemName(medicineName).build();
+                        .itemName(code2Name.get(medicineCode)).build();
                     medicineDtos.add(dto);
                 }
             }
+            
 
             RecognitionResponseDto responseDto = RecognitionResponseDto.builder()
-                .count(count)
+                .count(medicineDtos.size())
                 .medicineList(medicineDtos)
                 .build();
 
