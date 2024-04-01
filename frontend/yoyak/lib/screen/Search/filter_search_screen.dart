@@ -23,7 +23,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
   final List<Map<String, dynamic>> filterOptions = [
     {
       'options': {
-        '모양     전체': null,
+        '모양 전체': null,
         '원형': 'assets/images/shapes/circle.png',
         '타원형': 'assets/images/shapes/ellipse.png',
         '반원형': 'assets/images/shapes/half_circle.png',
@@ -36,12 +36,12 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
         '팔각형': 'assets/images/shapes/octagon.png',
         '기타': 'assets/images/shapes/etc.png',
       },
-      'default': '모양     전체',
+      'default': '모양 전체',
       'type': 'drugShape',
     },
     {
       'options': {
-        '색상     전체': null,
+        '색상 전체': null,
         '하양': 'assets/images/colors/white.png',
         '노랑': 'assets/images/colors/yellow.png',
         '주황': 'assets/images/colors/orange.png',
@@ -59,19 +59,19 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
         '검정': 'assets/images/colors/black.png',
         '투명': 'assets/images/colors/none.png',
       },
-      'default': '색상     전체',
+      'default': '색상 전체',
       'type': 'colorClass',
     },
   ];
   final List<Map<String, dynamic>> filterOptionsNoDi = [
     {
       'options': {
-        '제형     전체': null,
+        '제형 전체': null,
         '정제류': 'assets/images/pills/none.png',
         '경질캡슐': 'assets/images/pills/hard.png',
         '연질캡슐': 'assets/images/pills/soft.png',
       },
-      'default': '제형     전체',
+      'default': '제형 전체',
       'type': 'formCodeName',
     },
     // 분할선 없음
@@ -262,9 +262,9 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                   print('${filterOption['type']}: ${newSelection.text}');
                   // setState(() {
                   // 선택된 옵션이 전체일때는 api에 해당 타입을 보내지않음
-                  if (newSelection.text == '모양     전체') {
+                  if (newSelection.text == '모양 전체') {
                     selectedOptions.remove('drugShape');
-                  } else if (newSelection.text == '색상     전체') {
+                  } else if (newSelection.text == '색상 전체') {
                     selectedOptions.remove('colorClass');
                   } else {
                     selectedOptions[filterOption['type']] = newSelection.text;
@@ -290,7 +290,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                 onSelectionChanged: (newSelection) {
                   print('${filterOption['type']} : ${newSelection.text}');
                   // setState(() {
-                  if (newSelection.text == '제형     전체') {
+                  if (newSelection.text == '제형 전체') {
                     selectedOptions.remove('formCodeName');
                   } else if (newSelection.text == '분할선 전체') {
                     selectedOptions.remove('LINE');
