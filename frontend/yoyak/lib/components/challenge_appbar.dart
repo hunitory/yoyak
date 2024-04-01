@@ -26,7 +26,7 @@ class ChallengeaAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     var storage = context.read<LoginStore>().storage;
     var getImageAndNavigate = context.read<CameraStore>().getImageAndNavigate;
-    Map<String, dynamic> myChallengeCard = context.watch<ChallengeStore>().myChallengeCard;
+    Map<dynamic, dynamic> myChallengeCard = context.watch<ChallengeStore>().myChallengeCard;
     return AppBar(
         centerTitle: true,
         automaticallyImplyLeading: false,
@@ -60,7 +60,7 @@ class ChallengeaAppBar extends StatelessWidget implements PreferredSizeWidget {
                                   return const DialogUI(destination: LoginScreen(destination: RegistChallengeScreen(),),);
                             });
                           },
-                          text: "챌린지 시작",
+                          text: "시작하기",
                           colorMode: 'white',
                           borderWidth: 1.0,
                           borderRadius: BorderRadius.circular(20),

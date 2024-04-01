@@ -243,7 +243,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
     }
 
     // accountList에서 첫 번째 요소의 seq를 가져와서 초기화
-    var accountList = context.read<LoginStore>().alarmAccounts;
+    var accountList = context.read<LoginStore>().accountList;
     _alarmAccountSeq = accountList.isNotEmpty ? accountList.first.seq ?? 0 : 0;
   }
 
@@ -265,7 +265,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
 
   @override
   Widget build(BuildContext context) {
-    var accountList = context.watch<LoginStore>().alarmAccounts;
+    var accountList = context.watch<LoginStore>().accountList;
 
     return Scaffold(
       backgroundColor: Palette.MAIN_WHITE,
@@ -675,6 +675,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
               width: ScreenSize.getWidth(context),
               color: Colors.white,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(
@@ -709,7 +710,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
                                     borderRadius: BorderRadius.circular(10),
                                     color: Palette.SUB_BLUE.withOpacity(0.5),
                                   ),
-                                  width: ScreenSize.getWidth(context) * 0.85,
+                                  width: ScreenSize.getWidth(context) * 0.75,
                                   height: 40,
                                 ),
                                 Row(
@@ -824,9 +825,10 @@ class _AlarmCreateState extends State<AlarmCreate> {
                       ],
                     ),
                   ),
+                  const Spacer(),
                   Container(
                     width: ScreenSize.getWidth(context),
-                    height: 50.8,
+                    height: 46.7,
                     color: Palette.MAIN_BLUE,
                     child: TextButton(
                       onPressed: () {
@@ -1035,7 +1037,7 @@ class InputSelectDay extends StatelessWidget {
                         Navigator.pop(context);
                       },
                       child: Container(
-                        width: ScreenSize.getWidth(context) * 0.85,
+                        width: ScreenSize.getWidth(context) * 0.75,
                         color: Palette.MAIN_WHITE,
                         padding: const EdgeInsets.all(8),
                         child: const Text(
@@ -1061,7 +1063,7 @@ class InputSelectDay extends StatelessWidget {
                   children: [
                     GestureDetector(
                       child: Container(
-                        width: ScreenSize.getWidth(context) * 0.85,
+                        width: ScreenSize.getWidth(context) * 0.75,
                         color: Palette.MAIN_WHITE,
                         padding: const EdgeInsets.all(8),
                         child: const Text(
@@ -1083,7 +1085,9 @@ class InputSelectDay extends StatelessWidget {
 
                         print(' $selectedDays');
                         showSpecificDayModal(
-                            context: context, selectedDays: selectedDays);
+                          context: context,
+                          selectedDays: selectedDays,
+                        );
                       },
                     ),
                   ],

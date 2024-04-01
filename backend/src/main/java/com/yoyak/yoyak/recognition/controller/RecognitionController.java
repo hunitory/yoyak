@@ -6,6 +6,7 @@ import com.yoyak.yoyak.medicine.dto.MedicineDto;
 import com.yoyak.yoyak.medicine.service.MedicineService;
 import com.yoyak.yoyak.python.service.PythonService;
 import com.yoyak.yoyak.recognition.dto.RecognitionResponseDto;
+import com.yoyak.yoyak.util.dto.StatusResponseDto;
 import com.yoyak.yoyak.util.exception.CustomException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public class RecognitionController {
                 }
             };
 
+
             JsonNode jsonNode = pythonService.getRecognitionResponse(fileResource);
 
             int count = jsonNode.get("count").asInt();
@@ -75,7 +77,6 @@ public class RecognitionController {
                         .itemName(medicineName).build();
                     medicineDtos.add(dto);
                 }
-
             }
 
             RecognitionResponseDto responseDto = RecognitionResponseDto.builder()
@@ -85,9 +86,15 @@ public class RecognitionController {
 
             return ResponseEntity.ok().body(responseDto);
 
-        } catch (CustomException | IOException e) {
+        } catch (IOException e) {
 
             return ResponseEntity.internalServerError().body(e.getMessage());
+        }catch (CustomException e){
+            StatusResponseDto statusResponseDto = StatusResponseDto.builder()
+                .code(e.getStatus().getCode())
+                .message(e.getStatus().getMessage())
+                .build();
+            return ResponseEntity.badRequest().body(statusResponseDto);
         }
     }
 

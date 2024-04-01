@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
+import 'package:yoyak/auto_login/singleton_secure_storage.dart';
 import 'package:yoyak/components/my_challenge_card.dart';
 import 'package:yoyak/components/challenge_appbar.dart';
 import 'package:yoyak/store/challenge_store.dart';
@@ -17,21 +18,25 @@ class ChallengeScreen extends StatefulWidget {
 }
 
 class _ChallengeScreenState extends State<ChallengeScreen> {
+
   @override
   Widget build(BuildContext context) {
-    var accessToken = context.read<LoginStore>().accessToken;
-    context.read<ChallengeStore>().getMyChallenge(accessToken); // 내 챌린지 호출
-    context.read<ChallengeStore>().getOthersChallenge(accessToken); // 챌린지 둘러보기 호출
+    var userName = context.read<LoginStore>().userName;
+    context.read<ChallengeStore>().getMyChallenge(); // 내 챌린지 호출
+    context.read<ChallengeStore>().getMyChallengeList(); // 내 챌린지 덱 호출
+    context.read<ChallengeStore>().getOthersChallenge(); // 챌린지 둘러보기 호출
 
     return Scaffold(
       backgroundColor: Palette.BG_BLUE,
       appBar: const ChallengeaAppBar(
-        color: Palette.BG_BLUE,
+        color: Palette.MAIN_WHITE
+        ,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
+              width: ScreenSize.getWidth(context),
               height: 250,
               color: Palette.MAIN_WHITE,
               child: const Padding(
@@ -39,22 +44,22 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
                 child: _ChallengeTitleSection(),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(15, 30, 15, 25),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 30, 15, 25),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   MyChallengeCard(
-                    title: "성현님이 진행 중인 챌린지",
+                    title: "$userName님이 진행 중인 챌린지",
                     titleImagePath: "assets/images/medal.png",
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
-                  OtherChallengeCard(
+                  const OtherChallengeCard(
                     title: "챌린지 둘러보기",
                     titleImagePath: "assets/images/medal.png",
                   ),
@@ -79,14 +84,23 @@ class _ChallengeTitleSection extends StatelessWidget {
     print("내 챌린지 목록 길이: ${myChallengeList.length}");
     print("내 챌린지 목록: $myChallengeList");
 
-    var totalDay = myChallengeCard?["day"]?? 0 + 1;
+    var totalDay = (myChallengeCard?["day"]?? 0) + 1;
     var articleSize = myChallengeCard?["articleSize"];
-
+    print("totalDay $totalDay");
     // 챌린지를 시작하지 않은 경우
     if (myChallengeCard.isEmpty) {
       return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Text(
+                "꾸준한 복용을 위해",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Palette.SUB_BLACK.withOpacity(0.5),
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Pretendard',
+                ),
+              ),
               RichText(
                   text: const TextSpan(children: [
                 TextSpan(

@@ -26,8 +26,10 @@ class _PillBagModalState extends State<PillBagModal> {
   @override
   Widget build(BuildContext context) {
     // 약 봉투 리스트 가져오기
-    var pillBagList = context.watch<PillBagStore>().pillBag;
-    print('pillBagList: $pillBagList');
+    var pillBags = context.watch<PillBagStore>().pillBags;
+    List<dynamic> pillBagList = pillBags["result"] ?? [];
+
+    print('모달 pillBagList: $pillBags');
     print('다시 빌드?');
 
     // @ 모달 자체를 scroll 못하나?
@@ -71,7 +73,9 @@ class _PillBagModalState extends State<PillBagModal> {
                       builder: (BuildContext context) {
                         // 실시간 반영을 위한 StatefulBuilder
                         return StatefulBuilder(builder: (context, setState) {
-                          return const PillBagDialog();
+                          return PillBagDialog(
+                            medicineSeq: widget.medicineSeq,
+                          );
                         });
                       },
                     );
@@ -93,9 +97,10 @@ class _PillBagModalState extends State<PillBagModal> {
             // @ 없을 때 분기 처리하기
             Column(
               children: [
-                if (pillBagList["count"] != 0)
-                  for (var pillBag in pillBagList["result"])
+                if (pillBags["count"] != 0)
+                  for (var pillBag in pillBagList)
                     PillBag(
+                      medicineEnvelopSeq: pillBag["medicineEnvelopSeq"],
                       envelopName: pillBag["envelopName"],
                       medicineSeq: widget.medicineSeq,
                       accountSeq: pillBag["accountSeq"],
