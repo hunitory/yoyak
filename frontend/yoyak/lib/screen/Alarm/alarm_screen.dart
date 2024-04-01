@@ -508,6 +508,7 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
           context.read<AlarmStore>().getAlarmDatas(context);
         }
       } else {
+        print(accessToken);
         print('Failed to take medication, status code: ${response.statusCode}');
       }
     } catch (e) {

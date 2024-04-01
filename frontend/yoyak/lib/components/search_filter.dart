@@ -111,7 +111,7 @@ class _FilterComponentState extends State<FilterComponent> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.only(bottom: 25),
       child: RoundedRectangle(
         width: MediaQuery.of(context).size.width * 0.90,
         height: MediaQuery.of(context).size.width * 0.25,
