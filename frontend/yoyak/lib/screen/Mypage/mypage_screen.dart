@@ -9,6 +9,7 @@ import 'package:yoyak/models/user/accountdetail_models.dart';
 import 'package:yoyak/screen/Main/main_screen.dart';
 import 'package:yoyak/screen/Mypage/privacy_policy.dart';
 import 'package:yoyak/screen/Mypage/updateaccount_Screen.dart';
+import 'package:yoyak/store/alarm_store.dart';
 import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
@@ -395,6 +396,7 @@ class MypageScreen extends StatelessWidget {
                   storage.deleteAll();
                   context.read<ChallengeStore>().clearChallenges();
                   context.read<LoginStore>().clearAccounts();
+                  context.read<AlarmStore>().clearAlarms();
                   goToScreen(context, const MainScreen());
                 },
                 child: const Center(
