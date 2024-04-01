@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/auto_login/singleton_secure_storage.dart';
-import 'package:yoyak/main.dart';
 import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/store/pill_bag_store.dart';
 import '../../styles/colors/palette.dart';
@@ -110,22 +109,38 @@ class _PillBagDialogState extends State<PillBagDialog> {
               child: TextField(
                 controller: _nameController,
                 maxLength: 10,
-                cursorHeight: 20,
                 cursorColor: Palette.MAIN_BLUE,
                 style: const TextStyle(
                   color: Palette.MAIN_BLACK,
                   fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                   fontSize: 16,
                 ),
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 15,
+                    vertical: 11,
+                  ),
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.only(
-                    left: 15,
-                    bottom: 13,
-                    top: 13,
+                  hintText: '약 봉투 이름을 입력해주세요',
+                  hintStyle: const TextStyle(
+                    color: Palette.SUB_BLACK,
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15,
                   ),
                   counterText: '',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      Icons.clear,
+                      color: Palette.SUB_BLACK,
+                      size: MediaQuery.of(context).size.width * 0.065,
+                    ),
+                    onPressed: () {
+                      _nameController.clear();
+                      // 검색 결과 초기화
+                    },
+                  ),
                 ),
               ),
             ),
@@ -169,6 +184,26 @@ class _PillBagDialogState extends State<PillBagDialog> {
                 colorMode: 'blue',
                 onPressed: () {
                   print('약 봉투 생성');
+
+                  // 약 봉투 이름 null인지 확인
+                  if (_nameController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          '약 봉투 이름을 입력해주세요.',
+                          style: TextStyle(
+                            color: Palette.MAIN_WHITE,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
+                        ),
+                        backgroundColor: Palette.MAIN_RED,
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                    return;
+                  }
 
                   createPillBag(
                     _selectedAccountSeq ?? accountList[0].seq!,

@@ -176,7 +176,10 @@ class PillBagStore extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         print("약 삭제 성공");
-        await getPillBagDatas(context, medicineSeq: medicineSeq);
+        await getPillBagDetail(
+            context, envelopeSeq); // 약 봉투 저장된 약 목록 다시 불러오기(약 봉투 페이지 삭제 check 용)
+        await getPillBagDatas(context,
+            medicineSeq: medicineSeq); // 약 봉투 목록 다시 불러오기(저장하기 check 용)
         print('약봉투 목록 다시 불러왔나? - 삭제');
       } else {
         print("약 삭제 실패: ${response.body}");

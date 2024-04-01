@@ -99,32 +99,25 @@ class _PillPreviewState extends State<PillPreview> {
               ClipRRect(
                   // 자식요소 크기 강제 설정
                   borderRadius: BorderRadius.circular(17),
-                  child: widget.imgPath != null
-                      ? Image.network(
-                          widget.imgPath!, // null이 아님
-                          width: MediaQuery.of(context).size.width * 0.25,
-                          height: MediaQuery.of(context).size.width * 0.13,
-                          fit: BoxFit.cover,
-                          // 에러 처리
-                          errorBuilder: (BuildContext context, Object error,
-                              StackTrace? stackTrace) {
-                            print(error);
-                            print("이미지 오류 해결 !!!!!!!!!!!!!");
-                            // 대체 이미지 반환
-                            return Image.asset(
-                              'assets/images/pillbox.jpg',
-                              width: MediaQuery.of(context).size.width * 0.25,
-                              height: MediaQuery.of(context).size.width * 0.13,
-                              fit: BoxFit.cover,
-                            );
-                          },
-                        )
-                      : Image.asset(
-                          'assets/images/pillbox.jpg',
-                          width: MediaQuery.of(context).size.width * 0.25,
-                          height: MediaQuery.of(context).size.width * 0.13,
-                          fit: BoxFit.cover,
-                        )),
+                  child: Image.network(
+                    widget.imgPath!, // null이 아님
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    height: MediaQuery.of(context).size.width * 0.13,
+                    fit: BoxFit.cover,
+                    // 에러 처리
+                    errorBuilder: (BuildContext context, Object error,
+                        StackTrace? stackTrace) {
+                      print(error);
+                      print("이미지 오류 해결 !!!!!!!!!!!!!");
+                      // 대체 이미지 반환
+                      return Image.asset(
+                        'assets/images/pillbox.jpg',
+                        width: MediaQuery.of(context).size.width * 0.25,
+                        height: MediaQuery.of(context).size.width * 0.13,
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  )),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.07,
               ),

@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/components/base_button.dart';
 import 'package:yoyak/components/pill_bag_dialog.dart';
+import 'package:yoyak/screen/PillBag/pill_bag_detail_screen.dart';
 import 'package:yoyak/store/pill_bag_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 
@@ -34,7 +35,7 @@ class _PillBagScreenState extends State<PillBagScreen> {
   Widget _pillBagComponent(
     int medicineEnvelopSeq,
     String envelopName,
-    // int accountSeq,
+    int accountSeq,
     String nickname,
     String color,
     // bool isSavedMedicine,
@@ -44,15 +45,26 @@ class _PillBagScreenState extends State<PillBagScreen> {
         _checkedPillBags.contains(medicineEnvelopSeq); // 현재 약 봉투 항목이 선택되었는지 여부
 
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         if (!_isDeleteMode) {
           // 삭제 모드가 아닐 때, 클릭하면 상세 페이지로 이동
           print("약 봉투 클릭 -> 상세 페이지 이동");
           // 약 조회 api 호출
-          context
+          // async awiat 적용 부르고 네비게이터로 이동
+          await context
               .read<PillBagStore>()
               .getPillBagDetail(context, medicineEnvelopSeq);
           // 상세페이지 이동
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PillBagDetailScreen(
+                envelopName: envelopName,
+                accountSeq: accountSeq,
+                envelopSeq: medicineEnvelopSeq,
+              ),
+            ),
+          );
         }
       },
       child: Container(
@@ -60,7 +72,7 @@ class _PillBagScreenState extends State<PillBagScreen> {
         padding: const EdgeInsets.only(bottom: 20),
         decoration: const BoxDecoration(
           border: Border(
-            bottom: BorderSide(color: Palette.SHADOW_GREY, width: 0.5),
+            bottom: BorderSide(color: Palette.MAIN_BLACK, width: 0.1),
           ),
         ),
         child: Row(
@@ -72,34 +84,38 @@ class _PillBagScreenState extends State<PillBagScreen> {
                 _isDeleteMode
                     ? SizedBox(
                         // 덜컹안하게 체크박스 원래 padding 조정
-                        width: 30.0,
-                        height: 30.0,
-                        child: Checkbox(
-                          value: isChecked, // 체크 여부
-                          onChanged: (bool? value) {
-                            setState(() {
-                              if (value == true) {
-                                _checkedPillBags.add(
-                                    medicineEnvelopSeq); // 체크하면 체크된 약 봉투 Seq에 추가
-                                print(
-                                    "@@@@_checkedPillBags 추가 : $_checkedPillBags");
-                              } else {
-                                _checkedPillBags.remove(medicineEnvelopSeq);
-                                print(
-                                    "@@@@_checkedPillBags 삭제 : $_checkedPillBags"); // 체크 해제하면 체크된 약 봉투 Seq에서 제거
-                              }
-                            });
-                          },
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
+                        width: MediaQuery.of(context).size.width * 0.078,
+                        height: MediaQuery.of(context).size.width * 0.078,
+                        // 체크 박스 크기 조정
+                        child: Transform.scale(
+                          scale: 1.4,
+                          child: Checkbox(
+                            value: isChecked, // 체크 여부
+                            onChanged: (bool? value) {
+                              setState(() {
+                                if (value == true) {
+                                  _checkedPillBags.add(
+                                      medicineEnvelopSeq); // 체크하면 체크된 약 봉투 Seq에 추가
+                                  print(
+                                      "@@@@_checkedPillBags 추가 : $_checkedPillBags");
+                                } else {
+                                  _checkedPillBags.remove(medicineEnvelopSeq);
+                                  print(
+                                      "@@@@_checkedPillBags 삭제 : $_checkedPillBags"); // 체크 해제하면 체크된 약 봉투 Seq에서 제거
+                                }
+                              });
+                            },
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            side: const BorderSide(
+                              color: Palette.MAIN_BLACK,
+                              width: 0.5,
+                            ),
+                            activeColor: Palette.MAIN_BLUE,
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
                           ),
-                          side: const BorderSide(
-                            color: Palette.SUB_BLACK,
-                            width: 1,
-                          ),
-                          activeColor: Palette.MAIN_BLUE,
-                          materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
                         ),
                       )
                     // 삭제모드가 아닐 때
@@ -112,6 +128,7 @@ class _PillBagScreenState extends State<PillBagScreen> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.06,
                 ),
+                // 약 봉투 이름
                 Text(
                   envelopName,
                   style: const TextStyle(
@@ -192,8 +209,10 @@ class _PillBagScreenState extends State<PillBagScreen> {
           : SingleChildScrollView(
               child: Container(
                 width: double.infinity,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 40, horizontal: 30),
+                padding: EdgeInsets.symmetric(
+                  vertical: MediaQuery.of(context).size.height * 0.02,
+                  horizontal: MediaQuery.of(context).size.height * 0.03,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -207,7 +226,7 @@ class _PillBagScreenState extends State<PillBagScreen> {
                             _pillBagComponent(
                               pillBag['medicineEnvelopSeq'],
                               pillBag['envelopName'],
-                              // pillBag['accountSeq'],
+                              pillBag['accountSeq'],
                               pillBag['nickname'],
                               pillBag['color'],
                             )
