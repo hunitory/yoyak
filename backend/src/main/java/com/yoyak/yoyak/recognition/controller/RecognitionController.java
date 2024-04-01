@@ -8,6 +8,7 @@ import com.yoyak.yoyak.python.service.PythonService;
 import com.yoyak.yoyak.recognition.dto.RecognitionResponseDto;
 import com.yoyak.yoyak.util.dto.StatusResponseDto;
 import com.yoyak.yoyak.util.exception.CustomException;
+import com.yoyak.yoyak.util.exception.CustomExceptionStatus;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +66,9 @@ public class RecognitionController {
 
             JsonNode medicineList = jsonNode.get("medicineList");
             log.info("medicineList = {}", medicineList.size());
+            if(medicineList.size() == 0){
+                throw new CustomException(CustomExceptionStatus.MEDICINE_NO_RECOGNITION);
+            }
             List<MedicineDto> medicineDtos = new ArrayList<>();
             for (JsonNode medicine : medicineList) {
                 Long medicineCode = medicine.get("medicineCode").asLong();
