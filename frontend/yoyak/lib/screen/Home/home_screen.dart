@@ -137,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             if (accessToken != null) ...[
                               Text(
-                                "안녕하세요 $userName님",
+                                "안녕하세요 $accessToken님",
                                 style: const TextStyle(
                                   fontSize: 20,
                                   color: Palette.MAIN_WHITE,
