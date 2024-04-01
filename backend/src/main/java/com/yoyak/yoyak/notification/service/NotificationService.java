@@ -131,7 +131,7 @@ public class NotificationService {
 
     private com.google.firebase.messaging.Notification getNotification(String message) {
         return com.google.firebase.messaging.Notification.builder()
-            .setTitle("Yoyak 알림")
+            .setTitle("Yoyak")
             .setBody(message)
             .build();
     }

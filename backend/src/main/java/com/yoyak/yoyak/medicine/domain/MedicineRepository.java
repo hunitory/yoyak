@@ -31,4 +31,17 @@ public interface MedicineRepository extends JpaRepository<Medicine, Long> {
         @Param("colorClass") String colorClass,
         @Param("formCodeName") String formCodeName,
         @Param("line") String line);
+
+
+    @Query(
+        "SELECT new com.yoyak.yoyak.medicine.dto.MedicineDto(m.seq, m.imgPath, m.itemName, m.entpName) "
+            + " FROM Medicine m JOIN m.medicineDetail md "
+            + "WHERE "
+            + "  (COALESCE(:keyword, null) IS NULL OR m.itemName LIKE CONCAT('%', :keyword, '%')) OR "
+            + "  (COALESCE(:keyword, null) IS NULL OR md.atpn LIKE CONCAT('%', :keyword, '%')) OR "
+            + "  (COALESCE(:keyword, null) IS NULL OR md.atpnWarn LIKE CONCAT('%', :keyword, '%')) OR "
+            + "  (COALESCE(:keyword, null) IS NULL OR md.className LIKE CONCAT('%', :keyword, '%')) OR "
+            + "  (COALESCE(:keyword, null) IS NULL OR md.efficacy LIKE CONCAT('%', :keyword, '%')) OR "
+            + "  (COALESCE(:keyword, null) IS NULL OR md.sideEffect LIKE CONCAT('%', :keyword, '%'))")
+    List<MedicineDto> findByKeyword(@Param("keyword") String keyword);
 }
