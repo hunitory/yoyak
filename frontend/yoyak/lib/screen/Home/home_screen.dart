@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
     List<AccountModel> alarmAccounts = context.watch<LoginStore>().accountList;
     // 약 봉투 read 요청 - 로그인 됐을 때
     if (alarmAccounts.isNotEmpty) {
-      context.read<PillBagStore>().getPillBagDatas(context);
+      context.read<PillBagStore>().getPillBagDatas(context, medicineSeq: 0);
     }
 
     // account 변수를 선언하고 조건에 따라 할당
