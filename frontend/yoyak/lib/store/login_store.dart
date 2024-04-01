@@ -63,8 +63,8 @@ class LoginStore extends ChangeNotifier {
       // await storage.write(
       //     key: 'userNickname', value: userInfo['nickname']); // 수정 가능성 있음
 
-      // var tmpToken = await storage.read(key: 'accessToken');
-      // setAccessToken(tmpToken); // provider에 받은 토큰 저장
+      var tmpToken = await storage.read(key: 'accessToken');
+      setAccessToken(tmpToken); // provider에 받은 토큰 저장
 
       storage.deleteAll(); // 기존 토큰 삭제
       storage.write(key: 'accessToken', value: accessToken); // accessToken 저장
