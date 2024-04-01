@@ -29,7 +29,7 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
       // 약 봉투 api get 요청
       context.read<PillBagStore>().getPillBagDatas(
             context,
-            widget.medicineInfo["medicineSeq"]!,
+            medicineSeq: widget.medicineInfo["medicineSeq"]!,
           );
     }
 
@@ -44,8 +44,8 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
             style: TextStyle(
               color: Palette.MAIN_BLACK,
               fontFamily: 'Pretendard',
-              fontWeight: FontWeight.w400,
-              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
             ),
           ),
           backgroundColor: Palette.BG_BLUE,

@@ -67,7 +67,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return const SafeArea(
         child: MaterialApp(
       // 알림 날짜 선택기를 위한 한국어 설정

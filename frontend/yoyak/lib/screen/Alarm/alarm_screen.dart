@@ -80,9 +80,9 @@ class _AlarmScreenState extends State<AlarmScreen> {
             '알림 관리',
             style: TextStyle(
               color: Palette.MAIN_BLACK,
+              fontSize: 16,
               fontFamily: 'Pretendard',
-              fontWeight: FontWeight.w400,
-              fontSize: 15,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),

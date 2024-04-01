@@ -60,6 +60,7 @@ class ChallengeStore extends ChangeNotifier {
       if (response.statusCode == 200) {
         print("내 챌린지 게시글 조회 성공");
         myChallengeList = json.decode(utf8.decode(response.bodyBytes));
+        myChallengeList = myChallengeList.reversed.toList();
         notifyListeners();
       } else {
         print("내 챌린지 목록 조회 실패");
@@ -161,6 +162,7 @@ class ChallengeStore extends ChangeNotifier {
       if (response.statusCode == 200) {
         print("챌린지 둘러보기 조회 성공");
         othersChallengeList = json.decode(utf8.decode(response.bodyBytes));
+        othersChallengeList = othersChallengeList.reversed.toList();
         notifyListeners();
       } else {
         print("챌린지 둘러보기 조회 실패");
@@ -194,5 +196,12 @@ class ChallengeStore extends ChangeNotifier {
       print(error);
       print("챌린지 등록 실패");
     }
+  }
+
+  void clearChallenges() {
+    myChallengeList.clear();
+    myChallengeCard.clear();
+    othersChallengeList.clear();
+    notifyListeners(); // UI에 변경사항을 알림
   }
 }

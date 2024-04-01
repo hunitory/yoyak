@@ -1,5 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:yoyak/styles/colors/palette.dart';
+import 'package:yoyak/styles/screenSize/screen_size.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
   const PrivacyPolicyScreen({super.key});
@@ -7,89 +10,75 @@ class PrivacyPolicyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF5F6F9),
+      backgroundColor: Palette.BG_BLUE,
       appBar: AppBar(
+        centerTitle: true,
         scrolledUnderElevation: 0.0,
         elevation: 0,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios_rounded),
+          icon: const Icon(
+            Icons.arrow_back_ios_rounded,
+            color: Palette.MAIN_BLACK,
+            size: 18,
+          ),
         ),
-        title: Text("개인정보 처리방침"),
+        title: const Text(
+          "개인정보 처리방침",
+          style: TextStyle(
+            color: Palette.MAIN_BLACK,
+            fontSize: 16,
+            fontFamily: "Pretendard",
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(40.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //개인 정보 정책
-              Container(
-                width: 400,
-                child: Center(
+              // 제목 및 서문
+              SizedBox(
+                width: ScreenSize.getWidth(context),
+                child: const Center(
                   child: Text(
-                    "개인 정보 정책",
+                    "<요약> 개인정보 처리방침",
                     style: TextStyle(
+                      color: Palette.MAIN_BLACK,
                       fontSize: 23,
                       fontFamily: "Pretendard",
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                 ),
               ),
+              const SizedBox(
+                height: 14,
+              ),
+              const Text(
+                '  <요약>은 정보주체의 자유와 권리 보호를 위해 「개인정보 보호법」 및 관계 법령이 정한바를 준수하여, 적법하게 개인정보를 처리하고 안전하게 관리하고 있습니다. 이에 「개인정보 보호법」제30조에 따라 정보주체에게 개인정보 처리에 관한 절차 및 기준을 안내하고, 이와 관련한 고충을신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보 처리방침을 수립·공개합니다.',
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const SizedBox(
+                height: 14,
+              ),
+              // 개인정보의 처리 목적
               SizedBox(
-                height: 10,
-              ),
-              Container(
-                child: Text(
-                  '   이주혁님은 Pillin 앱을 무료 앱으로 구축했습니다. 이 서비스는 Pillin이 무료로 제공하며 있는 그대로 사용하도록 되어 있습니다.',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Pretendard",
-                  ),
-                ),
-              ),
-              Container(
-                child: Text(
-                  "   이 페이지는 누군가가 우리 서비스를 사용하기로 결정한 경우 개인 정보 수집, 사용 및 공개에 대한  우리 정책을 방문자에게 알리는 데 사용됩니다.",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Pretendard",
-                  ),
-                ),
-              ),
-              Container(
-                child: Text(
-                  "   귀하가 우리 서비스를 사용하기로 선택한 경우, 귀하는 이 정책과 관련된 정보 수집 및 사용에 동의하는 것입니다. 우리가 수집한 개인정보는 서비스 제공 및 개선을 위해 사용됩니다. 우리는 본 개인정보 보호정책에 설명된 경우를 제외하고 누구와도 귀하의 정보를 사용하거나 공유하지 않습니다.",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Pretendard",
-                  ),
-                ),
-              ),
-              Container(
-                child: Text(
-                  "   본 개인정보 보호정책에 사용된 용어는 본 개인정보 보호정책에서 달리 정의되지 않는 한 Pillin에서 액세스할 수 있는 이용 약관과 동일한 의미를 갖습니다.",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Pretendard",
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              //정보 수집 및 사용
-              Container(
-                width: 400,
-                child: Center(
+                width: ScreenSize.getWidth(context),
+                child: const Center(
                   child: Text(
-                    "정보 수집 및 사용",
+                    "개인정보의 처리목적",
                     style: TextStyle(
+                      color: Palette.MAIN_BLACK,
                       fontSize: 22,
                       fontWeight: FontWeight.w400,
                       fontFamily: "Pretendard",
@@ -97,296 +86,589 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 10,
+              const SizedBox(
+                height: 14,
               ),
-              Container(
+              const Text(
+                "  <요약>은 다음의 목적을 위하여 개인정보를 처리합니다. 처리하고 있는 개인정보는다음의 목적 이외의 용도로는 이용되지 않으며, 이용 목적이 변경되는 경우에는 「개인정보 보호법」제18조에 따라 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다. ",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const SizedBox(
                 child: Text(
-                  "   더 나은 경험을 위해 당사 서비스를 사용하는 동안 우리는 귀하에게 특정 개인 식별 정보를 제공하도록 요구할 수 있습니다. 요청은 귀하의 장치에 보관되며 저희가 어떤 방식으로든 수집하지 않습니다.",
+                  "  - 회원 가입 및 관리 : 회원 가입의사 확인, 회원제 서비스 제공에 따른 본인 식별·인증, 회원자격 유지·관리, 서비스 부정이용방지, 만 14세 미만 아동의 개인정보 처리 시 법정대리인의 동의여부 확인, 각종 고지·통지, 고충처리목적으로 개인정보를 처리합니다. ",
                   style: TextStyle(
+                    color: Palette.MAIN_BLACK,
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                     fontFamily: "Pretendard",
                   ),
                 ),
               ),
-              Container(
-                child: Text(
-                  "   앱은 귀하를 식별하는 데 사용되는 정보를 수집할 수 있는 제3자 서비스를 사용합니다.",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Pretendard",
-                  ),
-                ),
-              ),
-              Container(
-                child: Text(
-                  "앱에서 사용하는 제3자 서비스 제공업체의 개인정보 보호정책 링크",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Pretendard",
-                  ),
-                ),
-              ),
-              Container(
-                child:
-                    //url 달기
-                    Container(
-                  child: TextButton(
-                    child: Text("구글 플레이 서비스 링크"),
-                    onPressed: () async {
-                      final url =
-                          Uri.parse('https://www.google.com/policies/privacy/');
-                      if (await canLaunchUrl(url)) {
-                        launchUrl(url, mode: LaunchMode.externalApplication);
-                      }
-                    },
-                  ),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    const TextSpan(
+                      text: '앱에서 사용하는 제3자 서비스 제공업체의 개인정보 보호정책 ',
+                      style: TextStyle(
+                        color: Palette.MAIN_BLACK,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Pretendard",
+                      ),
+                    ),
+                    TextSpan(
+                      text: '링크',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Pretendard",
+                        color: Palette.MAIN_BLUE, // 하이퍼링크 색상
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () async {
+                          final url = Uri.parse(
+                              'https://www.google.com/policies/privacy/');
+                          if (await canLaunchUrl(url)) {
+                            launchUrl(url,
+                                mode: LaunchMode.externalApplication);
+                          }
+                        },
+                    ),
+                  ],
                 ),
               ),
               //로그 데이터
-              SizedBox(
-                height: 10,
+              const SizedBox(
+                height: 14,
               ),
               //정보 수집 및 사용
-              Container(
+              const SizedBox(
                 width: 400,
                 child: Center(
                   child: Text(
-                    "로그 데이터",
+                    "개인 정보의 처리 및 보유 기간",
                     style: TextStyle(
-                      fontSize: 15,
+                      color: Palette.MAIN_BLACK,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: "Pretendard",
                     ),
                   ),
                 ),
               ),
-              SizedBox(
-                height: 10,
+              const SizedBox(
+                height: 14,
               ),
-              Container(
-                child: Text(
-                  "   우리는 귀하가 우리 서비스를 이용할 때마다 앱에 오류가 발생하는 경우 Log라는 귀하의 휴대폰에서 (제3자 제품을 통해) 데이터 및 정보를 수집한다는 점을 알려드리고 싶습니다. 데이터. 이 로그 데이터에는 귀하의 장치 인터넷 프로토콜(\"IP\") 주소, 장치 이름, 운영 체제 버전, 우리 서비스 이용 시 앱 구성, 서비스 사용 시간 및 날짜와 같은 정보가 포함될 수 있습니다. 및 기타 통계.",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Pretendard",
-                  ),
+              const Text(
+                "   ① <요약>은 법령에 따른 개인정보 보유·이용기간 또는 정보주체로부터 개인정보를 수집 시에 동의 받은 개인정보 보유·이용기간 내에서 개인정보를 처리·보유합니다. ",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
                 ),
               ),
-              SizedBox(
-                height: 10,
+              const Text(
+                "   ② 각각의 개인정보 처리 및 보유 기간은 다음과 같습니다",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   1. 홈페이지 회원 가입 및 관리 : 사업자/단체 홈페이지 탈퇴 시까지",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   다만, 다음의 사유에 해당하는 경우에는 해당 사유 종료 시까지 ",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   1) 관계 법령 위반에 따른 수사·조사 등이 진행 중인 경우에는 해당 수사·조사 종료 시까지",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   2) 홈페이지 이용에 따른 채권·채무관계 잔존 시에는 해당 채권·채무관계 정산 시까지",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   3) <예외 사유> 시에는 1년까지",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+
+              const SizedBox(
+                height: 14,
               ),
               //쿠키
-              Container(
+              const SizedBox(
                 width: 400,
                 child: Center(
                   child: Text(
-                    "쿠키",
+                    "처리하는 개인정보의 항목",
                     style: TextStyle(
-                      fontSize: 25,
+                      color: Palette.MAIN_BLACK,
+                      fontSize: 22,
                       fontWeight: FontWeight.w400,
                       fontFamily: "Pretendard",
                     ),
                   ),
                 ),
               ),
-              SizedBox(
-                height: 10,
+              const SizedBox(
+                height: 14,
               ),
-              Container(
-                child: Text(
-                  "   쿠키는 일반적으로 익명의 고유 식별자로 사용되는 소량의 데이터가 포함된 파일입니다. 이러한 정보는 귀하가 방문하는 웹사이트에서 귀하의 브라우저로 전송되며 장치의 내부 메모리에 저장됩니다.",
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Pretendard",
-                  ),
+              const Text(
+                "   <요약>은 다음의 개인정보 항목을 처리하고 있습니다.",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
                 ),
               ),
-              Container(
-                child: Text(
-                  "   본 서비스는 이러한 \"쿠키\"를 명시적으로 사용하지 않습니다. 그러나 앱은 정보를 수집하고 서비스를 개선하기 위해 \"쿠키\"를 사용하는 타사 코드 및 라이브러리를 사용할 수 있습니다. 귀하는 이러한 쿠키를 수락하거나 거부할 수 있으며 쿠키가 귀하의 장치로 전송되는 시기를 알 수 있습니다. 귀하가 쿠키를 거부하기로 선택한 경우\, 본 서비스의 일부를 사용하지 못할 수도 있습니다.",
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Pretendard",
-                  ),
+              const Text(
+                "   1. 회원 가입 및 관리",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
                 ),
               ),
-              SizedBox(
-                height: 10,
+              const Text(
+                "   - 필수항목 : 이메일, 비밀번호, 닉네임, 생년월일, 성별",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
               ),
-              //서비스 제공자
-              Container(
+              const Text(
+                "   - 선택항목 : 주요증상",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const SizedBox(
+                height: 14,
+              ),
+              // 개인정보의 파기 절차 및 방법에 관한 사항
+              const SizedBox(
                 width: 400,
                 child: Center(
                   child: Text(
-                    "서비스 제공자",
+                    "개인정보의 파기 절차 및 방법",
                     style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                child: Text(
-                  "   우리는 다음과 같은 이유로 제3자 회사 및 개인을 고용할 수 있습니다.\n 1) 서비스를 용이하게 하기 위해 \n 2) 당사를 대신하여 서비스를 제공하기 위해 \n 3) 서비스 관련 서비스를 수행하기 위해 또는 \n 4) 당사 서비스가 어떻게 사용되는지 분석하는 데 도움을 주기 위해",
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Pretendard",
-                  ),
-                ),
-              ),
-              Container(
-                child: Text(
-                  "   우리는 이 서비스 사용자에게 이러한 제3자가 사용자의 개인정보에 접근할 수 있음을 알리고 싶습니다. 그 이유는 우리를 대신하여 그들에게 할당된 임무를 수행하기 위해서입니다. 그러나 해당 정보를 다른 목적으로 공개하거나 사용해서는 안 됩니다.",
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Pretendard",
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              //보안
-              Container(
-                width: 400,
-                child: Center(
-                  child: Text(
-                    "보안",
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                child: Text(
-                  "   우리는 귀하의 개인정보 제공에 대한 귀하의 신뢰를 소중히 여기며, 이를 보호하기 위해 상업적으로 허용되는 수단을 사용하기 위해 노력하고 있습니다. 그러나 인터넷을 통한 전송 방법이나 전자 저장 방법은 100% 안전하고 신뢰할 수 없으며 우리는 절대적인 보안을 보장할 수 없습니다.",
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Pretendard",
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              //다른 사이트에 대한 링크
-              Container(
-                width: 400,
-                child: Center(
-                  child: Text(
-                    "다른 사이트에 대한 링크",
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                child: Text(
-                  "   본 서비스에는 다른 사이트에 대한 링크가 포함될 수 있습니다. 타사 링크를 클릭하면 해당 사이트로 이동됩니다. 이러한 외부 사이트는 우리가 운영하지 않습니다. 따라서 우리는 귀하가 이러한 웹사이트의 개인정보 보호정책을 검토할 것을 강력히 권고합니다. 우리는 제3자 사이트나 서비스의 콘텐츠, 개인 정보 보호 정책 또는 관행에 대해 통제권이 없으며 책임을 지지 않습니다.",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Pretendard",
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              //아동의 개인정보 보호
-              Container(
-                width: 400,
-                child: Center(
-                  child: Text(
-                    "아동의 개인정보 보호",
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                child: Text(
-                  "   우리는 13세 미만의 어린이로부터 고의로 개인 식별 정보를 수집하지 않습니다. 13세 미만의 아동이 우리에게 개인정보를 제공한 사실을 우리가 발견한 경우, 우리는 이를 즉시 서버에서 삭제합니다. 귀하가 부모 또는 보호자이고 귀하의 자녀가 당사에 개인정보를 제공한 사실을 알고 있는 경우, 우리가 필요한 조치를 취할 수 있도록 우리에게 연락해 주십시오.",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Pretendard",
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              //본 개인정보 보호정책의 변경
-              Container(
-                width: 400,
-                child: Center(
-                  child: Text(
-                    "본 개인정보 보호정책의 변경",
-                    style: TextStyle(
-                      fontSize: 25,
+                      color: Palette.MAIN_BLACK,
+                      fontSize: 22,
                       fontWeight: FontWeight.w400,
                       fontFamily: "Pretendard",
                     ),
                   ),
                 ),
               ),
-              SizedBox(
-                height: 10,
+              const SizedBox(
+                height: 14,
               ),
-              Container(
-                child: Text(
-                  "   우리는 수시로 개인정보 보호정책을 업데이트할 수 있습니다. 따라서 이 페이지를 정기적으로 검토하여 변경 사항이 있는지 확인하는 것이 좋습니다. 우리는 이 페이지에 새로운 개인정보 보호정책을 게시하여 변경 사항을 알려드립니다.",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Pretendard",
+              const Text(
+                "   <요약>은 원칙적으로 개인정보 처리목적이 달성된 경우에는 지체 없이 해당 개인정보를 파기합니다. 파기의 절차, 기한 및 방법은 다음과 같습니다.",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   - 파기절차",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   <요약>은 파기 사유가 발생한 개인정보를 선정하고, <요약>의 개인정보 보호책임자의 승인을 받아 개인정보를 파기합니다.",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   - 파기기한",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   <요약>은 개인정보의 처리목적 달성, 해당 서비스의 폐지, 사업 종료 등 그 개인정보가 불필요하게 되었을 때에는 지체 없이 파기합니다.",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   - 파기방법",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   <요약>은 전자적 파일 형태로 기록·저장된 개인정보는 기록을 재생할 수 없는 기술적 방법을 사용하여 파기하며, 종이 문서에 기록·저장된 개인정보는 분쇄기로 분쇄하거나 소각하여 파기합니다.",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const SizedBox(
+                height: 14,
+              ),
+              //개인정보의 안전성 확보 조치
+              const SizedBox(
+                width: 400,
+                child: Center(
+                  child: Text(
+                    "개인정보의 안전성 확보 조치",
+                    style: TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: "Pretendard",
+                    ),
                   ),
                 ),
               ),
-              Container(
-                child: Text(
-                  "   본 방침은 2024년 2월 2일부터 시행됩니다.",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "Pretendard",
+
+              const SizedBox(
+                height: 14,
+              ),
+              const Text(
+                "   <요약>은 개인정보의 안전성 확보를 위해 다음과 같은 조치를 취하고 있습니다.",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   1. 관리적 조치 : 내부관리계획 수립·시행, 정기적 직원 교육 등",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   2. 기술적 조치 : 개인정보처리시스템 접근권한 관리, 접근통제시스템 설치, 비인가자에 대한 접근 통제 등",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   3. 물리적 조치 : 전산실, 자료보관실 등의 접근통제",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const SizedBox(
+                height: 14,
+              ),
+
+              //개인정보 보호책임자
+              const SizedBox(
+                width: 400,
+                child: Center(
+                  child: Text(
+                    "개인정보 보호책임자",
+                    style: TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: "Pretendard",
+                    ),
                   ),
                 ),
               ),
-              SizedBox(
-                height: 10,
+              const SizedBox(
+                height: 14,
               ),
+              const Text(
+                "   <요약>은 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 정보주체의 불만 처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   ▶ 개인정보 보호책임자",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   성명 : 오지훈",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   직책 : 개발자",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   연락처 : 010-2575-2397",
+                style: TextStyle(
+                    color: Palette.MAIN_BLACK,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: "Pretendard"),
+              ),
+              const Text(
+                "   이메일 : gfsd2397@gmail.com",
+                style: TextStyle(
+                    color: Palette.MAIN_BLACK,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: "Pretendard"),
+              ),
+              const Text(
+                '② 정보주체는 <요약>의 서비스(또는 사업)을 이용하시면서 발생한 모든 개인정보보호관련 문의, 불만처리, 피해구제 등에 관한 사항을 개인정보 보호책임자 및 담당부서로 문의할 수있습니다. <요약> 은 정보주체의 문의에 대해 지체없이 답변 및 처리해드릴 것입니다.',
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+
+              const SizedBox(
+                height: 14,
+              ),
+
+              // 권익침해 구제방법
+              const SizedBox(
+                width: 400,
+                child: Center(
+                  child: Text(
+                    "권익침해 구제방법",
+                    style: TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: "Pretendard",
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(
+                height: 14,
+              ),
+
+              const Text(
+                "   정보주체는 개인정보침해에 대한 피해구제를 받기 위하여 개인정보분쟁조정위원회, 한국인터넷진흥원 개인정보침해신고센터 등에 분쟁해결이나 상담 등을 신청할 수 있습니다. 아래는 개인정보분쟁조정위원회의 연락처입니다.",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   1. 개인정보분쟁조정위원회 : (국번없이) 1833-6972 (www.kopico.go.kr)",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   2. 개인정보침해신고센터 : (국번없이) 118 (privacy.kisa.or.kr)",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   3. 대검찰청 : (국번없이) 1301 (www.spo.go.kr)",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   4. 경찰청 : (국번없이) 182 (ecrm.cyber.go.kr) ",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                '② <개인정보처리자명>은(는) 정보주체의 개인정보자기결정권을 보장하고, 개인정보침해로 인한상담 및 피해 구제를 위해 노력하고 있으며, 신고나 상담이 필요한 경우 아래의 담당부서로 연락해주시기 바랍니다.',
+                style: TextStyle(
+                    color: Palette.MAIN_BLACK,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: "Pretendard"),
+              ),
+              const Text(
+                "   ‣ 개인정보보호 관련 고객 상담 및 신고 ",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   담당자 : 김성현",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   연락처 : 010-2717-6906",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const SizedBox(
+                height: 14,
+              ),
+
+              //개인정보 처리방침 변경
+              const SizedBox(
+                width: 400,
+                child: Center(
+                  child: Text(
+                    "개인정보 처리방침 변경",
+                    style: TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: "Pretendard",
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(
+                height: 14,
+              ),
+
+              const Text(
+                "   ① 이 개인정보 처리방침은 2024년 4월 1일부터 적용되며, 법령 및 방침에 따른 변경내용의 추가, 삭제 및 정정이 있는 경우에는 변경사항의 시행 7일 전부터 공지사항을 통하여 고지할 것입니다.",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const Text(
+                "   ② 이 개인정보 처리방침은 2024년 4월 1일부터 시행됩니다.",
+                style: TextStyle(
+                  color: Palette.MAIN_BLACK,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: "Pretendard",
+                ),
+              ),
+              const SizedBox(
+                height: 14,
+              ),
+
               //문의하기
-              Container(
+              const SizedBox(
                 width: 400,
                 child: Center(
                   child: Text(
                     "문의하기",
                     style: TextStyle(
+                      color: Palette.MAIN_BLACK,
                       fontSize: 25,
                       fontWeight: FontWeight.w400,
                       fontFamily: "Pretendard",
@@ -394,13 +676,14 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Container(
+              const SizedBox(
                 child: Text(
-                  "   우리 개인정보 보호정책에 대해 질문이나 제안 사항이 있는 경우 주저하지 말고 wngur4300@gmail.com으로 문의하십시오.",
+                  "   우리 개인정보 보호정책에 대해 질문이나 제안 사항이 있는 경우 주저하지 말고 yjw5602@naver.com으로 문의하십시오.",
                   style: TextStyle(
+                    color: Palette.MAIN_BLACK,
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                     fontFamily: "Pretendard",

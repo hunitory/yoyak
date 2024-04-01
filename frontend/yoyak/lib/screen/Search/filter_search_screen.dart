@@ -165,8 +165,8 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
             style: TextStyle(
               color: Palette.MAIN_BLACK,
               fontFamily: 'Pretendard',
-              fontWeight: FontWeight.w400,
-              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
             )),
         backgroundColor: Palette.BG_BLUE,
         centerTitle: true,

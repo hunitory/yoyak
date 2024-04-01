@@ -25,8 +25,8 @@ class AccountModel {
     profileImg = json['profileImg'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+  Map<dynamic, dynamic> toJson() {
+    final Map<dynamic, dynamic> data = <dynamic, dynamic>{};
     data['seq'] = seq;
     data['nickname'] = nickname;
     data['gender'] = gender;

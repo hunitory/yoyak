@@ -57,6 +57,8 @@ dependencies:
   firebase_core: ^2.15.0
   permission_handler: ^11.3.1
   flutter_launcher_icons: ^0.13.1
+  video_player: ^2.8.3
+  flick_video_player: ^0.7.0
 
 dev_dependencies:
   flutter_test:
@@ -90,6 +92,7 @@ flutter:
     - assets/images/lines/
     - assets/images/profiles/
     - assets/lotties/
+    - assets/videos/
     - assets/config/.env
 
   # An image asset can refer to one or more resolution-specific "variants", see

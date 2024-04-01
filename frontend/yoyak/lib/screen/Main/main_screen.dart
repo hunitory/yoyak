@@ -88,12 +88,12 @@ class _MainScreenState extends State<MainScreen> {
   //     print('로그인 풀렸어요 자동 로그인 실패');
   //   }
   // }
-
   @override
   Widget build(BuildContext context) {
     context.read<LoginStore>().getAccountData();
     context.read<AlarmStore>().getAlarmDatas(context);
     context.read<LoginStore>().getDeviceToken();
+    print("흠흠");
     print("device 토큰 : ${context.read<LoginStore>().deviceToken}");
 
     return Scaffold(

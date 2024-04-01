@@ -11,18 +11,19 @@ class PillBagStore extends ChangeNotifier {
   var storage = SingletonSecureStorage().storage;
 
   // 약 봉투 목록 가져오기 api
-  Future<void> getPillBagDatas(
-    BuildContext context,
-    int medicineSeq,
-  ) async {
+  Future<void> getPillBagDatas(BuildContext context, {int? medicineSeq}) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
     String modifiedUrl = yoyakURL.substring(8, yoyakURL.length - 4);
     String path = '/api/medicineEnvelop'; // path
     String? accessToken = await storage.read(key: 'accessToken');
 
     print("modified  : $modifiedUrl");
+    print(accessToken);
 
     final uri = Uri.https(modifiedUrl, path, {"medicineSeq": "$medicineSeq"});
+    // final uri = Uri.https(
+    //     "192.168.219.100:8080", path, {"medicineSeq": "$medicineSeq"});
+
     // print("api 어디로감 ... : $uri");
 
     // API 호출
@@ -135,7 +136,7 @@ class PillBagStore extends ChangeNotifier {
       if (response.statusCode == 200) {
         print("약 저장 성공");
         // 약 봉투 목록 다시 불러오기 -
-        await getPillBagDatas(context, medicineSeq);
+        await getPillBagDatas(context, medicineSeq: medicineSeq);
         print('약봉투 목록 다시 불러왔나? - 저장');
       } else {
         print("약 저장 실패: ${response.body}");
@@ -174,7 +175,7 @@ class PillBagStore extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         print("약 삭제 성공");
-        await getPillBagDatas(context, medicineSeq);
+        await getPillBagDatas(context, medicineSeq: medicineSeq);
         print('약봉투 목록 다시 불러왔나? - 삭제');
       } else {
         print("약 삭제 실패: ${response.body}");
