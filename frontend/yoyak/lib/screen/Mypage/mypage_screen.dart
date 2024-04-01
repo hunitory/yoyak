@@ -3,30 +3,34 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/components/accountlist_view.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
+import 'package:yoyak/hooks/goto_screen.dart';
 import 'package:yoyak/models/user/account_models.dart';
 import 'package:yoyak/models/user/accountdetail_models.dart';
+import 'package:yoyak/screen/Main/main_screen.dart';
 import 'package:yoyak/screen/Mypage/privacy_policy.dart';
 import 'package:yoyak/screen/Mypage/updateaccount_Screen.dart';
 import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 
+import '../../auto_login/singleton_secure_storage.dart';
+import '../../store/challenge_store.dart';
+
 class MypageScreen extends StatelessWidget {
   const MypageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final storage = SingletonSecureStorage().storage;
+
     final List<AccountModel> accountList =
         context.watch<LoginStore>().accountList;
 
-    final AccountModel accountitem =
-        context.read<LoginStore>().accountList[0];
+    final AccountModel accountitem = context.read<LoginStore>().accountList[0];
 
-    final String userName =
-        context.read<LoginStore>().accountList[0].nickname!;
+    final String userName = context.read<LoginStore>().accountList[0].nickname!;
 
-    final String userGender =
-        context.read<LoginStore>().accountList[0].gender!;
+    final String userGender = context.read<LoginStore>().accountList[0].gender!;
     String gender = userGender == 'F' ? '여자' : '남자';
 
     final String userBirth = context.read<LoginStore>().accountList[0].birth!;
@@ -64,8 +68,8 @@ class MypageScreen extends StatelessWidget {
           '내 정보',
           style: TextStyle(
             color: Palette.MAIN_BLACK,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ),
@@ -103,8 +107,11 @@ class MypageScreen extends StatelessWidget {
                         padding: EdgeInsets.symmetric(
                             horizontal: ScreenSize.getWidth(context) * 0.05),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Image(
+                              width :86,
+                              height: 86,
                               image: AssetImage(
                                   'assets/images/profiles/profile$profileImg.png'),
                             ),
@@ -290,11 +297,11 @@ class MypageScreen extends StatelessWidget {
                         ],
                       ),
                       AccountList(accountList: accountList.sublist(1)),
-                      if (accountList.length < 4)
+                      if (accountList.length < 3)
                         const SizedBox(
                           height: 10,
                         ),
-                      if (accountList.length < 4)
+                      if (accountList.length < 3)
                         GestureDetector(
                           onTap: () {
                             goToAccountUpdate(null, false);
@@ -385,6 +392,10 @@ class MypageScreen extends StatelessWidget {
                 height: 50,
                 onTap: () {
                   // 로그아웃
+                  storage.deleteAll();
+                  context.read<ChallengeStore>().clearChallenges();
+
+                  goToScreen(context, const MainScreen());
                 },
                 child: const Center(
                   child: Text(
