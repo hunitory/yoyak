@@ -13,7 +13,6 @@ import 'package:yoyak/screen/Search/filter_search_screen.dart';
 import 'package:yoyak/screen/Search/photo_search_screen.dart';
 import 'package:yoyak/store/pill_bag_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
-import '../../auto_login/singleton_secure_storage.dart';
 import '../../components/icon_in_rectangle.dart';
 import '../../store/login_store.dart';
 import 'package:video_player/video_player.dart';
@@ -102,10 +101,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     double screenWidth = MediaQuery.of(context).size.width;
     double rectangleSize = MediaQuery.of(context).size.width * 0.44;
     // LoginStore에서 alarmAccounts 가져오기
-    List<AccountModel> alarmAccounts = context.watch<LoginStore>().accountList;
-    print("accountList: $alarmAccounts");
+    var loginedUser = context.watch<LoginStore>().loginedUser;
+    print("loginedUser: $loginedUser");
     // 약 봉투 read 요청 - 로그인 됐을 때
-    if (alarmAccounts.isNotEmpty) {
+    if (accessToken.isNotEmpty) {
       context.read<PillBagStore>().getPillBagDatas(context, medicineSeq: 0);
     }
     // List<AccountModel> alarmAccounts = context.watch<LoginStore>().accountList;
@@ -159,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     children: [
                       if (accessToken.isNotEmpty) ...[
                         Text(
-                          "안녕하세요 $accessToken님",
+                          "안녕하세요 ${loginedUser?.nickname ?? "유저"}님",
                           style: const TextStyle(
                             fontSize: 20,
                             color: Palette.MAIN_WHITE,
