@@ -31,16 +31,16 @@ public class MedicineController {
      * @return ResponseEntity<BasicResponseDto>
      */
     @GetMapping("/filter")
-    public ResponseEntity<BasicResponseDto> medicineList(
+    public ResponseEntity<BasicResponseDto> searchMedicineByFilter(
         @ModelAttribute MedicineSearchParametersDto parameters) {
 
-        log.info("[{}.{}] parmeters = {}", this.getClass().getName(),
-            Thread.currentThread().getStackTrace()[1].getMethodName(), parameters);
+//        log.info("[{}.{}] parmeters = {}", this.getClass().getName(),
+//            Thread.currentThread().getStackTrace()[1].getMethodName(), parameters);
 
         List<MedicineDto> medicineList = medicineService.findMedicineByParameters(parameters);
 
-        log.info("[{}.{}] medicineList = {}", this.getClass().getName(),
-            Thread.currentThread().getStackTrace()[1].getMethodName(), medicineList);
+//        log.info("[{}.{}] medicineList.get(0) = {}", this.getClass().getName(),
+//            Thread.currentThread().getStackTrace()[1].getMethodName(), medicineList.get(0));
 
         return ResponseEntity
             .status(HttpStatus.OK)
@@ -51,22 +51,33 @@ public class MedicineController {
     }
 
     @GetMapping("/full-text")
-    public ResponseEntity<BasicResponseDto> productList(
+    public ResponseEntity<BasicResponseDto> searchMedicineByFullText(
         @RequestParam(name = "keyword") String keyword,
         @RequestParam(name = "page", defaultValue = "1") int page
     ) {
 
-        log.info("[{}.{}] parmeters = {}", this.getClass().getName(),
-            Thread.currentThread().getStackTrace()[1].getMethodName(),
-            "keyword: " + keyword + " page: " + page);
+//        log.info("[{}.{}] parmeters = {}", this.getClass().getName(),
+//            Thread.currentThread().getStackTrace()[1].getMethodName(),
+//            "keyword: " + keyword + " page: " + page);
 
-        List<MedicineDto> medicineDtoList =
+        BasicResponseDto responseDto =
             medicineService.findMedicineByFullText(
                 SearchParameters.createMedicineSearchParameters(page, keyword));
 
-        log.info("[{}.{}] medicineList = {}", this.getClass().getName(),
-            Thread.currentThread().getStackTrace()[1].getMethodName(), medicineDtoList);
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(responseDto);
+    }
 
+    @GetMapping("/search-keyword")
+    @Deprecated
+    public ResponseEntity<BasicResponseDto> searchMedicineByKeyword(
+        @RequestParam(name = "keyword") String keyword) {
+
+//        log.info("[{}.{}] parmeters = {}", this.getClass().getName(),
+//            Thread.currentThread().getStackTrace()[1].getMethodName(),
+//            "keyword: " + keyword);
+
+        List<MedicineDto> medicineDtoList = medicineService.findMedicineByKeyword(keyword);
         return ResponseEntity.status(HttpStatus.OK)
             .body(BasicResponseDto.builder()
                 .count(medicineDtoList.size())

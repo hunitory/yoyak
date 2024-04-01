@@ -31,32 +31,7 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
             .from(challenge)
             .where(challenge.user.seq.ne(userSeq))
             .fetch();
-        List<ChallengeArticleResponseDto> ret = new ArrayList<>();
-
-        challenges.forEach(challenge -> {
-            queryFactory.select(challengeArticle)
-                .from(challengeArticle)
-                .where(challengeArticle.challenge.seq.eq(challenge.getSeq()))
-                .fetch()
-                .forEach(article -> {
-                    int cheerCnt = 0;
-                    if (article.getCheers() != null) {
-                        cheerCnt = article.getCheers().size();
-                    }
-
-                    ret.add(ChallengeArticleResponseDto.builder()
-                        .articleSeq(article.getSeq())
-                        .challengeSeq(article.getChallenge().getSeq())
-                        .imgUrl(article.getImgUrl())
-                        .title(article.getContent())
-                        .userNickname(challenge.getUser().getNickname())
-                        .userSeq(challenge.getUser().getSeq())
-                        .cheerCnt(cheerCnt)
-                        .build());
-                });
-        });
-
-        return ret;
+        return makeChallengeArticleResponseDto(challenges, userSeq);
 
 
     }
@@ -68,28 +43,7 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
             .from(challenge)
             .where(challenge.user.seq.eq(userSeq))
             .fetch();
-        List<ChallengeArticleResponseDto> ret = new ArrayList<>();
-
-        challenges.forEach(challenge -> {
-            queryFactory.select(challengeArticle)
-                .from(challengeArticle)
-                .where(challengeArticle.challenge.seq.eq(challenge.getSeq()))
-                .fetch()
-                .forEach(article -> {
-                    int cheerCnt = article.getCheers().size();
-                    ret.add(ChallengeArticleResponseDto.builder()
-                        .articleSeq(article.getSeq())
-                        .challengeSeq(article.getChallenge().getSeq())
-                        .imgUrl(article.getImgUrl())
-                        .title(article.getContent())
-                        .userNickname(challenge.getUser().getNickname())
-                        .userSeq(challenge.getUser().getSeq())
-                        .cheerCnt(cheerCnt)
-                        .build());
-                });
-        });
-
-        return ret;
+        return makeChallengeArticleResponseDto(challenges, userSeq);
 
     }
 
@@ -103,6 +57,50 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
             .fetch();
 
          return !(articles.isEmpty() || articles == null);
+    }
+
+
+    private List<ChallengeArticleResponseDto> makeChallengeArticleResponseDto(List<Challenge> challenges, Long userSeq){
+        List<ChallengeArticleResponseDto> ret = new ArrayList<>();
+
+        for(Challenge challenge1 : challenges){
+            List<ChallengeArticle> articles = queryFactory.select(challengeArticle)
+                .from(challengeArticle)
+                .where(challengeArticle.challenge.seq.eq(challenge1.getSeq()))
+                .fetch();
+
+            for(ChallengeArticle article : articles){
+                int cheerCnt = 0;
+                boolean cheered = false;
+                
+                if (article.getCheers() != null) {
+                    cheerCnt = article.getCheers().size();
+                    for(Cheer cheer: article.getCheers()){
+                        if(cheer.getUser().getSeq() == userSeq){
+                            cheered = true;
+                            break;
+                        }
+                    }
+                }
+
+
+                ret.add(ChallengeArticleResponseDto.builder()
+                    .articleSeq(article.getSeq())
+                    .challengeSeq(article.getChallenge().getSeq())
+                    .imgUrl(article.getImgUrl())
+                    .title(article.getContent())
+                    .userNickname(challenge1.getUser().getNickname())
+                    .userSeq(challenge1.getUser().getSeq())
+                    .cheerCnt(cheerCnt)
+                    .cheered(cheered)
+                    .createdDate(article.getCreatedDate())
+                    .build());
+            }
+        }
+
+
+
+        return ret;
     }
 
 
