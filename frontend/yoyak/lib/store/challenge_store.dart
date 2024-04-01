@@ -17,9 +17,9 @@ class ChallengeStore extends ChangeNotifier {
   List<dynamic> othersChallengeList = [];
   var storage = SingletonSecureStorage().storage;
   var accessToken = "";
-  Future getMyChallengeList() async {
+  
+  Future getMyChallengeList(String? accessToken) async {
     try {
-      String? accessToken = await storage.read(key: 'accessToken');
       print("덱에서 accessToken 잘 들어오나: $accessToken");
       var response = await http.get(Uri.parse('$yoyakUrl/challenge'), headers: {
         'Authorization': 'Bearer $accessToken',
@@ -45,9 +45,8 @@ class ChallengeStore extends ChangeNotifier {
     }
   }
 
-  Future getMyChallenge() async {
+  Future getMyChallenge(String? accessToken) async {
     try {
-      String? accessToken = await storage.read(key: 'accessToken');
       print("내 챌린지 목록에서 accessToken 잘 들어오나: $accessToken");
       var response =
           await http.get(Uri.parse('$yoyakUrl/challenge/article/my'), headers: {
@@ -148,9 +147,8 @@ class ChallengeStore extends ChangeNotifier {
   }
 
   // 챌린지 둘러보기 get
-  Future getOthersChallenge() async {
+  Future getOthersChallenge(String? accessToken) async {
     try {
-      String? accessToken = await storage.read(key: 'accessToken');
       print("다른 사람 챌린지 목록에서 accessToken 잘 들어오나: $accessToken");
       var response =
           await http.get(Uri.parse('$yoyakUrl/challenge/article'), headers: {
