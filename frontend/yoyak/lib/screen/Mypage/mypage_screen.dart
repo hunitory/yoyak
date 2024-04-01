@@ -394,7 +394,7 @@ class MypageScreen extends StatelessWidget {
                   // 로그아웃
                   storage.deleteAll();
                   context.read<ChallengeStore>().clearChallenges();
-
+                  context.read<LoginStore>().clearAccounts();
                   goToScreen(context, const MainScreen());
                 },
                 child: const Center(

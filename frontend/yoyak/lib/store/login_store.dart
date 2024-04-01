@@ -167,4 +167,10 @@ class LoginStore extends ChangeNotifier {
     accessToken = token;
     notifyListeners();
   }
+
+  void clearAccounts() {
+    accountList.clear();
+    notifyListeners(); // UI에 변경사항을 알림
+  }
+
 }
