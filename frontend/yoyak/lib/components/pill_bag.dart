@@ -78,7 +78,7 @@ class _PillBagState extends State<PillBag> {
       padding: const EdgeInsets.only(bottom: 5),
       decoration: const BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: Palette.SHADOW_GREY, width: 0.5),
+          bottom: BorderSide(color: Palette.MAIN_BLACK, width: 0.1),
         ),
       ),
       child: ListTile(
@@ -100,7 +100,7 @@ class _PillBagState extends State<PillBag> {
               borderRadius: BorderRadius.circular(5),
             ),
             side: const BorderSide(
-              color: Palette.SHADOW_GREY,
+              color: Palette.SUB_BLACK,
               width: 1,
             ),
             activeColor: Palette.MAIN_BLUE,
