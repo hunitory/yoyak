@@ -6,6 +6,7 @@ import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/screen/Search/pill_bag_modal.dart';
 import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/store/pill_bag_store.dart';
+import 'package:yoyak/styles/screenSize/screen_size.dart';
 import '../../styles/colors/palette.dart';
 
 class PillDetailScreen extends StatefulWidget {
@@ -153,7 +154,7 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   var screenHigh =
-                                      MediaQuery.of(context).size.height;
+                                      ScreenSize.getHeight(context);
                                   return StatefulBuilder(builder:
                                       (BuildContext context,
                                           StateSetter setState) {
@@ -162,7 +163,6 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
                                         medicineSeq:
                                             widget.medicineInfo["medicineSeq"]);
                                   });
-                                  // return const PillBagModal();
                                 });
                           },
                           text: "저장하기",
