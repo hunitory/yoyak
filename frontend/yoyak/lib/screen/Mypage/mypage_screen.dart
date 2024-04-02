@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyak/components/accountlist_view.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/hooks/goto_screen.dart';
@@ -15,8 +16,30 @@ import 'package:yoyak/styles/colors/palette.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 import '../../store/challenge_store.dart';
 
-class MypageScreen extends StatelessWidget {
+class MypageScreen extends StatefulWidget {
   const MypageScreen({super.key});
+
+  @override
+  State<MypageScreen> createState() => _MypageScreenState();
+}
+
+class _MypageScreenState extends State<MypageScreen> with WidgetsBindingObserver {
+  String accessToken = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getAccessToken();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  Future<void> getAccessToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      accessToken = prefs.getString('accessToken') ?? ''; // accessToken state 업데이트
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +65,15 @@ class MypageScreen extends StatelessWidget {
       );
     }
 
+    @override
+    void dispose() {
+      WidgetsBinding.instance.removeObserver(this);
+      super.dispose();
+    }
     final List<AccountModel> accountList =
         context.watch<LoginStore>().accountList;
 
-    if (accountList.isNotEmpty) {
+    if (accessToken.isNotEmpty) {
       final AccountModel accountitem = accountList[0];
       final String userName = accountitem.nickname!;
       final String userGender = accountitem.gender!;
@@ -396,6 +424,7 @@ class MypageScreen extends StatelessWidget {
                     context.read<ChallengeStore>().clearChallenges();
                     context.read<LoginStore>().clearAccounts();
                     context.read<AlarmStore>().clearAlarms();
+                    context.read<LoginStore>().loginedUser = null;
                     goToScreen(context, const MainScreen());
                   },
                   child: const Center(
@@ -410,6 +439,7 @@ class MypageScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                const SizedBox(height: 20),
               ],
             ),
           ),

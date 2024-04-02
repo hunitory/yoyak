@@ -12,7 +12,7 @@ class LoginStore extends ChangeNotifier {
   dynamic userInfo = ""; // storage에 있는 유저 정보 저장
   final storage = SingletonSecureStorage().storage;
   List<AccountModel> accountList = [];
-
+  var loginedUser;
   String accessToken = '';
   String? deviceToken = "";
 
@@ -122,8 +122,8 @@ class LoginStore extends ChangeNotifier {
         var decodedBody = utf8.decode(response.bodyBytes);
         List<dynamic> data = json.decode(decodedBody);
         accountList = data.map((json) => AccountModel.fromJson(json)).toList();
-        print('유저: ${response.statusCode}.');
-        await saveAccountList(accountList); // prefs에 유저 이름(닉네임) 저장
+        loginedUser = accountList.first;
+        print('유저: ${response.body}.');
 
         notifyListeners();
       } else {
