@@ -20,21 +20,21 @@ class ChallengeStore extends ChangeNotifier {
   
   Future getMyChallengeList(String? accessToken) async {
     try {
-      print("덱에서 accessToken 잘 들어오나: $accessToken");
+      // print("덱에서 accessToken 잘 들어오나: $accessToken");
       var response = await http.get(Uri.parse('$yoyakUrl/challenge'), headers: {
         'Authorization': 'Bearer $accessToken',
       });
-      print(yoyakUrl);
-      print(response.body);
-      print(accessToken);
+      // print(yoyakUrl);
+      // print(response.body);
+      // print(accessToken);
 
       if (response.statusCode == 200) {
         print("내 챌린지 덱 조회 성공");
         var responseBody = utf8.decode(response.bodyBytes);
         myChallengeCard = json.decode(responseBody);
         challengeSeq = myChallengeCard['challengeSeq'];
-        print('챌린지 덱: $myChallengeCard');
-        print('챌린지 시퀀스: $challengeSeq');
+        // print('챌린지 덱: $myChallengeCard');
+        // print('챌린지 시퀀스: $challengeSeq');
 
         notifyListeners();
       } else {

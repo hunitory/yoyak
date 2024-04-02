@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:yoyak/components/account_filter.dart';
 import 'package:yoyak/components/base_button.dart';
@@ -58,11 +59,13 @@ class _AlarmCreateState extends State<AlarmCreate> {
 
   Future<void> fetchAlarmData(int notiSeq) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = context.read<LoginStore>().accessToken;
+    final prefs = await SharedPreferences.getInstance();
     String url = '$yoyakURL/noti/$notiSeq';
     Uri uri = Uri.parse(url);
 
     try {
+      // GET 요청 보내기
+      String? accessToken = prefs.getString('accessToken');
       var response = await http.get(uri, headers: {
         'Content-Type': 'application/json',
         "Authorization": 'Bearer $accessToken',
@@ -106,7 +109,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
 
   Future<void> sendAlarmData() async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = context.read<LoginStore>().accessToken;
+    final prefs = await SharedPreferences.getInstance();
     String url = '$yoyakURL/noti'; // 서버 URL
 
     // _alarmTime을 "HH:mm" 형식의 문자열로 변환
@@ -129,6 +132,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
 
     try {
       // POST 요청 보내기
+      String? accessToken = prefs.getString('accessToken');
       var response = await http.post(
         Uri.parse(url),
         headers: {
@@ -157,7 +161,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
 
   Future<void> updateAlarmData(int notiSeq) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = context.read<LoginStore>().accessToken;
+    final prefs = await SharedPreferences.getInstance();
 
     String url = '$yoyakURL/noti'; // 서버 URL
 
@@ -178,6 +182,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
 
     try {
       // POST 요청 보내기
+      String? accessToken = prefs.getString('accessToken');
       var response = await http.put(
         Uri.parse(url),
         headers: {
@@ -205,11 +210,12 @@ class _AlarmCreateState extends State<AlarmCreate> {
 
   Future<void> deleteAlarmData(int notiSeq) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = context.read<LoginStore>().accessToken;
+    final prefs = await SharedPreferences.getInstance();
     String url = '$yoyakURL/noti/time/$notiSeq'; // 서버 URL
 
     try {
       // DELETE 요청 보내기
+      String? accessToken = prefs.getString('accessToken');
       var response = await http.delete(
         Uri.parse(url),
         headers: {

@@ -36,6 +36,7 @@ class LoginStore extends ChangeNotifier {
   void getDeviceToken() async {
     await FirebaseMessaging.instance.getToken().then((token) {
       deviceToken = token;
+      print('deviceToken: $deviceToken');
     });
   }
 
@@ -58,9 +59,13 @@ class LoginStore extends ChangeNotifier {
     prefs.setString('accessToken', token); // 문자열 저장
   }
 
-  Future<void> saveAccountList(accountList) async {
+  Future<void> saveAccountList(List<AccountModel> accountList) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setStringList('accountList', accountList);
+    // AccountModel 리스트를 JSON 문자열 리스트로 변환
+    List<String> accountStringList =
+        accountList.map((account) => jsonEncode(account.toJson())).toList();
+    // 변환된 리스트를 SharedPreferences에 저장
+    prefs.setStringList('accountList', accountStringList);
   }
 
   Future login(BuildContext context, String email, String password,
