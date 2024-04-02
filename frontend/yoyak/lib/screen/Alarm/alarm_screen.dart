@@ -1245,7 +1245,8 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
                               selectedMinute,
                             ),
                           );
-                          Navigator.popUntil(context, (route) => route.isFirst);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
                         },
                         child: Text(
                           selectedPeriodIndex == 0
