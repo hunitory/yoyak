@@ -59,6 +59,7 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
   Widget build(BuildContext context) {
     var inputWidth = MediaQuery.of(context).size.width * 0.25;
     return Scaffold(
+      backgroundColor: Palette.MAIN_WHITE,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20),

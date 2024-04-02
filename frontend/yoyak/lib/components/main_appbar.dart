@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yoyak/screen/Login/kakao_login_screen.dart';
+import 'package:yoyak/screen/Login/kakao/kakao_login_screen.dart';
+import 'package:yoyak/screen/Login/login_screen.dart';
 import 'package:yoyak/screen/Mypage/mypage_screen.dart';
 import 'main_appbar_button.dart';
 
@@ -29,14 +30,14 @@ class _MainAppBarState extends State<MainAppBar> with WidgetsBindingObserver {
   Future<void> loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      accessToken = prefs.getString('accessToken') ?? ''; // accessToken state 업데이트
+      accessToken =
+          prefs.getString('accessToken') ?? ''; // accessToken state 업데이트
     });
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
-
       case AppLifecycleState.resumed:
         print('resumed123');
         break;
@@ -55,13 +56,11 @@ class _MainAppBarState extends State<MainAppBar> with WidgetsBindingObserver {
     }
   }
 
-
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +85,7 @@ class _MainAppBarState extends State<MainAppBar> with WidgetsBindingObserver {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const KakaoLoginScreen(),
+                      builder: (context) => const LoginScreen(),
                     ),
                   );
                 })

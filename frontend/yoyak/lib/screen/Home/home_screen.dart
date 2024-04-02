@@ -1,19 +1,21 @@
+import 'dart:convert';
+
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yoyak/components/dialog.dart';
 import 'package:yoyak/components/main_appbar.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/models/user/account_models.dart';
 import 'package:yoyak/screen/Alarm/alarm_screen.dart';
 import 'package:yoyak/screen/Challenge/challenge_screen.dart';
-import 'package:yoyak/screen/Login/kakao_login_screen.dart';
+import 'package:yoyak/screen/Login/login_screen.dart';
 import 'package:yoyak/screen/PillBag/pill_bag_screen.dart';
 import 'package:yoyak/screen/Search/filter_search_screen.dart';
 import 'package:yoyak/screen/Search/photo_search_screen.dart';
 import 'package:yoyak/store/pill_bag_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
-import '../../auto_login/singleton_secure_storage.dart';
 import '../../components/icon_in_rectangle.dart';
 import '../../store/login_store.dart';
 import 'package:video_player/video_player.dart';
@@ -28,11 +30,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   String accessToken = '';
   late final FlickManager flickManager;
+  AccountModel? account;
 
   @override
   void initState() {
     super.initState();
     loadUserData();
+    loadAccountData();
     WidgetsBinding.instance.addObserver(this);
     flickManager = FlickManager(
       autoPlay: true,
@@ -53,7 +57,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     print("state는 이거임 : $state");
     switch (state) {
-
       case AppLifecycleState.resumed:
         print('resumed123');
         break;
@@ -79,15 +82,30 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     super.dispose();
   }
 
-
-
   Future<void> loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      accessToken = prefs.getString('accessToken') ?? ''; // accessToken state 업데이트
+      accessToken =
+          prefs.getString('accessToken') ?? ''; // accessToken state 업데이트
+      print('asdas asdasda $accessToken');
     });
   }
 
+  Future<AccountModel?> loadAccount() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? accountJson = prefs.getString('accountModel');
+    if (accountJson != null) {
+      return AccountModel.fromJson(jsonDecode(accountJson));
+    }
+    return null;
+  }
+
+  Future<void> loadAccountData() async {
+    AccountModel? accountData = await loadAccount();
+    setState(() {
+      account = accountData; // 로드된 데이터로 account 변수 업데이트
+    });
+  }
 
   void goTo(destination) {
     Navigator.push(
@@ -98,27 +116,20 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-
     double screenWidth = MediaQuery.of(context).size.width;
     double rectangleSize = MediaQuery.of(context).size.width * 0.44;
     // LoginStore에서 alarmAccounts 가져오기
-    List<AccountModel> alarmAccounts = context.watch<LoginStore>().accountList;
-    print("accountList: $alarmAccounts");
-    // 약 봉투 read 요청 - 로그인 됐을 때
-    if (alarmAccounts.isNotEmpty) {
-      context.read<PillBagStore>().getPillBagDatas(context, medicineSeq: 0);
-    }
-    // List<AccountModel> alarmAccounts = context.watch<LoginStore>().accountList;
-    // print("accountList: $alarmAccounts");
-    // // 약 봉투 read 요청 - 로그인 됐을 때
-    // if (alarmAccounts.isNotEmpty) {
-    //   context.read<PillBagStore>().getPillBagDatas(context);
-    // }
 
     // account 변수를 선언하고 조건에 따라 할당
-    // AccountModel? account =
-    //     alarmAccounts.isNotEmpty ? alarmAccounts.first : null;
+    List<AccountModel> alarmAccounts = context.watch<LoginStore>().accountList;
 
+    AccountModel? account =
+        alarmAccounts.isNotEmpty ? alarmAccounts.first : null;
+
+    // 약 봉투 read 요청 - 로그인 됐을 때
+    if (accessToken.isNotEmpty) {
+      context.read<PillBagStore>().getPillBagDatas(context, medicineSeq: 0);
+    }
     goTo(destination) {
       Navigator.push(
         context,
@@ -137,31 +148,31 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   height: 250,
                   color: Palette.MAIN_BLUE,
                 ),
-                Positioned.fill(
-                  child: FlickVideoPlayer(
-                    flickManager: flickManager,
-                    flickVideoWithControls: FlickVideoWithControls(
-                      controls: Container(),
-                    ),
-                    flickVideoWithControlsFullscreen: FlickVideoWithControls(
-                      controls: Container(),
-                    ),
-                  ),
-                ),
+                // Positioned.fill(
+                //   child: FlickVideoPlayer(
+                //     flickManager: flickManager,
+                //     flickVideoWithControls: FlickVideoWithControls(
+                //       controls: Container(),
+                //     ),
+                //     flickVideoWithControlsFullscreen: FlickVideoWithControls(
+                //       controls: Container(),
+                //     ),
+                //   ),
+                // ),
                 MainAppBar(
                   color: Colors.black.withOpacity(0),
                 ),
                 Positioned(
-                  bottom: 20,
+                  bottom: 25,
                   left: 20,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (accessToken.isNotEmpty) ...[
                         Text(
-                          "안녕하세요 $accessToken님",
+                          "안녕하세요 ${account?.nickname}님",
                           style: const TextStyle(
-                            fontSize: 20,
+                            fontSize: 23,
                             color: Palette.MAIN_WHITE,
                             fontWeight: FontWeight.w600,
                             fontFamily: 'Pretendard',
@@ -172,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           text: const TextSpan(
                             style: TextStyle(
                               color: Palette.MAIN_WHITE,
-                              fontSize: 20,
+                              fontSize: 23,
                               fontWeight: FontWeight.w500,
                               fontFamily: 'Pretendard',
                             ),
@@ -181,12 +192,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                 text: "오늘도 ",
                                 style: TextStyle(
                                   fontFamily: 'Pretendard',
+                                  fontSize: 23,
                                 ),
                               ),
                               TextSpan(
                                 text: "요약",
                                 style: TextStyle(
-                                  fontSize: 23,
+                                  fontSize: 26,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.yellow,
                                   fontFamily: 'Pretendard',
@@ -197,6 +209,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Pretendard',
+                                  fontSize: 23,
                                 ),
                               ),
                             ],
@@ -206,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         const Row(
                           children: [
                             Text(
-                              "약이 궁금할 땐, ",
+                              "요 약이 궁금할 땐, ",
                               style: TextStyle(
                                 fontSize: 22,
                                 color: Colors.white,
@@ -218,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               "요약",
                               style: TextStyle(
                                 fontSize: 24,
-                                color: Palette.MAIN_BLUE,
+                                color: Colors.yellow,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'Pretendard',
                               ),
@@ -297,7 +310,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           onTap: () {
                             accessToken.isNotEmpty
                                 ? goTo(const PillBagScreen())
-                                : goTo(const KakaoLoginScreen());
+                                : goTo(
+                                    const DialogUI(
+                                      destination: (LoginScreen()),
+                                    ),
+                                  );
                           },
                           child: const IconInRectangle(
                             subTitle: "내 약을 한눈에",
@@ -310,7 +327,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           width: rectangleSize,
                           height: rectangleSize,
                           onTap: () {
-                            goTo(const AlarmScreen());
+                            goTo(
+                              const AlarmScreen(),
+                            );
                           },
                           child: const IconInRectangle(
                             subTitle: "복약 시간 알려드려요",
