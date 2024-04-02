@@ -25,13 +25,15 @@ class ChallengeScreen extends StatefulWidget {
   State<ChallengeScreen> createState() => _ChallengeScreenState();
 }
 
-class _ChallengeScreenState extends State<ChallengeScreen> with WidgetsBindingObserver {
+class _ChallengeScreenState extends State<ChallengeScreen>
+    with WidgetsBindingObserver {
   String accessToken = '';
 
   Future<void> getAccessToken() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      accessToken = prefs.getString('accessToken') ?? ''; // accessToken state 업데이트
+      accessToken =
+          prefs.getString('accessToken') ?? ''; // accessToken state 업데이트
     });
   }
 
@@ -51,8 +53,12 @@ class _ChallengeScreenState extends State<ChallengeScreen> with WidgetsBindingOb
   @override
   Widget build(BuildContext context) {
     context.read<ChallengeStore>().getMyChallenge(accessToken); // 내 챌린지 호출
-    context.read<ChallengeStore>().getMyChallengeList(accessToken); // 내 챌린지 덱 호출
-    context.read<ChallengeStore>().getOthersChallenge(accessToken); // 챌린지 둘러보기 호출
+    context
+        .read<ChallengeStore>()
+        .getMyChallengeList(); // 내 챌린지 덱 호출
+    context
+        .read<ChallengeStore>()
+        .getOthersChallenge(accessToken); // 챌린지 둘러보기 호출
     var loginedUser = context.watch<LoginStore>().loginedUser;
 
     return Scaffold(
@@ -83,10 +89,10 @@ class _ChallengeScreenState extends State<ChallengeScreen> with WidgetsBindingOb
                   ),
                   // FutureBuilder 삭제하고 그 안의 내용을 그대로 MyChallengeCard로 옮김
                   if (accessToken.isNotEmpty)
-                  MyChallengeCard(
-                    title: "${loginedUser?.nickname}님이 진행 중인 챌린지",
-                    titleImagePath: "assets/images/medal.png",
-                  ),
+                    MyChallengeCard(
+                      title: "${loginedUser?.nickname}님이 진행 중인 챌린지",
+                      titleImagePath: "assets/images/medal.png",
+                    ),
                   const SizedBox(
                     height: 15,
                   ),
@@ -117,298 +123,317 @@ class _ChallengeTitleSection extends StatelessWidget {
   Widget build(BuildContext context) {
     var myChallengeList = context.watch<ChallengeStore>().myChallengeList;
     var myChallengeCard = context.watch<ChallengeStore>().myChallengeCard;
-    var storage = context.read<LoginStore>().storage;
     var getImageAndNavigate = context.read<CameraStore>().getImageAndNavigate;
 
-
-    var totalDay = (myChallengeCard?["day"]?? 0) + 1;
+    var totalDay = (myChallengeCard?["day"] ?? 0) + 1;
     var articleSize = myChallengeCard?["articleSize"];
     // 챌린지를 시작하지 않은 경우
     if (myChallengeCard.isEmpty) {
       return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "꾸준한 복용을 위해",
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Palette.SUB_BLACK.withOpacity(0.5),
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Pretendard',
-                ),
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            "꾸준한 복용을 위해",
+            style: TextStyle(
+              fontSize: 20,
+              color: Palette.SUB_BLACK.withOpacity(0.5),
+              fontWeight: FontWeight.w400,
+              fontFamily: 'Pretendard',
+            ),
+          ),
+          RichText(
+              text: const TextSpan(children: [
+            TextSpan(
+              text: '새로운 ',
+              style: TextStyle(
+                fontSize: 27,
+                color: Palette.MAIN_BLACK,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Pretendard',
               ),
-              RichText(
-                  text: const TextSpan(children: [
-                TextSpan(
-                  text: '새로운 ',
-                  style: TextStyle(
-                    fontSize: 27,
-                    color: Palette.MAIN_BLACK,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Pretendard',
-                  ),
-                ),
-                TextSpan(
-                  text: '챌린지',
-                  style: TextStyle(
-                    fontSize: 27,
-                    color: Palette.MAIN_BLUE,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'Pretendard',
-                  ),
-                ),
-                TextSpan(
-                  text: '를',
-                  style: TextStyle(
-                    fontSize: 27,
-                    color: Palette.MAIN_BLACK,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Pretendard',
-                  ),
-                ),
-              ])),
-              const Text(
-                "시작해보세요",
+            ),
+            TextSpan(
+              text: '챌린지',
+              style: TextStyle(
+                fontSize: 27,
+                color: Palette.MAIN_BLUE,
+                fontWeight: FontWeight.w700,
+                fontFamily: 'Pretendard',
+              ),
+            ),
+            TextSpan(
+              text: '를',
+              style: TextStyle(
+                fontSize: 27,
+                color: Palette.MAIN_BLACK,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Pretendard',
+              ),
+            ),
+          ])),
+          const Text(
+            "시작해보세요",
+            style: TextStyle(
+              fontSize: 27,
+              color: Palette.MAIN_BLACK,
+              fontWeight: FontWeight.w400,
+              fontFamily: 'Pretendard',
+            ),
+          ),
+        ],
+      );
+    } else {
+      // 챌린지를 시작했다면
+      return Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                width: 10,
+              ),
+              Text(
+                "챌린지를 응원해요",
                 style: TextStyle(
-                  fontSize: 27,
-                  color: Palette.MAIN_BLACK,
+                  fontSize: 17,
+                  color: Palette.SUB_BLACK.withOpacity(0.6),
                   fontWeight: FontWeight.w400,
                   fontFamily: 'Pretendard',
                 ),
               ),
             ],
-          );
-    } else {  // 챌린지를 시작했다면
-      return Column(
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const SizedBox(width: 10,),
+                  const SizedBox(
+                    width: 10,
+                  ),
                   Text(
-                    "챌린지를 응원해요",
-                    style: TextStyle(
-                      fontSize: 17,
-                      color: Palette.SUB_BLACK.withOpacity(0.6),
-                      fontWeight: FontWeight.w400,
+                    myChallengeCard["title"],
+                    style: const TextStyle(
+                      fontSize: 27,
+                      color: Palette.MAIN_BLACK,
+                      fontWeight: FontWeight.w600,
                       fontFamily: 'Pretendard',
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 5,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      const SizedBox(width: 10,),
-                      Text(
-                        myChallengeCard["title"],
-                        style: const TextStyle(
-                          fontSize: 27,
-                          color: Palette.MAIN_BLACK,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Pretendard',
-                        ),
-                      ),
-                    ],
-                  ),
+              myChallengeCard.isEmpty
+                  ? GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MypageScreen()));
+                      },
+                      child: SizedBox(
+                          width: 120,
+                          height: 33,
+                          child: BaseButton(
+                            height: 40,
+                            fontSize: 15,
+                            onPressed: () async {
+                              final prefs =
+                                  await SharedPreferences.getInstance();
 
-
-                  myChallengeCard.isEmpty
-                      ? GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MypageScreen()));
-                    },
-                    child: SizedBox(
-                        width: 120,
-                        height: 33,
-                        child: BaseButton(
-                          height: 40,
-                          fontSize: 15,
-                          onPressed: () async {
-                            final prefs = await SharedPreferences.getInstance();
-
-                            prefs.getString('accessToken')!.isNotEmpty ? goToScreen(context, const RegistChallengeScreen()) // 로그인 되어있다면
-                                : showDialog(context: context, builder: (context) { // 로그인 안되어있을 경우
-                              return const DialogUI(destination: LoginScreen(destination: RegistChallengeScreen(),),);
-                            });
-                          },
-                          text: "시작하기",
-                          colorMode: 'white',
-                          borderWidth: 1.0,
-                          borderRadius: BorderRadius.circular(20),
-                        )),
-                  )
-                      : GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MypageScreen()));
-                    },
-                    child: SizedBox(
-                        width: 130,
-                        height: 33,
-                        child: BaseButton(
-                          height: 40,
-                          fontSize: 15,
-                          onPressed: () {
-                            // 모달 창 나옴
-                            showModalBottomSheet(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Container(
-                                    height: 170,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(20),
-                                        topRight: Radius.circular(20),
+                              prefs.getString('accessToken')!.isNotEmpty
+                                  ? goToScreen(context,
+                                      const RegistChallengeScreen()) // 로그인 되어있다면
+                                  : showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        // 로그인 안되어있을 경우
+                                        return const DialogUI(
+                                          destination: LoginScreen(
+                                            destination:
+                                                RegistChallengeScreen(),
+                                          ),
+                                        );
+                                      });
+                            },
+                            text: "시작하기",
+                            colorMode: 'white',
+                            borderWidth: 1.0,
+                            borderRadius: BorderRadius.circular(20),
+                          )),
+                    )
+                  : GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MypageScreen()));
+                      },
+                      child: SizedBox(
+                          width: 130,
+                          height: 33,
+                          child: BaseButton(
+                            height: 40,
+                            fontSize: 15,
+                            onPressed: () {
+                              // 모달 창 나옴
+                              showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Container(
+                                      height: 170,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          topRight: Radius.circular(20),
+                                        ),
                                       ),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        const SizedBox(height: 20),
-                                        Expanded(
-                                          child: InkWell(
-                                            onTap: () {
-                                              // 사진 촬영 기능 구현
-                                              getImageAndNavigate(
-                                                  ImageSource.camera, context);
-                                            },
-                                            child: const Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  '사진 촬영',
-                                                  style: TextStyle(
-                                                    color: Palette.MAIN_BLUE,
-                                                    fontFamily: 'Pretendard',
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 19,
+                                      child: Column(
+                                        children: [
+                                          const SizedBox(height: 20),
+                                          Expanded(
+                                            child: InkWell(
+                                              onTap: () {
+                                                // 사진 촬영 기능 구현
+                                                getImageAndNavigate(
+                                                    ImageSource.camera,
+                                                    context);
+                                              },
+                                              child: const Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    '사진 촬영',
+                                                    style: TextStyle(
+                                                      color: Palette.MAIN_BLUE,
+                                                      fontFamily: 'Pretendard',
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 19,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        const Divider(
-                                          height: 0.1,
-                                          color: Palette.SHADOW_GREY,
-                                        ),
-                                        Expanded(
-                                          child: InkWell(
-                                            onTap: () {
-                                              // 이미지 업로드 기능 구현
-                                              getImageAndNavigate(
-                                                  ImageSource.gallery, context);
-                                              // Navigator.pop(context);
-                                            },
-                                            child: const Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  '이미지 업로드',
-                                                  style: TextStyle(
-                                                    color: Palette.MAIN_BLUE,
-                                                    fontFamily: 'Pretendard',
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 19,
+                                          const Divider(
+                                            height: 0.1,
+                                            color: Palette.SHADOW_GREY,
+                                          ),
+                                          Expanded(
+                                            child: InkWell(
+                                              onTap: () {
+                                                // 이미지 업로드 기능 구현
+                                                getImageAndNavigate(
+                                                    ImageSource.gallery,
+                                                    context);
+                                                // Navigator.pop(context);
+                                              },
+                                              child: const Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    '이미지 업로드',
+                                                    style: TextStyle(
+                                                      color: Palette.MAIN_BLUE,
+                                                      fontFamily: 'Pretendard',
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 19,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                });
-                          },
-                          text: "챌린지 올리기",
-                          colorMode: 'white',
-                          borderWidth: 1.0,
-                          borderRadius: BorderRadius.circular(20),
-                        )),
-                  )
-
-                ],
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "D-$totalDay",
-                      style: const TextStyle(
-                        fontSize: 22,
-                        color: Palette.MAIN_BLUE,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Pretendard',
-                      ),
-                    ),
-                    RichText(
-                        text: TextSpan(children: [
-                      const TextSpan(
-                        text: '현재까지 완료율   ',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Palette.MAIN_BLACK,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'Pretendard',
-                        ),
-                      ),
-                      TextSpan(
-                        text: "${((myChallengeList.length / totalDay) * 100).toInt()}",
-                        style: const TextStyle(
-                          fontSize: 30,
-                          color: Palette.MAIN_BLACK,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Pretendard',
-                        ),
-                      ),
-                      const TextSpan(
-                        text: '%',
-                        style: TextStyle(
-                          fontSize: 17,
-                          color: Palette.MAIN_BLACK,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Pretendard',
-                        ),
-                      ),
-                    ])),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20,),
-              // Progress Bar
-              AnimatedProgressBar(
-                width: ScreenSize.getWidth(context) * 0.82,
-                height: 10,
-                value: articleSize / totalDay,
-                duration: const Duration(seconds: 1),
-                gradient: const LinearGradient(
-                  colors: [
-                    Colors.lightBlue,
-                    Palette.MAIN_BLUE,
-                  ],
-                ),
-                backgroundColor: Palette.SUB_BLACK.withOpacity(0.1),
-              ),
-
+                                        ],
+                                      ),
+                                    );
+                                  });
+                            },
+                            text: "챌린지 올리기",
+                            colorMode: 'white',
+                            borderWidth: 1.0,
+                            borderRadius: BorderRadius.circular(20),
+                          )),
+                    )
             ],
-          );
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "D-$totalDay",
+                  style: const TextStyle(
+                    fontSize: 22,
+                    color: Palette.MAIN_BLUE,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Pretendard',
+                  ),
+                ),
+                RichText(
+                    text: TextSpan(children: [
+                  const TextSpan(
+                    text: '현재까지 완료율   ',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Palette.MAIN_BLACK,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Pretendard',
+                    ),
+                  ),
+                  TextSpan(
+                    text:
+                        "${((myChallengeList.length / totalDay) * 100).toInt()}",
+                    style: const TextStyle(
+                      fontSize: 30,
+                      color: Palette.MAIN_BLACK,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Pretendard',
+                    ),
+                  ),
+                  const TextSpan(
+                    text: '%',
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: Palette.MAIN_BLACK,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Pretendard',
+                    ),
+                  ),
+                ])),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          // Progress Bar
+          AnimatedProgressBar(
+            width: ScreenSize.getWidth(context) * 0.82,
+            height: 10,
+            value: articleSize / totalDay,
+            duration: const Duration(seconds: 1),
+            gradient: const LinearGradient(
+              colors: [
+                Colors.lightBlue,
+                Palette.MAIN_BLUE,
+              ],
+            ),
+            backgroundColor: Palette.SUB_BLACK.withOpacity(0.1),
+          ),
+        ],
+      );
     }
   }
 }
