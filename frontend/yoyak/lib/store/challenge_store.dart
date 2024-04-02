@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:http/http.dart' as http;
-import 'package:yoyak/hooks/goto_screen.dart';
-import 'package:yoyak/screen/Challenge/challenge_screen.dart';
-import 'package:yoyak/screen/Main/main_screen.dart';
 import 'package:http_parser/http_parser.dart';
 
 class ChallengeStore extends ChangeNotifier {

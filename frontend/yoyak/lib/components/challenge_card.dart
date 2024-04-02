@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:yoyak/components/base_button.dart';
 import 'package:yoyak/store/challenge_store.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 import '../styles/colors/palette.dart';
-import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 class ChallengeCard extends StatelessWidget {
   const ChallengeCard({super.key, this.challenge});

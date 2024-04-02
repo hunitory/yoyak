@@ -9,7 +9,6 @@ import 'package:yoyak/components/main_appbar.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/models/user/account_models.dart';
 import 'package:yoyak/screen/Alarm/alarm_screen.dart';
-import 'package:yoyak/screen/Challenge/challenge_screen.dart';
 import 'package:yoyak/screen/Login/login_screen.dart';
 import 'package:yoyak/screen/PillBag/pill_bag_screen.dart';
 import 'package:yoyak/screen/Search/filter_search_screen.dart';

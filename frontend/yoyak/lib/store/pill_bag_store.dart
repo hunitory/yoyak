@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:yoyak/apis/url.dart';
-import 'package:yoyak/store/login_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PillBagStore extends ChangeNotifier {

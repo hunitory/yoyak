@@ -4,7 +4,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import '../screen/Challenge/upload_challenge_screen.dart';
 import 'package:yoyak/apis/url.dart';
-import 'package:yoyak/screen/Search/photo_result_screen.dart';
 import 'dart:io';
 
 class CameraStore extends ChangeNotifier {
