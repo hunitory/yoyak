@@ -4,6 +4,7 @@ import 'package:yoyak/components/base_button.dart';
 import 'package:yoyak/components/pill_description.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/screen/Search/pill_bag_modal.dart';
+import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/store/pill_bag_store.dart';
 import '../../styles/colors/palette.dart';
 
@@ -19,11 +20,19 @@ class PillDetailScreen extends StatefulWidget {
   State<PillDetailScreen> createState() => _PillDetailScreenState();
 }
 
-// @ 로그인 되어있으면 약 봉투 목록 여기서 불러오기
-
 class _PillDetailScreenState extends State<PillDetailScreen> {
   @override
   Widget build(BuildContext context) {
+// 로그인 되어있으면 약 봉투 목록 여기서 불러오기
+    var isLogined = context.watch<LoginStore>().accessToken != '';
+    if (isLogined) {
+      // 약 봉투 api get 요청
+      context.read<PillBagStore>().getPillBagDatas(
+            context,
+            widget.medicineInfo["medicineSeq"]!,
+          );
+    }
+
     // medicineSeq를 이용해서 DB에서 알약 정보를 가져오기
     return DefaultTabController(
       length: 2,
@@ -56,7 +65,9 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
                 ),
                 child: RoundedRectangle(
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.width * 0.90,
+                  height: isLogined
+                      ? MediaQuery.of(context).size.width * 0.90
+                      : MediaQuery.of(context).size.width * 0.80,
                   boxShadow: const [
                     BoxShadow(
                       color: Palette.SHADOW_GREY,
@@ -121,32 +132,36 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
                       ),
                       // 저장하기 버튼
                       // 로그인 안됐을 때는 로그인 창으로 이동
-                      BaseButton(
-                        onPressed: () {
-                          // 약 봉투 api get 요청
-                          context.read<PillBagStore>().getPillBagDatas(context);
-                          // 약 봉투 모달창 띄우기
-                          showModalBottomSheet(
-                              context: context,
-                              builder: (BuildContext context) {
-                                var screenHigh =
-                                    MediaQuery.of(context).size.height;
-                                return StatefulBuilder(builder:
-                                    (BuildContext context,
-                                        StateSetter setState) {
-                                  return PillBagModal(
-                                      sceenHeight: screenHigh,
-                                      medicineSeq:
-                                          widget.medicineInfo["medicineSeq"]);
+                      if (isLogined)
+                        BaseButton(
+                          onPressed: () {
+                            // 약 봉투 api get 요청
+                            // context.read<PillBagStore>().getPillBagDatas(
+                            //       context,
+                            //       widget.medicineInfo["medicineSeq"]!,
+                            //     );
+                            // 약 봉투 모달창 띄우기
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  var screenHigh =
+                                      MediaQuery.of(context).size.height;
+                                  return StatefulBuilder(builder:
+                                      (BuildContext context,
+                                          StateSetter setState) {
+                                    return PillBagModal(
+                                        sceenHeight: screenHigh,
+                                        medicineSeq:
+                                            widget.medicineInfo["medicineSeq"]);
+                                  });
+                                  // return const PillBagModal();
                                 });
-                                // return const PillBagModal();
-                              });
-                        },
-                        text: "저장하기",
-                        colorMode: "blue",
-                        width: 104,
-                        height: 35,
-                      )
+                          },
+                          text: "저장하기",
+                          colorMode: "blue",
+                          width: 104,
+                          height: 35,
+                        )
                     ],
                   ),
                 ),

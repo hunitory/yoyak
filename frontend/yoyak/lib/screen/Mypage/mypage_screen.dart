@@ -3,43 +3,50 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/components/accountlist_view.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
+import 'package:yoyak/hooks/goto_screen.dart';
 import 'package:yoyak/models/user/account_models.dart';
 import 'package:yoyak/models/user/accountdetail_models.dart';
+import 'package:yoyak/screen/Main/main_screen.dart';
 import 'package:yoyak/screen/Mypage/privacy_policy.dart';
 import 'package:yoyak/screen/Mypage/updateaccount_Screen.dart';
 import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 
+import '../../auto_login/singleton_secure_storage.dart';
+import '../../store/challenge_store.dart';
+
 class MypageScreen extends StatelessWidget {
   const MypageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final List<AccountModel> alarmAccounts =
-        context.watch<LoginStore>().alarmAccounts;
+    final storage = SingletonSecureStorage().storage;
+
+    final List<AccountModel> accountList =
+        context.watch<LoginStore>().accountList;
 
     final AccountModel accountitem =
-        context.read<LoginStore>().alarmAccounts[0];
+        context.read<LoginStore>().accountList[0];
 
     final String userName =
-        context.read<LoginStore>().alarmAccounts[0].nickname!;
+        context.read<LoginStore>().accountList[0].nickname!;
 
     final String userGender =
-        context.read<LoginStore>().alarmAccounts[0].gender!;
+        context.read<LoginStore>().accountList[0].gender!;
     String gender = userGender == 'F' ? '여자' : '남자';
 
-    final String userBirth = context.read<LoginStore>().alarmAccounts[0].birth!;
+    final String userBirth = context.read<LoginStore>().accountList[0].birth!;
 
     final String userdisease =
-        context.read<LoginStore>().alarmAccounts[0].disease ?? '없음';
+        context.read<LoginStore>().accountList[0].disease ?? '없음';
 
     String displayDisease = userdisease.length > 5
         ? '${userdisease.substring(0, 5)}...'
         : userdisease;
 
     final int profileImg =
-        context.read<LoginStore>().alarmAccounts[0].profileImg!;
+        context.read<LoginStore>().accountList[0].profileImg!;
 
     void goToAccountUpdate(AccountModel? accountitem, bool isUser) {
       accountitem ??= AccountModel();
@@ -289,12 +296,12 @@ class MypageScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      AccountList(accountList: alarmAccounts.sublist(1)),
-                      if (alarmAccounts.length < 4)
+                      AccountList(accountList: accountList.sublist(1)),
+                      if (accountList.length < 4)
                         const SizedBox(
                           height: 10,
                         ),
-                      if (alarmAccounts.length < 4)
+                      if (accountList.length < 4)
                         GestureDetector(
                           onTap: () {
                             goToAccountUpdate(null, false);
@@ -385,6 +392,10 @@ class MypageScreen extends StatelessWidget {
                 height: 50,
                 onTap: () {
                   // 로그아웃
+                  storage.deleteAll();
+                  context.read<ChallengeStore>().clearChallenges();
+
+                  goToScreen(context, const MainScreen());
                 },
                 child: const Center(
                   child: Text(

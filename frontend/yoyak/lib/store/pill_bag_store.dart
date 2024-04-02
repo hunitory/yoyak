@@ -1,25 +1,35 @@
 import 'dart:convert';
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/apis/url.dart';
+import 'package:yoyak/auto_login/singleton_secure_storage.dart';
 import 'package:yoyak/store/login_store.dart';
 
 class PillBagStore extends ChangeNotifier {
-  Map<String, dynamic> pillBag = {}; // 약 봉투 목록
-  final storage = FlutterSecureStorage();
+  Map<String, dynamic> pillBags = {}; // 약 봉투 목록
+  var storage = SingletonSecureStorage().storage;
 
-  Future<void> getPillBagDatas(BuildContext context) async {
+  // 약 봉투 목록 가져오기 api
+  Future<void> getPillBagDatas(
+    BuildContext context,
+    int medicineSeq,
+  ) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
+    String modifiedUrl = yoyakURL.substring(8, yoyakURL.length - 4);
+    String path = '/api/medicineEnvelop'; // path
     String? accessToken = await storage.read(key: 'accessToken');
-    String url = '$yoyakURL/medicineEnvelop'; // path
+
+    print("modified  : $modifiedUrl");
+
+    final uri = Uri.https(modifiedUrl, path, {"medicineSeq": "$medicineSeq"});
+    // print("api 어디로감 ... : $uri");
 
     // API 호출
     try {
       final response = await http.get(
-        Uri.parse(url),
+        // Uri.parse(url),
+        uri,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
@@ -31,10 +41,16 @@ class PillBagStore extends ChangeNotifier {
         var decodedBody = utf8.decode(response.bodyBytes);
         // Map<String, dynamic>으로 변환
         // API 호출 결과를 pillBag에 저장
-        pillBag = json.decode(decodedBody); // type이 맞나?
+        // pillBagList = json.decode(decodedBody); // type이 맞나?
+        pillBags = jsonDecode(decodedBody); // type이 맞나?
+
         // 상태변경 업데이트
         notifyListeners();
-        print("약 봉투 데이터 api 호출 성공 잘 담김 : $pillBag.");
+        // print("쿼리잘갔니? : $medicineSeq");
+        // print("주소를 보자!!!! : $uri");
+        // print("약 봉투 데이터 api 호출 성공 잘 담김 : $pillBags.");
+        print("되니.... : ${pillBags.runtimeType}");
+        print("되니.... : $pillBags");
       } else {
         // 오류 처리
         print('약 봉투 데이터 api 오류 ${response.statusCode}, $response');
@@ -47,7 +63,10 @@ class PillBagStore extends ChangeNotifier {
 
   // 약 봉투 생성 api
   Future<void> createPillBag(
-      BuildContext context, int accountSeq, String name) async {
+    BuildContext context,
+    int accountSeq,
+    String name,
+  ) async {
     String yoyakURL = API.yoyakUrl; // 호스트 URL
     String? accessToken = await storage.read(key: 'accessToken');
     String url = '$yoyakURL/medicineEnvelop'; // path
@@ -79,11 +98,90 @@ class PillBagStore extends ChangeNotifier {
       if (response.statusCode == 200) {
         print("약 봉투 생성 성공");
         Navigator.pop(context);
+        notifyListeners(); // 상태 변경
       } else {
         print("약 봉투 생성 실패: ${response.body}");
       }
     } catch (e) {
       print("약 봉투 생성 에러: $e");
     }
+  }
+
+  // 약 봉투 약 저장 api
+  Future<void> saveMedicine(
+    BuildContext context,
+    int accountSeq,
+    int medicineSeq,
+    int envelopeSeq,
+  ) async {
+    String yoyakURL = API.yoyakUrl; // 호스트 URL
+    String accessToken = context.read<LoginStore>().accessToken;
+    String url = '$yoyakURL/medicineSaved'; // path
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
+        body: json.encode({
+          "accountSeq": accountSeq,
+          "medicineSeq": medicineSeq,
+          "envelopeSeq": envelopeSeq,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print("약 저장 성공");
+        // 약 봉투 목록 다시 불러오기 -
+        await getPillBagDatas(context, medicineSeq);
+        print('약봉투 목록 다시 불러왔나? - 저장');
+      } else {
+        print("약 저장 실패: ${response.body}");
+        print("어카운트 : $accountSeq, 메디슨 :$medicineSeq, 약 봉투 이름: $envelopeSeq");
+      }
+    } catch (e) {
+      print("약 저장 에러: $e");
+    }
+    notifyListeners(); //  상태 변경
+  }
+
+  // 약 봉투 약 삭제 api
+  Future<void> deleteMedicine(
+    BuildContext context,
+    int accountSeq,
+    int medicineSeq,
+    int envelopeSeq,
+  ) async {
+    String yoyakURL = API.yoyakUrl; // 호스트 URL
+    String accessToken = context.read<LoginStore>().accessToken;
+    String url = '$yoyakURL/medicineSaved'; // path
+
+    try {
+      final response = await http.delete(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
+        body: json.encode({
+          "accountSeq": accountSeq,
+          "medicineSeq": medicineSeq,
+          "envelopeSeq": envelopeSeq,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print("약 삭제 성공");
+        await getPillBagDatas(context, medicineSeq);
+        print('약봉투 목록 다시 불러왔나? - 삭제');
+      } else {
+        print("약 삭제 실패: ${response.body}");
+      }
+    } catch (e) {
+      print("약 삭제 에러: $e");
+    }
+    notifyListeners();
   }
 }

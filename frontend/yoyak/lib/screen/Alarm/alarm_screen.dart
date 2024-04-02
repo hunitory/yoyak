@@ -40,10 +40,9 @@ class _AlarmScreenState extends State<AlarmScreen> {
     DateTime now = DateTime.now();
 
     var alarmList = context.watch<AlarmStore>().alarms;
-    var accountList = context.watch<LoginStore>().alarmAccounts;
-    var accessToken = context.watch<LoginStore>().accessToken;
+    var accountList = context.watch<LoginStore>().accountList;
 
-    var isLogin = accessToken.isNotEmpty;
+    var isLogin = accountList.isEmpty;
 
     // 선택된 날짜에 해당하는 alarmList를 필터링
     var filteredAlarmList = _selectedDay != null
@@ -402,7 +401,7 @@ class AlarmCreateButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void goToAlarmCreate(int? notiSeq, bool isLogin) {
-      if (!isLogin) {
+      if (isLogin) {
         showDialog(
           context: context,
           builder: (BuildContext context) {

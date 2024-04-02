@@ -41,9 +41,9 @@ public class ChallengeArticleService {
         Challenge challenge = challengeRepository.findById(dto.getChallengeSeq())
             .orElseThrow(() -> new CustomException(CustomExceptionStatus.NO_CHALLENGE));
 
-        if(challengeArticleRepository.existsBySameCreateDateAndSameUser(createdDate, dto.getUserSeq()) ){
-            throw new CustomException(CustomExceptionStatus.ALREADY_POST);
-        }
+//        if(challengeArticleRepository.existsBySameCreateDateAndSameUser(createdDate, dto.getUserSeq()) ){
+//            throw new CustomException(CustomExceptionStatus.ALREADY_POST);
+//        }
 
 
         ChallengeArticle article = ChallengeArticle.builder()

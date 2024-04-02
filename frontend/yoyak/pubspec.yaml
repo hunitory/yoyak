@@ -1,5 +1,5 @@
 name: yoyak
-description: "yo yak man"
+description: "사진으로 약을 인식하여 상세정보를 제공, 약 복용 알림 서비스 및 약 복용 장려를 위한 챌린지로 사용자들을 돕는 앱입니다."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -57,6 +57,8 @@ dependencies:
   firebase_core: ^2.15.0
   permission_handler: ^11.3.1
   flutter_launcher_icons: ^0.13.1
+  video_player: ^2.8.3
+  flick_video_player: ^0.7.0
 
 dev_dependencies:
   flutter_test:
@@ -90,6 +92,7 @@ flutter:
     - assets/images/lines/
     - assets/images/profiles/
     - assets/lotties/
+    - assets/videos/
     - assets/config/.env
 
   # An image asset can refer to one or more resolution-specific "variants", see
