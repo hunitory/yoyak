@@ -83,8 +83,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var initializationSettingsAndroid =
       const AndroidInitializationSettings('@mipmap/logo');
+  final DarwinInitializationSettings initializationSettingsDarwin =
+      DarwinInitializationSettings();
   var initializationSettings =
-      InitializationSettings(android: initializationSettingsAndroid);
+      InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsDarwin);
+
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   runApp(

@@ -27,7 +27,7 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 
 android {
-    namespace "com.example.yoyak"
+    namespace "com.ssafy.yoyak"
     compileSdkVersion 33
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
@@ -39,7 +39,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.yoyak"
+        applicationId "com.ssafy.yoyak"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 21
