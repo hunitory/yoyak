@@ -24,7 +24,7 @@ class _UploadChallengeScreenState extends State<UploadChallengeScreen> {
   @override
   Widget build(BuildContext context) {
     var image = context.watch<CameraStore>().image;
-    var accessToken = context.read<LoginStore>().accessToken;
+
     return Scaffold(
         appBar: AppBar(
           leading: const Icon(Icons.arrow_back_ios, size: 24),
@@ -94,7 +94,7 @@ class _UploadChallengeScreenState extends State<UploadChallengeScreen> {
             onPressed: () {
               context.read<ChallengeStore>().challengeContent = content; // 챌린지 업로드 내용 저장
               // 일일 챌린지 업로드 함수 호출
-              context.read<ChallengeStore>().uploadDailyChallenge(context, image, accessToken);
+              context.read<ChallengeStore>().uploadDailyChallenge(context, image);
             },
             text: "완료",
             colorMode: "BLUE",
