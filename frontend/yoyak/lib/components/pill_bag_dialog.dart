@@ -26,7 +26,6 @@ class PillBagDialog extends StatefulWidget {
 }
 
 class _PillBagDialogState extends State<PillBagDialog> {
-  // var storage = SingletonSecureStorage().storage; // AccessToken 저장소
   final TextEditingController _nameController =
       TextEditingController(); // 약 봉투 이름 관리
   // selectedAccountSeq 초기에 null값인거 바꾸기
@@ -42,6 +41,7 @@ class _PillBagDialogState extends State<PillBagDialog> {
   Future<void> createPillBag(int accountSeq, String name) async {
     final prefs = await SharedPreferences.getInstance();
     String yoyakURL = API.yoyakUrl; // 호스트 URL
+    var accessToken = prefs.getString('accessToken') ?? ''; // accessToken state 업데이트
     String url = '$yoyakURL/medicineEnvelop'; // path
     // 색상 리스트
     List<String> colors = [

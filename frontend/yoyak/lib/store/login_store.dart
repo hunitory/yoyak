@@ -5,12 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:http/http.dart' as http;
 import 'package:yoyak/models/user/account_models.dart';
-import '../auto_login/singleton_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginStore extends ChangeNotifier {
   dynamic userInfo = ""; // storage에 있는 유저 정보 저장
-  final storage = SingletonSecureStorage().storage;
   List<AccountModel> accountList = [];
   var loginedUser;
   String accessToken = '';
