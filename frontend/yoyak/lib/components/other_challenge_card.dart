@@ -20,6 +20,7 @@ class OtherChallengeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     double cardListWidth = MediaQuery.of(context).size.width * 0.9;
     var othersChallengeList = context.watch<ChallengeStore>().othersChallengeList;
+    context.watch<ChallengeStore>().isCheered;
     // 응원했으면 배경 색, 글씨 색 바꾸기
     return RoundedRectangle(
       width: ScreenSize.getWidth(context),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:http/http.dart' as http;
 import 'package:yoyak/hooks/goto_screen.dart';
@@ -10,17 +11,19 @@ import '../auto_login/singleton_secure_storage.dart';
 
 class ChallengeStore extends ChangeNotifier {
   var yoyakUrl = API.yoyakUrl;
-  dynamic myChallengeCard = {};
+  dynamic myChallengeCard = [];
   int challengeSeq = 0;
   String challengeContent = "";
   List<dynamic> myChallengeList = [];
   List<dynamic> othersChallengeList = [];
   var storage = SingletonSecureStorage().storage;
   var accessToken = "";
+  bool isCheered = false;
   
-  Future getMyChallengeList(String? accessToken) async {
+  Future getMyChallengeList() async {
     try {
-      print("덱에서 accessToken 잘 들어오나: $accessToken");
+      final prefs = await SharedPreferences.getInstance();
+        String? accessToken = prefs.getString('accessToken');
       var response = await http.get(Uri.parse('$yoyakUrl/challenge'), headers: {
         'Authorization': 'Bearer $accessToken',
       });
@@ -57,7 +60,7 @@ class ChallengeStore extends ChangeNotifier {
       print(accessToken);
 
       if (response.statusCode == 200) {
-        print("내 챌린지 게시글 조회 성공");
+            print("내 챌린지 게시글 조회 성공");
         myChallengeList = json.decode(utf8.decode(response.bodyBytes));
         myChallengeList = myChallengeList.reversed.toList();
         notifyListeners();
@@ -71,8 +74,9 @@ class ChallengeStore extends ChangeNotifier {
 
   Future registChallenge(String name, DateTime startDate, DateTime endDate,
       BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
     try {
-      String? accessToken = await storage.read(key: 'accessToken');
+      String? accessToken = prefs.getString('accessToken');
       String startMonth = "${startDate.month}".padLeft(2, "0");
       String startDay = "${startDate.day}".padLeft(2, "0");
       String endMonth = "${endDate.month}".padLeft(2, "0");
@@ -173,7 +177,8 @@ class ChallengeStore extends ChangeNotifier {
   // 응원하기
   Future cheerUp(var articleSeq) async {
     try {
-      String? accessToken = await storage.read(key: 'accessToken');
+      final prefs = await SharedPreferences.getInstance();
+      String? accessToken = prefs.getString('accessToken');
       var response =
           await http.put(Uri.parse("$yoyakUrl/challenge/article/cheer-up"),
               headers: {
@@ -186,6 +191,7 @@ class ChallengeStore extends ChangeNotifier {
       print(response.statusCode);
       if (response.statusCode == 200) {
         print("챌린지 응원하기 성공");
+        isCheered = !isCheered;
       } else {
         print("챌린지 응원하기 실패");
       }

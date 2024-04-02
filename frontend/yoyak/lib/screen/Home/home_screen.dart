@@ -136,22 +136,22 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   height: 250,
                   color: Palette.MAIN_BLUE,
                 ),
-                Positioned.fill(
-                  child: FlickVideoPlayer(
-                    flickManager: flickManager,
-                    flickVideoWithControls: FlickVideoWithControls(
-                      controls: Container(),
-                    ),
-                    flickVideoWithControlsFullscreen: FlickVideoWithControls(
-                      controls: Container(),
-                    ),
-                  ),
-                ),
+                // Positioned.fill(
+                //   child: FlickVideoPlayer(
+                //     flickManager: flickManager,
+                //     flickVideoWithControls: FlickVideoWithControls(
+                //       controls: Container(),
+                //     ),
+                //     flickVideoWithControlsFullscreen: FlickVideoWithControls(
+                //       controls: Container(),
+                //     ),
+                //   ),
+                // ),
                 MainAppBar(
                   color: Colors.black.withOpacity(0),
                 ),
                 Positioned(
-                  bottom: 20,
+                  bottom: 25,
                   left: 20,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         Text(
                           "안녕하세요 ${loginedUser?.nickname ?? "유저"}님",
                           style: const TextStyle(
-                            fontSize: 20,
+                            fontSize: 23,
                             color: Palette.MAIN_WHITE,
                             fontWeight: FontWeight.w600,
                             fontFamily: 'Pretendard',
@@ -171,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           text: const TextSpan(
                             style: TextStyle(
                               color: Palette.MAIN_WHITE,
-                              fontSize: 20,
+                              fontSize: 23,
                               fontWeight: FontWeight.w500,
                               fontFamily: 'Pretendard',
                             ),
@@ -180,12 +180,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                 text: "오늘도 ",
                                 style: TextStyle(
                                   fontFamily: 'Pretendard',
+                                  fontSize: 23,
                                 ),
                               ),
                               TextSpan(
                                 text: "요약",
                                 style: TextStyle(
-                                  fontSize: 23,
+                                  fontSize: 26,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.yellow,
                                   fontFamily: 'Pretendard',
@@ -196,6 +197,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Pretendard',
+                                  fontSize: 23,
                                 ),
                               ),
                             ],
@@ -205,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         const Row(
                           children: [
                             Text(
-                              "약이 궁금할 땐, ",
+                              "요 약이 궁금할 땐, ",
                               style: TextStyle(
                                 fontSize: 22,
                                 color: Colors.white,
@@ -217,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               "요약",
                               style: TextStyle(
                                 fontSize: 24,
-                                color: Palette.MAIN_BLUE,
+                                color: Colors.yellow,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'Pretendard',
                               ),
