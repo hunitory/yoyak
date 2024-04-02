@@ -62,8 +62,8 @@ public class ChallengeArticleService {
     }
 
     public List<ChallengeArticleResponseDto> getArticles() {
-        Long userSeq = SecurityUtil.getUserSeq();
-        return challengeArticleRepository.findArticlesExceptUserSeq(userSeq);
+
+        return challengeArticleRepository.findAllArticles();
     }
 
     public List<ChallengeArticleResponseDto> getMyChallengeArticles() {

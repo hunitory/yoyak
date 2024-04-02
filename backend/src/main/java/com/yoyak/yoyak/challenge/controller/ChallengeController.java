@@ -126,9 +126,13 @@ public class ChallengeController {
     }
 
     // 하루에 한번 날짜가 바뀌면 실행
-    @Scheduled(cron = "0 0 0 * * ?")
+//    @Scheduled(cron = "0 0 0 * * ?")
+//    public void checkChallengeDeadline(){
+//
+//        challengeService.checkChallengeDeadline();
+//    }
+        @Scheduled(cron = "0 0 0 * * ?")
     public void checkChallengeDeadline(){
-
         challengeService.checkChallengeDeadline();
     }
 

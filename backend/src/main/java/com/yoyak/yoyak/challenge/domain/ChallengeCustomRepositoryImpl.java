@@ -2,6 +2,7 @@ package com.yoyak.yoyak.challenge.domain;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -52,5 +53,16 @@ public class ChallengeCustomRepositoryImpl implements ChallengeCustomRepository{
         });
     }
 
+    @Override
+    @Transactional
+    public void deleteAfterEndDate(LocalDate time) {
+        // 현재시간보다 endDate가 이전인 Challenge 삭제
+//        @Query(value = "delete from Challenge c where c.endDate < :time")
+//        void deleteAfterEndDate(LocalDate time);
 
+            queryFactory.delete(challenge)
+            .where(challenge.endDate.before(time))
+            .execute();
+
+    }
 }
