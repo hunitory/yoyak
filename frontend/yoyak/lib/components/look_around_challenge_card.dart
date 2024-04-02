@@ -16,11 +16,10 @@ class LookAroundChallengeCard extends StatefulWidget {
 }
 
 class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
-
   @override
   Widget build(BuildContext context) {
     context.watch<ChallengeStore>().othersChallengeList;
-    var isCheered = context.watch<ChallengeStore>().isCheered;
+    // var isCheered = context.watch<ChallengeStore>().isCheered;
 
     double cardWidth = ScreenSize.getWidth(context) * 0.4;
     return Padding(
@@ -106,11 +105,13 @@ class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
                           onPressed: () async {
                             final prefs = await SharedPreferences.getInstance();
                             String? accessToken = prefs.getString('accessToken');
-                            context
+                            await context
                                 .read<ChallengeStore>()
                                 .cheerUp(widget.challenge?['articleSeq']);
-                            context.read<ChallengeStore>().getOthersChallenge(accessToken);
-                            isCheered = !isCheered;
+                            await context.read<ChallengeStore>().getOthersChallenge(accessToken);
+                            // setState(() {
+                            //   isCheered++;
+                            // });
                           },
                         ),
                       ],
