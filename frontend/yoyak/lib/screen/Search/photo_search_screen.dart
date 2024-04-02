@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:yoyak/components/base_button.dart';
 import 'dart:io';
 import 'package:yoyak/components/rounded_rectangle.dart';
-import 'package:yoyak/screen/Camera/Camera.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/screen/Search/photo_result_screen.dart';
 import 'package:yoyak/store/camera_store.dart';
 import '../../styles/colors/palette.dart';
+import 'package:lottie/lottie.dart';
 
 class PhotoSearchScreen extends StatefulWidget {
   const PhotoSearchScreen({super.key});
@@ -17,6 +17,45 @@ class PhotoSearchScreen extends StatefulWidget {
 }
 
 class _PhotoSearchScreenState extends State<PhotoSearchScreen> {
+  // 로딩 다이얼로그
+  Future<void> showLoadingDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // 다른 곳을 터치해도 닫히지 않음
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Palette.WHITE_BLUE,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Lottie.asset(
+                  'assets/lotties/loading.json',
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width * 0.15,
+                  height: MediaQuery.of(context).size.height * 0.10,
+                  fit: BoxFit.fill,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.03,
+                ),
+                const Text(
+                  "AI로 분석하는 중입니다..",
+                  style: TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   // 초기 데이터 로드
   @override
   void initState() {
@@ -204,15 +243,20 @@ class _PhotoSearchScreenState extends State<PhotoSearchScreen> {
               Center(
                 child: BaseButton(
                   onPressed: () async {
+                    // 로딩 다이얼로그 표시
+                    showLoadingDialog(context);
                     // 함수가 완료 될 때까지 기다렸다가 결과 페이지로 이동 async await
                     await sendImageToServer(context);
+
+                    // 로딩 다이얼로그 닫기
+                    Navigator.of(context).pop();
                     // 약 검색 결과 담기면 사진 결과 페이지로 이동 -> sendImageToServer 에서 네비게이터까지 처리
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => PhotoResultScreen(
-                    //               photoResults: photoResults,
-                    //             )));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PhotoResultScreen(
+                                  photoResults: photoResults,
+                                )));
 
                     // 결과페이지로 이동하면 원래 img는 초기화
                     image = null;
