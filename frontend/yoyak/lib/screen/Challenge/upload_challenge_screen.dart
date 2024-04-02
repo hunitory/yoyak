@@ -5,7 +5,6 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/components/base_button.dart';
 import 'package:yoyak/store/challenge_store.dart';
-import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 import '../../store/camera_store.dart';
 import '../../styles/colors/palette.dart';

@@ -1,10 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/components/pill_bag.dart';
-import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/store/pill_bag_store.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 import '../../styles/colors/palette.dart';
@@ -146,7 +143,7 @@ class _PillBagModalState extends State<PillBagModal> {
             ],
           ),
           Container(
-            height: 50,
+            height: 45,
             width: ScreenSize.getWidth(context) * 0.9,
             decoration: BoxDecoration(
               color: Palette.MAIN_BLUE,

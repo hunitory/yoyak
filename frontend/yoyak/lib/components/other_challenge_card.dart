@@ -68,7 +68,7 @@ class OtherChallengeCard extends StatelessWidget {
           // 챌린지 시작했을 때, 안했을 때 분기
           SizedBox(
             width: cardListWidth,
-            height: 280,
+            height: 290,
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,

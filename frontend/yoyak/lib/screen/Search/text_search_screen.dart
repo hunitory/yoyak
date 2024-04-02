@@ -67,7 +67,7 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
         if (_hasMoreData) {
           print("왜 돼? : $_hasMoreData");
           _isLoading = false;
-          _fetchPills();
+          _fetchPills(showDialog: false); // 스크롤일때는 다이얼로그 안띄움
         }
         // _fetchPills();
       }
@@ -86,8 +86,47 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
     });
   }
 
+  // 로딩 다이얼로그
+  Future<void> showLoadingDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // 다른 곳을 터치해도 닫히지 않음
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Palette.WHITE_BLUE,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Lottie.asset(
+                  'assets/lotties/loading.json',
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width * 0.15,
+                  height: MediaQuery.of(context).size.height * 0.10,
+                  fit: BoxFit.fill,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.03,
+                ),
+                const Text(
+                  "해당하는 약을 찾는 중 입니다..",
+                  style: TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   // 알약 검색 api 호출
-  Future<void> _fetchPills() async {
+  Future<void> _fetchPills({bool showDialog = false}) async {
     // if (_isLoading) {
     //   print("isLoding이 true라서 안되네@@@");
     // }
@@ -102,6 +141,12 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
       setState(() {
         _isLoading = true;
       });
+
+      if (showDialog) {
+        // 로딩 다이얼로그 표시
+        showLoadingDialog(context);
+        print("로딩 다이얼로그 띄우기 : $showDialog");
+      }
 
       // API 호출
       String yoyakURL = API.yoyakUrl; // 호스트 URL
@@ -123,6 +168,13 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
           var decodedBody = utf8.decode(response.bodyBytes);
           resultPills = jsonDecode(decodedBody);
           isResult = true;
+
+          // // 로딩 다이얼로그 닫기
+          if (showDialog) {
+            // 로딩 다이얼로그 닫기
+            Navigator.of(context).pop();
+            print("로딩 다이얼로그 닫기?????????????");
+          }
 
           // Pill 리스트 생성
           List<dynamic> pillsJson = resultPills["result"];
@@ -185,7 +237,6 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
       } catch (e) {
         print("알약 검색 실패 에러 $e");
       } finally {
-        // @@ 이거 되나?
         setState(() {
           _isLoading = false;
           _hasMoreData = true;
@@ -204,7 +255,7 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('알약 검색',
+        title: const Text('약 검색',
             style: TextStyle(
               color: Palette.MAIN_BLACK,
               fontFamily: 'Pretendard',
@@ -234,7 +285,7 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
                   Container(
                     // padding: const EdgeInsets.only(left: 7),
                     child: const Text(
-                      "텍스트로 알약 검색",
+                      "텍스트로 약 검색",
                       style: TextStyle(
                           color: Palette.MAIN_BLACK,
                           fontFamily: 'Pretendard',
@@ -278,7 +329,7 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
                       vertical: 11,
                     ),
                     border: InputBorder.none,
-                    hintText: '알약 이름, 성분, 증상을 입력해주세요',
+                    hintText: '약 이름, 성분, 증상을 입력해주세요',
                     filled: true,
                     fillColor: Palette.MAIN_WHITE,
                     enabledBorder: OutlineInputBorder(
@@ -313,14 +364,18 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
                     ),
                   ),
                   // api get
-                  onSubmitted: (value) {
+                  // 검색하기
+                  onSubmitted: (value) async {
                     print('검색어 = $value');
                     _resetSearch(); // 검색 결과 초기화
-                    _fetchPills();
+                    _fetchPills(showDialog: true); // 검색을 할 때 다이얼로그 출력
                   },
                 ),
               ),
             ),
+            // 로딩 다이얼로그 닫기
+            // Navigator.of(context).pop();
+
             // 검색 성공 시 "검색 결과"가 나옴(조건부 렌더링)
             if (isResult)
               Expanded(
