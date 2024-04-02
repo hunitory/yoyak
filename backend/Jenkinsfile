@@ -1,0 +1,73 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'NAME', defaultValue: 'springtest')
+    }
+
+    stages {
+        stage('SCM') {
+            steps {
+                sh "echo 'SCM...'"
+                checkout scm
+            }
+        }
+
+//         stage('SonarQube Analysis') {
+//             steps {
+//                 dir('backend') {
+//                     script{
+//                         withSonarQubeEnv('sonarqube') {
+//                             sh "echo 'SonarQube Analysis...'"
+//                             sh "chmod +x gradlew"
+//                             sh "./gradlew sonar"
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+
+        stage('Springboot build') {
+            steps {
+                dir('backend') {
+                    sh '''
+                    echo 'Springboot build...'
+                    chmod +x gradlew
+                    ./gradlew clean build
+                    '''
+                }
+            }
+        }
+
+        stage('Docker deploy') {
+            steps {
+                dir('backend') {
+                    script {
+                        sh'''
+                        nginx-server/deploy.sh
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('SSH deploy') {
+            steps {
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: "ssh_server",
+                            verbose: true,
+                            transfers: [
+                                sshTransfer(
+                                    execCommand: "sudo systemctl reload nginx",
+                                    execTimeout: 120000
+                                )
+                            ]
+                        )
+                    ]
+                )
+            }
+        }
+    }
+}
