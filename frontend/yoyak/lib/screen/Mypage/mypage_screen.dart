@@ -130,7 +130,7 @@ class _MypageScreenState extends State<MypageScreen>
                           padding: EdgeInsets.symmetric(
                               horizontal: ScreenSize.getWidth(context) * 0.05),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Image(
                                 width: 86,
@@ -139,7 +139,7 @@ class _MypageScreenState extends State<MypageScreen>
                                     'assets/images/profiles/profile$profileImg.png'),
                               ),
                               SizedBox(
-                                  width: ScreenSize.getWidth(context) * 0.04),
+                                  width: ScreenSize.getWidth(context) * 0.06),
                               const Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
@@ -159,7 +159,7 @@ class _MypageScreenState extends State<MypageScreen>
                                     '성별',
                                     style: TextStyle(
                                       color: Palette.MAIN_BLACK,
-                                      fontSize: 16,
+                                      fontSize: 15,
                                       fontFamily: 'pretendard',
                                       fontWeight: FontWeight.w700,
                                     ),
@@ -171,7 +171,7 @@ class _MypageScreenState extends State<MypageScreen>
                                     '생년월일',
                                     style: TextStyle(
                                       color: Palette.MAIN_BLACK,
-                                      fontSize: 16,
+                                      fontSize: 15,
                                       fontFamily: 'pretendard',
                                       fontWeight: FontWeight.w700,
                                     ),
@@ -183,7 +183,7 @@ class _MypageScreenState extends State<MypageScreen>
                                     '주요 증상',
                                     style: TextStyle(
                                       color: Palette.MAIN_BLACK,
-                                      fontSize: 16,
+                                      fontSize: 15,
                                       fontFamily: 'pretendard',
                                       fontWeight: FontWeight.w700,
                                     ),
@@ -198,7 +198,7 @@ class _MypageScreenState extends State<MypageScreen>
                                     ':',
                                     style: TextStyle(
                                       color: Palette.MAIN_BLACK,
-                                      fontSize: 16,
+                                      fontSize: 15,
                                       fontFamily: 'pretendard',
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -208,7 +208,7 @@ class _MypageScreenState extends State<MypageScreen>
                                     ':',
                                     style: TextStyle(
                                       color: Palette.MAIN_BLACK,
-                                      fontSize: 16,
+                                      fontSize: 15,
                                       fontFamily: 'pretendard',
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -218,7 +218,7 @@ class _MypageScreenState extends State<MypageScreen>
                                     ':',
                                     style: TextStyle(
                                       color: Palette.MAIN_BLACK,
-                                      fontSize: 16,
+                                      fontSize: 15,
                                       fontFamily: 'pretendard',
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -228,7 +228,7 @@ class _MypageScreenState extends State<MypageScreen>
                                     ':',
                                     style: TextStyle(
                                       color: Palette.MAIN_BLACK,
-                                      fontSize: 16,
+                                      fontSize: 15,
                                       fontFamily: 'pretendard',
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -244,7 +244,7 @@ class _MypageScreenState extends State<MypageScreen>
                                     userName,
                                     style: const TextStyle(
                                       color: Palette.MAIN_BLACK,
-                                      fontSize: 16,
+                                      fontSize: 15,
                                       fontFamily: 'pretendard',
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -254,7 +254,7 @@ class _MypageScreenState extends State<MypageScreen>
                                     gender,
                                     style: const TextStyle(
                                       color: Palette.MAIN_BLACK,
-                                      fontSize: 16,
+                                      fontSize: 15,
                                       fontFamily: 'pretendard',
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -264,7 +264,7 @@ class _MypageScreenState extends State<MypageScreen>
                                     userBirth,
                                     style: const TextStyle(
                                       color: Palette.MAIN_BLACK,
-                                      fontSize: 16,
+                                      fontSize: 15,
                                       fontFamily: 'pretendard',
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -274,7 +274,7 @@ class _MypageScreenState extends State<MypageScreen>
                                     displayDisease,
                                     style: const TextStyle(
                                       color: Palette.MAIN_BLACK,
-                                      fontSize: 16,
+                                      fontSize: 15,
                                       fontFamily: 'pretendard',
                                       fontWeight: FontWeight.w500,
                                     ),

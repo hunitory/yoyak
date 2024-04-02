@@ -4,7 +4,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import '../screen/Challenge/upload_challenge_screen.dart';
 import 'package:yoyak/apis/url.dart';
-import 'package:yoyak/screen/Search/photo_result_screen.dart';
 import 'dart:io';
 
 class CameraStore extends ChangeNotifier {
@@ -44,12 +43,12 @@ class CameraStore extends ChangeNotifier {
         photoResults = response.data;
 
         // 상세 페이지로 이동 (미완)
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PhotoResultScreen(
-                      photoResults: photoResults,
-                    )));
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => PhotoResultScreen(
+        //               photoResults: photoResults,
+        //             )));
         // 이미지 변수 초기화
         // image = null;
 
