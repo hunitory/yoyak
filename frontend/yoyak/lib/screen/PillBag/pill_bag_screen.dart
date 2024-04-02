@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'package:yoyak/models/user/account_models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/components/pill_bag_dialog.dart';
 import 'package:yoyak/screen/PillBag/pill_bag_detail_screen.dart';
@@ -200,7 +198,6 @@ class _PillBagScreenState extends State<PillBagScreen> {
         context.watch<LoginStore>().accountList; // 돌보미 목록
 
     // 돌보미 필터링 드롭다운 메뉴 항목 생성
-    // ????
     List<DropdownMenuItem<int>> dropdownItems = [
       const DropdownMenuItem(
         value: null, // '모두' 옵션
@@ -285,21 +282,26 @@ class _PillBagScreenState extends State<PillBagScreen> {
                   children: [
                     // 돌보미 필터링 드롭다운 메뉴
                     if (accountList.length > 1)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          DropdownButton<int>(
-                            value: _selectedAccountSeq,
-                            items: dropdownItems,
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedAccountSeq =
-                                    value; // 선택된 accountSeq 업데이트
-                              });
-                            },
-                            underline: Container(), // 드롭다운 메뉴의 밑줄 제거
-                          ),
-                        ],
+                      Padding(
+                        padding: EdgeInsets.only(
+                          right: MediaQuery.of(context).size.height * 0.004,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            DropdownButton<int>(
+                              value: _selectedAccountSeq,
+                              items: dropdownItems,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedAccountSeq =
+                                      value; // 선택된 accountSeq 업데이트
+                                });
+                              },
+                              underline: Container(), // 드롭다운 메뉴의 밑줄 제거
+                            ),
+                          ],
+                        ),
                       ),
 
                     SizedBox(

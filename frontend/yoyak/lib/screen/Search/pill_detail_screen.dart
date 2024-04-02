@@ -136,6 +136,7 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
                           onPressed: () {
                             showModalBottomSheet(
                                 context: context,
+                                isScrollControlled: true, // ?
                                 builder: (BuildContext context) {
                                   var screenHigh =
                                       ScreenSize.getHeight(context);
