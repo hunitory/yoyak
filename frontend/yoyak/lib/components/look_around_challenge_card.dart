@@ -45,9 +45,13 @@ class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
                 ), // 둥근 모서리 반경 설정
                 child: Image.network(
                   widget.challenge?['imgUrl'],
-                  width: 200, // 이미지의 가로 크기
-                  height: 110, // 이미지의 세로 크기
-                  fit: BoxFit.cover, // 이미지의 크기를 설정한 크기에 맞게 조정
+                  width: 200,
+                  height: 110,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    // 오류 발생 시 대체할 이미지
+                    return Image.asset("assets/images/pillbox.jpg", width: 200, height: 110,);
+                  },
                 ),
               ),
               Padding(

@@ -1,18 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-import 'package:yoyak/components/dialog.dart';
-import 'package:yoyak/hooks/goto_screen.dart';
-import 'package:yoyak/screen/Challenge/regist_challenge_screen.dart';
-import 'package:yoyak/screen/Challenge/upload_challenge_screen.dart';
-import 'package:yoyak/screen/Login/login_screen.dart';
-import 'package:yoyak/screen/Mypage/mypage_screen.dart';
-import 'package:yoyak/store/login_store.dart';
-
-import '../store/camera_store.dart';
-import '../store/challenge_store.dart';
 import '../styles/colors/palette.dart';
-import 'base_button.dart';
 
 class ChallengeaAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ChallengeaAppBar({super.key, this.color});

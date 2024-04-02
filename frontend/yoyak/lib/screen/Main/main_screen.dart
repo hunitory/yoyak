@@ -7,7 +7,6 @@ import 'package:yoyak/screen/Alarm/alarm_screen.dart';
 import 'package:yoyak/screen/Challenge/challenge_screen.dart';
 import 'package:yoyak/store/alarm_store.dart';
 import 'package:yoyak/store/login_store.dart';
-import '../../store/challenge_store.dart';
 import '../Home/home_screen.dart';
 
 
