@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/screen/SignUp/user_info.screen.dart';
 import 'package:yoyak/styles/colors/palette.dart';
@@ -158,53 +156,70 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       width: inputWidth,
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (isValidate()) {
-                            try {
-                              context.read<LoginStore>().login(
-                                  context, email, password, const MainScreen());
-                              print('로그인 버튼 눌림');
-                              // 로그인 확인
-                              // if (loginCheck == '-1') {
-                              //   print('로그인 실패');
-                              //   showDialog(
-                              //     context: context,
-                              //     builder: (BuildContext context) {
-                              //       return AlertDialog(
-                              //         title: const Text('알림'),
-                              //         content: const Text('아이디 또는 비밀번호가 올바르지 않습니다.'),
-                              //         actions: [
-                              //           TextButton(
-                              //             child: const Text('닫기'),
-                              //             onPressed: () {
-                              //               Navigator.of(context).pop();
-                              //             },
-                              //           ),
-                              //         ],
-                              //       );
-                              //     },
-                              //   );
-                              // }
-                            } catch (error) {
-                              print('로그인에서 난 에러 $error');
-                              // Vibration.vibrate(duration: 300); // 진동
+                            bool loginSuccess = await context
+                                .read<LoginStore>()
+                                .login(context, email, password,
+                                    const MainScreen());
+
+                            if (!loginSuccess) {
+                              // 로그인 실패 알림
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(
-                                shape: RoundedRectangleBorder(
-                                  // ShapeDecoration을 사용하여 borderRadius 적용
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(15),
-                                      topRight: Radius.circular(15)),
-                                ),
-                                content: Text(
-                                  "로그인 되었습니다",
-                                  style: TextStyle(color: Palette.MAIN_BLACK),
-                                ),
-                                backgroundColor: Colors.yellow,
+                                content: Text("아이디 또는 비밀번호가 올바르지 않습니다.",
+                                    style:
+                                        TextStyle(color: Palette.MAIN_WHITE)),
+                                backgroundColor: Palette.MAIN_RED,
                                 duration: Duration(milliseconds: 1100),
                               ));
                             }
                           }
+                          // try {
+                          //     context.read<LoginStore>().login(
+                          //         context, email, password, const MainScreen());
+                          //     print('로그인 버튼 눌림');
+                          //     // 로그인 확인
+                          //     // if (loginCheck == '-1') {
+                          //     //   print('로그인 실패');
+                          //     //   showDialog(
+                          //     //     context: context,
+                          //     //     builder: (BuildContext context) {
+                          //     //       return AlertDialog(
+                          //     //         title: const Text('알림'),
+                          //     //         content: const Text('아이디 또는 비밀번호가 올바르지 않습니다.'),
+                          //     //         actions: [
+                          //     //           TextButton(
+                          //     //             child: const Text('닫기'),
+                          //     //             onPressed: () {
+                          //     //               Navigator.of(context).pop();
+                          //     //             },
+                          //     //           ),
+                          //     //         ],
+                          //     //       );
+                          //     //     },
+                          //     //   );
+                          //     // }
+                          //   } catch (error) {
+                          //     print('로그인에서 난 에러 $error');
+                          //     // Vibration.vibrate(duration: 300); // 진동
+                          //     ScaffoldMessenger.of(context)
+                          //         .showSnackBar(const SnackBar(
+                          //       shape: RoundedRectangleBorder(
+                          //         // ShapeDecoration을 사용하여 borderRadius 적용
+                          //         borderRadius: BorderRadius.only(
+                          //             topLeft: Radius.circular(15),
+                          //             topRight: Radius.circular(15)),
+                          //       ),
+                          //       content: Text(
+                          //         "로그인 되었습니다",
+                          //         style: TextStyle(color: Palette.MAIN_BLACK),
+                          //       ),
+                          //       backgroundColor: Colors.yellow,
+                          //       duration: Duration(milliseconds: 1100),
+                          //     ));
+                          //   }
+                          // }
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(

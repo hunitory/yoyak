@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:lottie/lottie.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:flutter/material.dart';
 import 'package:yoyak/components/base_button.dart';
@@ -20,6 +21,9 @@ class FilterSearchScreen extends StatefulWidget {
 class _FilterSearchScreenState extends State<FilterSearchScreen> {
   // 선택된 옵션을 저장하는 Map - 검색하기 api에 사용
   Map<String, String> selectedOptions = {}; // State 객체 내에 있으므로 변경 가능
+  // 검색 할 필터 데이터
+  var data;
+
   final List<Map<String, dynamic>> filterOptions = [
     {
       'options': {
@@ -93,9 +97,13 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
         print('api는 성공했는데 decodinf은?');
         // 결과를 변수에 저장
         // 문자열로 옴 => Map<String, dynamic>으로 변환
-        var data = jsonDecode(utf8.decode(response.bodyBytes));
+        data = jsonDecode(utf8.decode(response.bodyBytes));
         print(data);
         print('디코딩도 성공 !');
+
+        // 로딩 다이얼로그 닫기
+        Navigator.of(context).pop();
+
         // 결과를 props로 전달
         // 검색 결과 화면으로 이동
         Navigator.push(
@@ -108,6 +116,10 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
         );
       } else {
         // 400 오류 처리 -> 검색 결과 없음
+
+        // 로딩 다이얼로그 닫기
+        Navigator.of(context).pop();
+
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -116,13 +128,54 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
             ),
           ),
         );
-
+        print("${response.statusCode} : ${response.body}");
         print('검색 결과 없음');
       }
     } catch (e) {
       // 요청 실패 처리
+      // 로딩 다이얼로그 닫기
+      Navigator.of(context).pop();
       print('요청 안됐음: $e');
     }
+  }
+
+  // 로딩 다이얼로그
+  Future<void> showLoadingDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // 다른 곳을 터치해도 닫히지 않음
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Palette.WHITE_BLUE,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Lottie.asset(
+                  'assets/lotties/loading.json',
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width * 0.15,
+                  height: MediaQuery.of(context).size.height * 0.10,
+                  fit: BoxFit.fill,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.03,
+                ),
+                const Text(
+                  "해당하는 약을 찾는 중 입니다..",
+                  style: TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -152,7 +205,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('알약 검색',
+        title: const Text('약 검색',
             style: TextStyle(
               color: Palette.MAIN_BLACK,
               fontFamily: 'Pretendard',
@@ -173,7 +226,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
             Container(
               padding: const EdgeInsets.only(left: 10),
               child: const Text(
-                "필터로 알약 검색",
+                "필터로 약 검색",
                 style: TextStyle(
                     color: Palette.MAIN_BLACK,
                     fontFamily: 'Pretendard',
@@ -216,7 +269,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                       width: 15,
                     ),
                     Text(
-                      "약의 이름, 증상을 입력해주세요",
+                      "약 이름, 성분, 증상을 입력해주세요",
                       style: TextStyle(
                         color: Palette.SUB_BLACK,
                         fontSize: 15,
@@ -330,12 +383,9 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                   // selectedOptions을 get으로 보내기
                   // 결과를 변수에 저장 -> props로 전달
                   // 그 후 검색 결과 화면으로 이동
-                  onPressed: () {
-                    searchPills();
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => const FilterResult()));
+                  onPressed: () async {
+                    showLoadingDialog(context);
+                    await searchPills();
                   },
                   text: '검색하기',
                   colorMode: 'blue',
