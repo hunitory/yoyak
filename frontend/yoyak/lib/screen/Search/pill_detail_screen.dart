@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/components/base_button.dart';
 import 'package:yoyak/components/pill_description.dart';
@@ -31,16 +33,6 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
             medicineSeq: widget.medicineInfo["medicineSeq"]!,
           );
     }
-
-// 로그인 되어있으면 약 봉투 목록 여기서 불러오기
-    // var isLogined = context.watch<LoginStore>().accessToken != '';
-    // if (isLogined) {
-    //   // 약 봉투 api get 요청
-    //   context.read<PillBagStore>().getPillBagDatas(
-    //         context,
-    //         medicineSeq: widget.medicineInfo["medicineSeq"]!,
-    //       );
-    // }
 
     // medicineSeq를 이용해서 DB에서 알약 정보를 가져오기
     return DefaultTabController(
@@ -206,35 +198,49 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // 주의 키워드 바
-                          if (widget.medicineInfo["keyword"] != null)
+                          // 요약
+                          if (widget.medicineInfo["summary"] != null)
                             Padding(
                               padding: const EdgeInsets.only(
                                   left: 13, top: 10, bottom: 10),
-                              child: RoundedRectangle(
+                              child: Container(
+                                padding: const EdgeInsets.only(
+                                  right: 10,
+                                  top: 8,
+                                  bottom: 8,
+                                ),
                                 width: MediaQuery.of(context).size.width * 0.9,
-                                height: 40,
-                                color: Palette.MAIN_BLUE,
+                                // height: 40,
+                                decoration: BoxDecoration(
+                                  color: Palette.MAIN_BLUE,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
                                 child: Row(
                                   children: [
                                     const SizedBox(
                                       width: 10,
                                     ),
+                                    // 사진 너무 작아.. 그냥 원래 사진 파일을 좀 더 크게 가져와야하나?
                                     Image.asset(
-                                      "assets/images/light.png",
-                                      width: 30,
+                                      "assets/images/logo.png",
+                                      // scale: 1.7,
+                                      width: 33,
                                       height: 25,
+                                      fit: BoxFit.cover,
                                     ),
                                     const SizedBox(
                                       width: 5,
                                     ),
-                                    Text(
-                                      widget.medicineInfo["keyword"]!,
-                                      style: const TextStyle(
-                                        color: Palette.MAIN_WHITE,
-                                        fontFamily: 'Pretendard',
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 16,
+                                    Expanded(
+                                      child: Text(
+                                        widget.medicineInfo["summary"]!,
+                                        style: const TextStyle(
+                                          color: Palette.MAIN_WHITE,
+                                          fontFamily: 'Pretendard',
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 16,
+                                        ),
+                                        softWrap: true,
                                       ),
                                     ),
                                   ],

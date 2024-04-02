@@ -5,30 +5,25 @@ import 'package:provider/provider.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:yoyak/auto_login/singleton_secure_storage.dart';
 import 'package:yoyak/store/login_store.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PillBagStore extends ChangeNotifier {
   Map<String, dynamic> pillBags = {}; // 약 봉투 목록
   Map<String, dynamic> pillBagDetail = {}; // 약 봉투 저장된 약 목록
-  var storage = SingletonSecureStorage().storage;
 
   // 약 봉투 목록 가져오기 api
   Future<void> getPillBagDatas(BuildContext context, {int? medicineSeq}) async {
+    final prefs = await SharedPreferences.getInstance();
     String yoyakURL = API.yoyakUrl; // 서버 URL
     String modifiedUrl = yoyakURL.substring(8, yoyakURL.length - 4);
     String path = '/api/medicineEnvelop'; // path
-    String? accessToken = await storage.read(key: 'accessToken');
 
     print("modified  : $modifiedUrl");
-    print(accessToken);
-
-    final uri = Uri.https(modifiedUrl, path, {"medicineSeq": "$medicineSeq"});
-    // final uri = Uri.https(
-    //     "192.168.219.100:8080", path, {"medicineSeq": "$medicineSeq"});
-
-    // print("api 어디로감 ... : $uri");
 
     // API 호출
     try {
+      String? accessToken = prefs.getString('accessToken');
+      final uri = Uri.https(modifiedUrl, path, {"medicineSeq": "$medicineSeq"});
       final response = await http.get(
         // Uri.parse(url),
         uri,
@@ -69,8 +64,8 @@ class PillBagStore extends ChangeNotifier {
     int accountSeq,
     String name,
   ) async {
+    final prefs = await SharedPreferences.getInstance();
     String yoyakURL = API.yoyakUrl; // 호스트 URL
-    String? accessToken = await storage.read(key: 'accessToken');
     String url = '$yoyakURL/medicineEnvelop'; // path
     // 색상 리스트
     List<String> colors = [
@@ -81,6 +76,7 @@ class PillBagStore extends ChangeNotifier {
     ];
 
     try {
+      String? accessToken = prefs.getString('accessToken');
       final response = await http.post(
         Uri.parse(url),
         headers: {
@@ -116,11 +112,13 @@ class PillBagStore extends ChangeNotifier {
     int medicineSeq,
     int envelopeSeq,
   ) async {
+    final prefs = await SharedPreferences.getInstance();
     String yoyakURL = API.yoyakUrl; // 호스트 URL
-    String? accessToken = await storage.read(key: 'accessToken');
+    // String? accessToken = await storage.read(key: 'accessToken');
     String url = '$yoyakURL/medicineSaved'; // path
 
     try {
+      String? accessToken = prefs.getString('accessToken');
       final response = await http.post(
         Uri.parse(url),
         headers: {
@@ -156,11 +154,12 @@ class PillBagStore extends ChangeNotifier {
     int medicineSeq,
     int envelopeSeq,
   ) async {
+    final prefs = await SharedPreferences.getInstance();
     String yoyakURL = API.yoyakUrl; // 호스트 URL
-    String? accessToken = await storage.read(key: 'accessToken');
     String url = '$yoyakURL/medicineSaved'; // path
 
     try {
+      String? accessToken = prefs.getString('accessToken');
       final response = await http.delete(
         Uri.parse(url),
         headers: {
@@ -195,11 +194,12 @@ class PillBagStore extends ChangeNotifier {
     BuildContext context,
     int medicineEnvelopSeq,
   ) async {
+    final prefs = await SharedPreferences.getInstance();
     String yoyakURL = API.yoyakUrl; // 호스트 URL
-    String? accessToken = await storage.read(key: 'accessToken');
     String url = '$yoyakURL/medicineEnvelop/$medicineEnvelopSeq'; // path
 
     try {
+      String? accessToken = prefs.getString('accessToken');
       final response = await http.delete(
         Uri.parse(url),
         headers: {
@@ -226,11 +226,12 @@ class PillBagStore extends ChangeNotifier {
     BuildContext context,
     int medicineEnvelopSeq,
   ) async {
+    final prefs = await SharedPreferences.getInstance();
     String yoyakURL = API.yoyakUrl; // 호스트 URL
-    String? accessToken = await storage.read(key: 'accessToken');
     String url = '$yoyakURL/medicineEnvelop/$medicineEnvelopSeq'; // path
 
     try {
+      String? accessToken = prefs.getString('accessToken');
       final response = await http.get(
         Uri.parse(url),
         headers: {
