@@ -6,10 +6,14 @@ import com.yoyak.yoyak.medicine.dto.MedicineDto;
 import com.yoyak.yoyak.medicine.service.MedicineService;
 import com.yoyak.yoyak.python.service.PythonService;
 import com.yoyak.yoyak.recognition.dto.RecognitionResponseDto;
+import com.yoyak.yoyak.util.dto.StatusResponseDto;
 import com.yoyak.yoyak.util.exception.CustomException;
+import com.yoyak.yoyak.util.exception.CustomExceptionStatus;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,36 +61,45 @@ public class RecognitionController {
                 }
             };
 
+
             JsonNode jsonNode = pythonService.getRecognitionResponse(fileResource);
 
             int count = jsonNode.get("count").asInt();
 
             JsonNode medicineList = jsonNode.get("medicineList");
             log.info("medicineList = {}", medicineList.size());
-            List<MedicineDto> medicineDtos = new ArrayList<>();
-            for (JsonNode medicine : medicineList) {
-                Long medicineCode = medicine.get("medicineCode").asLong();
-                String medicineName = medicine.get("medicineName").asText();
-                try {
-                    MedicineDto dto = medicineService.findMedicine(medicineCode);
-                    medicineDtos.add(dto);
-                } catch (IllegalArgumentException e) {
-                    MedicineDto dto = MedicineDto.builder().medicineSeq(medicineCode)
-                        .itemName(medicineName).build();
-                    medicineDtos.add(dto);
-                }
 
+            List<MedicineDto> medicineDtos = new ArrayList<>();
+
+            Map<Long, String> code2Name = new HashMap<>();
+
+            for(JsonNode mecidine : medicineList){
+                Long medicineCode = mecidine.get("medicineCode").asLong();
+                String medicineName = mecidine.get("medicineName").asText();
+                code2Name.put(medicineCode, medicineName);
             }
 
+            for(Long medicineCode : code2Name.keySet()){
+                try{
+                    MedicineDto dto = medicineService.findMedicine(medicineCode);
+                    medicineDtos.add(dto);
+                }catch (IllegalArgumentException e){
+                    MedicineDto dto = MedicineDto.builder().medicineSeq(medicineCode)
+                        .itemName(code2Name.get(medicineCode)).build();
+                    medicineDtos.add(dto);
+                }
+            }
+            
+
             RecognitionResponseDto responseDto = RecognitionResponseDto.builder()
-                .count(count)
+                .count(medicineDtos.size())
                 .medicineList(medicineDtos)
                 .build();
 
             return ResponseEntity.ok().body(responseDto);
 
-        } catch (CustomException | IOException e) {
-
+        } catch (IOException e) {
+            log.error("error = {}", e.getMessage());
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }

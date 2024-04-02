@@ -105,6 +105,19 @@ class _PillPreviewState extends State<PillPreview> {
                           width: MediaQuery.of(context).size.width * 0.25,
                           height: MediaQuery.of(context).size.width * 0.13,
                           fit: BoxFit.cover,
+                          // 에러 처리
+                          errorBuilder: (BuildContext context, Object error,
+                              StackTrace? stackTrace) {
+                            print(error);
+                            print("이미지 오류 해결 !!!!!!!!!!!!!");
+                            // 대체 이미지 반환
+                            return Image.asset(
+                              'assets/images/pillbox.jpg',
+                              width: MediaQuery.of(context).size.width * 0.25,
+                              height: MediaQuery.of(context).size.width * 0.13,
+                              fit: BoxFit.cover,
+                            );
+                          },
                         )
                       : Image.asset(
                           'assets/images/pillbox.jpg',

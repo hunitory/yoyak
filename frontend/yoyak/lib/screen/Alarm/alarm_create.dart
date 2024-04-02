@@ -243,7 +243,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
     }
 
     // accountList에서 첫 번째 요소의 seq를 가져와서 초기화
-    var accountList = context.read<LoginStore>().alarmAccounts;
+    var accountList = context.read<LoginStore>().accountList;
     _alarmAccountSeq = accountList.isNotEmpty ? accountList.first.seq ?? 0 : 0;
   }
 
@@ -265,7 +265,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
 
   @override
   Widget build(BuildContext context) {
-    var accountList = context.watch<LoginStore>().alarmAccounts;
+    var accountList = context.watch<LoginStore>().accountList;
 
     return Scaffold(
       backgroundColor: Palette.MAIN_WHITE,

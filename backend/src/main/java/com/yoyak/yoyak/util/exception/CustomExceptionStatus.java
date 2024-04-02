@@ -20,10 +20,12 @@ public enum CustomExceptionStatus {
     // medicine 검색 관련
     MEDICINE_NOT_FOUND(4001, "검색된 결과가 없습니다"),
     MEDICINE_NOT_EXIST(4002, "존재하지 않는 약입니다."),
+    MEDICINE_NO_RECOGNITION(4003, "약을 인식할 수 없습니다"),
 
     // medicine 저장 관련
     ENVELOP_NOT_EXIST(5001, "존재하지 않는 약 봉투입니다."),
     ENVELOP_AUTHORITY(5002, "접근할 수 없는 약 봉투입니다."),
+    ENVELOP_INVALID_REQUEST(5003, "요청값을 확인하세요"),
 
     // alarm 관련
     NOTI_INVALID(6001, "존재하지 않는 알림입니다"),
@@ -33,7 +35,6 @@ public enum CustomExceptionStatus {
     ACCOUNT_INVALID(7001, "존재하지 않는 계정입니다"),
     ACCOUNT_MAXIMUM(7002, "계정을 더 이상 생성할 수 없습니다"),
     ACCOUNT_AUTHORITY(7003, "계정에 접근할 수 없습니다"),
-
 
 
     ARTICLE_INVALID(8001, "존재하지 않는 챌린지 글입니다"),

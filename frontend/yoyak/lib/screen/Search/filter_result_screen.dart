@@ -17,7 +17,7 @@ class _FilterResultState extends State<FilterResult> {
   final ScrollController _scrollController = ScrollController(); //  스크롤 위치 감지
   final List<dynamic> _displayedDataList = []; // 화면에 표시될 알약 리스트
   int _currentPage = 0; // 현재 페이지
-  final int _perPage = 30; // 한 페이지에 표시될 알약 수
+  final int _perPage = 20; // 한 페이지에 표시될 알약 수
   bool _hasMoreData = true; // 더 불러올 데이터가 있는지 여부
 
   // 초기 데이터 로드
@@ -31,6 +31,7 @@ class _FilterResultState extends State<FilterResult> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
+        print("끝까지 왔다.");
         _loadMoreData();
       }
     });

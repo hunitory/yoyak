@@ -23,36 +23,6 @@ public class PythonService {
     @Value("${fastapi.url}")
     private String fastApiUrl;
 
-    public String getSummary(MedicineDetail medicineDetail) {
-        log.info("fastApiUrl = {}", fastApiUrl);
-        SummaryRequestDto summaryRequestDto = SummaryRequestDto.builder()
-            .itemName(medicineDetail.getMedicine().getItemName())
-            .atpn(medicineDetail.getAtpn())
-            .efficacy(medicineDetail.getEfficacy())
-            .useMethod(medicineDetail.getUseMethod())
-            .depositMethod(medicineDetail.getDepositMethod())
-            .sideEffect(medicineDetail.getSideEffect())
-            .build();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-        String url = fastApiUrl + "/python/summary";
-
-        HttpEntity<SummaryRequestDto> request = new HttpEntity<>(summaryRequestDto, headers);
-        RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.postForObject(url, request, String.class);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        try {
-            JsonNode jsonNode = objectMapper.readTree(response);
-            return jsonNode.get("summary").asText();
-
-        } catch (IOException e) {
-            return "요약정보를 제공하지 못했습니다";
-        }
-
-    }
 
     public JsonNode getRecognitionResponse(ByteArrayResource fileResource) throws IOException {
         log.info("fastapiUrl = {}", fastApiUrl);
@@ -66,10 +36,14 @@ public class PythonService {
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
         RestTemplate restTemplate = new RestTemplate();
+
         String response = restTemplate.postForObject(url, requestEntity, String.class);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readTree(response);
+        JsonNode node = objectMapper.readTree(response);
+        log.info("node = {}", node);
+
+        return node;
 
     }
 }

@@ -152,7 +152,7 @@ class ChallengeStore extends ChangeNotifier {
       String? accessToken = await storage.read(key: 'accessToken');
       print("다른 사람 챌린지 목록에서 accessToken 잘 들어오나: $accessToken");
       var response =
-      await http.get(Uri.parse('$yoyakUrl/challenge/article'), headers: {
+          await http.get(Uri.parse('$yoyakUrl/challenge/article'), headers: {
         'Authorization': 'Bearer $accessToken',
       });
 
@@ -174,14 +174,15 @@ class ChallengeStore extends ChangeNotifier {
   Future cheerUp(var articleSeq) async {
     try {
       String? accessToken = await storage.read(key: 'accessToken');
-      var response = await http.put(Uri.parse("$yoyakUrl/challenge/article/cheer-up"),
-          headers: {
-            'Authorization': 'Bearer $accessToken',
-            'Content-Type': 'application/json',
-          },
-          body: json.encode({
-            "challengeArticleSeq" : articleSeq,
-          }));
+      var response =
+          await http.put(Uri.parse("$yoyakUrl/challenge/article/cheer-up"),
+              headers: {
+                'Authorization': 'Bearer $accessToken',
+                'Content-Type': 'application/json',
+              },
+              body: json.encode({
+                "challengeArticleSeq": articleSeq,
+              }));
       print(response.statusCode);
       if (response.statusCode == 200) {
         print("챌린지 응원하기 성공");
@@ -195,4 +196,10 @@ class ChallengeStore extends ChangeNotifier {
     }
   }
 
+  void clearChallenges() {
+    myChallengeList.clear();
+    myChallengeCard.clear();
+    othersChallengeList.clear();
+    notifyListeners(); // UI에 변경사항을 알림
+  }
 }

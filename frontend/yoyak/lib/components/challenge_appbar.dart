@@ -60,7 +60,7 @@ class ChallengeaAppBar extends StatelessWidget implements PreferredSizeWidget {
                                   return const DialogUI(destination: LoginScreen(destination: RegistChallengeScreen(),),);
                             });
                           },
-                          text: "챌린지 시작",
+                          text: "시작하기",
                           colorMode: 'white',
                           borderWidth: 1.0,
                           borderRadius: BorderRadius.circular(20),
