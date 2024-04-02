@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yoyak/components/base_button.dart';
 import 'package:yoyak/store/challenge_store.dart';
-import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 import '../styles/colors/palette.dart';
-import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 class LookAroundChallengeCard extends StatefulWidget {
   LookAroundChallengeCard({super.key, this.challenge});
@@ -25,9 +22,6 @@ class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
     context.watch<ChallengeStore>().othersChallengeList;
     var isCheered = context.watch<ChallengeStore>().isCheered;
 
-    Color basicHeartColor = Colors.white;
-    Color cheeredHeartColor = Colors.red;
-
     double cardWidth = ScreenSize.getWidth(context) * 0.4;
     return Padding(
       padding: const EdgeInsets.only(top: 15, right: 10),
@@ -40,7 +34,7 @@ class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
             border: Border.all(width: 0.4, color: Palette.SHADOW_GREY),
           ),
           width: cardWidth,
-          height: 270,
+          height: 280,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
