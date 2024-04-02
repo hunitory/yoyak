@@ -26,12 +26,11 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
     // 추후에 n+1 문제 고려해서 수정할 것
     @Override
     @Transactional
-    public List<ChallengeArticleResponseDto> findArticlesExceptUserSeq(Long userSeq) {
+    public List<ChallengeArticleResponseDto> findAllArticles() {
         List<Challenge> challenges = queryFactory.select(challenge)
             .from(challenge)
-            .where(challenge.user.seq.ne(userSeq))
             .fetch();
-        return makeChallengeArticleResponseDto(challenges, userSeq);
+        return makeChallengeArticleResponseDto(challenges, -1L);
 
 
     }
@@ -76,7 +75,7 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
                 if (article.getCheers() != null) {
                     cheerCnt = article.getCheers().size();
                     for(Cheer cheer: article.getCheers()){
-                        if(cheer.getUser().getSeq() == userSeq){
+                        if(userSeq != 1L && cheer.getUser().getSeq() == userSeq){
                             cheered = true;
                             break;
                         }
