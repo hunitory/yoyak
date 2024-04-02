@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:yoyak/components/base_button.dart';
 import 'dart:io';
 import 'package:yoyak/components/rounded_rectangle.dart';
-import 'package:yoyak/screen/Camera/Camera.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/screen/Search/photo_result_screen.dart';

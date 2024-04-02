@@ -7,10 +7,7 @@ import 'package:yoyak/screen/Alarm/alarm_screen.dart';
 import 'package:yoyak/screen/Challenge/challenge_screen.dart';
 import 'package:yoyak/store/alarm_store.dart';
 import 'package:yoyak/store/login_store.dart';
-import '../../store/challenge_store.dart';
 import '../Home/home_screen.dart';
-
-
 
 // MainScreen
 // - AlarmScreen, HomeScreen, ChallengeScreen을 담고 있는 Screen
@@ -24,7 +21,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-
   var curTabIdx = 1;
   final mainTabs = [
     const AlarmScreen(),
@@ -40,7 +36,7 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  void requestPermission() async{
+  void requestPermission() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
     NotificationSettings settings = await messaging.requestPermission(
@@ -52,17 +48,12 @@ class _MainScreenState extends State<MainScreen> {
       provisional: false,
       sound: true,
     );
-    if(settings.authorizationStatus == AuthorizationStatus.authorized) {
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       print('User granted permission');
-
-      String? deviceToken = await messaging.getToken();
-    }else{
+    } else {
       print("알림 권한이 거부되었습니다");
     }
   }
-
-
-  
 
   @override
   void initState() {
@@ -86,5 +77,3 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
-
-
