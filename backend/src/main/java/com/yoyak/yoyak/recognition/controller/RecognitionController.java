@@ -68,9 +68,7 @@ public class RecognitionController {
 
             JsonNode medicineList = jsonNode.get("medicineList");
             log.info("medicineList = {}", medicineList.size());
-            if(medicineList.size() == 0){
-                throw new CustomException(CustomExceptionStatus.MEDICINE_NO_RECOGNITION);
-            }
+
             List<MedicineDto> medicineDtos = new ArrayList<>();
 
             Map<Long, String> code2Name = new HashMap<>();
@@ -101,7 +99,7 @@ public class RecognitionController {
             return ResponseEntity.ok().body(responseDto);
 
         } catch (IOException e) {
-
+            log.error("error = {}", e.getMessage());
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
