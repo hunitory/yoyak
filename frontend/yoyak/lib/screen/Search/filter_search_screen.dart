@@ -144,6 +144,9 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
   // }
 
   @override
+  // 이 클래스의 인스턴스를 항상 살아있게 유지합니다.
+
+  @override
   Widget build(BuildContext context) {
     // options을 포함하는 리스트
 
