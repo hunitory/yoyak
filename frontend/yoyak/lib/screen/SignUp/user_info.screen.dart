@@ -17,7 +17,7 @@ class UserInfoScreen extends StatefulWidget {
 }
 
 class _UserInfoScreenState extends State<UserInfoScreen> {
-  String email = '';
+  String userId = '';
   String password = '';
   TextEditingController idController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -61,25 +61,23 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
 
   Future<bool> checkUsernameDuplicate(String username) async {
     String yoyak = API.yoyakUrl;
-    String url = '$yoyak/user/dupid?username=$username';
+    String url = '$yoyak/user/dupid';
+    Uri uri = Uri.parse(url);
 
     try {
-      var response = await http.get(Uri.parse(url));
+      print('api 보내지는중');
+      var response = await http.post(uri,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode(
+            {'userId': username},
+          ));
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.body);
-        print(data['code']);
-        if (data['code'] == 1003) {
-          return true;
-        } else if (data['code'] == 1004) {
-          return false;
-        } else {
-          return false; // 또는 true, 에러 상황에 대한 기본값
-        }
+        return false;
       } else {
-        return true; // 또는 false, 비정상적인 상태 코드에 대한 기본값
+        return true;
       }
     } catch (e) {
-      return true; // 또는 false, 예외 발생 시 기본값
+      return false; // 또는 false, 예외 발생 시 기본값
     }
   }
 
@@ -173,7 +171,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                             },
                             onChanged: (value) {
                               setState(() {
-                                email = value;
+                                userId = value;
                               });
                             },
                             decoration: const InputDecoration(
@@ -239,6 +237,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     // 회원가입 요청
                     GestureDetector(
                       onTap: () async {
+                        print('여기는 오지 ?');
                         // await showPersonalAgreementDialog(context);
                         // if (!agreement) {
                         //   // agreement가 false인 경우 메시지를 띄움
@@ -254,8 +253,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                           return; // 등록 작업을 중단
                         }
 
-                        bool isDuplicate =
-                            await checkUsernameDuplicate(idController.text);
+                        bool isDuplicate = await checkUsernameDuplicate(userId);
 
                         if (isDuplicate) {
                           // 아이디가 중복인 경우 사용자에게 알림
