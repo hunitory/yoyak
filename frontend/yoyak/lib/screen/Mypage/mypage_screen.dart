@@ -23,7 +23,8 @@ class MypageScreen extends StatefulWidget {
   State<MypageScreen> createState() => _MypageScreenState();
 }
 
-class _MypageScreenState extends State<MypageScreen> with WidgetsBindingObserver {
+class _MypageScreenState extends State<MypageScreen>
+    with WidgetsBindingObserver {
   String accessToken = '';
 
   @override
@@ -36,10 +37,10 @@ class _MypageScreenState extends State<MypageScreen> with WidgetsBindingObserver
   Future<void> getAccessToken() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      accessToken = prefs.getString('accessToken') ?? ''; // accessToken state 업데이트
+      accessToken =
+          prefs.getString('accessToken') ?? ''; // accessToken state 업데이트
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -65,15 +66,10 @@ class _MypageScreenState extends State<MypageScreen> with WidgetsBindingObserver
       );
     }
 
-    @override
-    void dispose() {
-      WidgetsBinding.instance.removeObserver(this);
-      super.dispose();
-    }
     final List<AccountModel> accountList =
         context.watch<LoginStore>().accountList;
 
-    if (accessToken.isNotEmpty) {
+    if (accountList.isNotEmpty) {
       final AccountModel accountitem = accountList[0];
       final String userName = accountitem.nickname!;
       final String userGender = accountitem.gender!;
