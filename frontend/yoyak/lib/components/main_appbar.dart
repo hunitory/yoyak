@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yoyak/screen/Login/kakao/kakao_login_screen.dart';
 import 'package:yoyak/screen/Login/login_screen.dart';
 import 'package:yoyak/screen/Mypage/mypage_screen.dart';
 import 'main_appbar_button.dart';

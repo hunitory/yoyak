@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/screen/SignUp/user_info.screen.dart';
 import 'package:yoyak/styles/colors/palette.dart';
