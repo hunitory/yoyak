@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:yoyak/components/base_button.dart';
+import 'package:provider/provider.dart';
+import 'package:yoyak/store/challenge_store.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 import '../styles/colors/palette.dart';
-import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 class ChallengeCard extends StatelessWidget {
   const ChallengeCard({super.key, this.challenge});
@@ -10,7 +10,9 @@ class ChallengeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var myChallengeCard = context.read<ChallengeStore>().myChallengeCard;
     double cardWidth = ScreenSize.getWidth(context) * 0.4;
+    String curProgressDate = DateTime.parse(challenge?['createdDate']).difference(DateTime.parse(myChallengeCard['startDate'])).inDays.toString();
     return Padding(
       padding: const EdgeInsets.only(top: 15, right: 10),
       child: GestureDetector(
@@ -33,9 +35,13 @@ class ChallengeCard extends StatelessWidget {
                 ), // 둥근 모서리 반경 설정
                 child: Image.network(
                   challenge?['imgUrl'],
-                  width: 200, // 이미지의 가로 크기
-                  height: 110, // 이미지의 세로 크기
-                  fit: BoxFit.cover, // 이미지의 크기를 설정한 크기에 맞게 조정
+                  width: 200,
+                  height: 110,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    // 오류 발생 시 대체할 이미지
+                    return Image.asset("assets/images/pillbox.jpg", width: 200, height: 110,);
+                  },
                 ),
               ),
               Padding(
@@ -62,7 +68,16 @@ class ChallengeCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 10,
+                    ),
+                    Text(
+                      "${int.parse(curProgressDate) + 1}일 차" ?? "챌린지 업로드 날짜",
+                      style: TextStyle(
+                        color: Palette.MAIN_BLUE.withOpacity(0.7),
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15,
+                      ),
                     ),
                     const SizedBox(
                       height: 20,

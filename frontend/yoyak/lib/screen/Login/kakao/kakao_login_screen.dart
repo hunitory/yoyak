@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:yoyak/screen/Alarm/alarm_screen.dart';
 import 'package:yoyak/screen/Login/kakao/kakao_login.dart';
 import 'package:yoyak/screen/Login/kakao/kakao_view_model.dart';
 import 'package:yoyak/screen/Main/main_screen.dart';
-import 'package:yoyak/screen/SignUp/greeting_screen.dart';
 import 'package:yoyak/screen/SignUp/user_info.screen.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 

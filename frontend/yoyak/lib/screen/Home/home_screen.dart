@@ -9,7 +9,6 @@ import 'package:yoyak/components/main_appbar.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/models/user/account_models.dart';
 import 'package:yoyak/screen/Alarm/alarm_screen.dart';
-import 'package:yoyak/screen/Challenge/challenge_screen.dart';
 import 'package:yoyak/screen/Login/login_screen.dart';
 import 'package:yoyak/screen/PillBag/pill_bag_screen.dart';
 import 'package:yoyak/screen/Search/filter_search_screen.dart';
@@ -138,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
 
     return Scaffold(
-      backgroundColor: Palette.BG_BLUE,
+      backgroundColor: Palette.MAIN_WHITE,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -249,15 +248,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             Container(
               color: Palette.MAIN_WHITE,
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Palette.MAIN_WHITE,
-                  borderRadius: const BorderRadius.only(
+                  borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20),
-                  ),
-                  border: Border.all(
-                    width: 0.1,
-                    color: Colors.grey.withOpacity(0.5),
                   ),
                 ),
                 width: screenWidth,
