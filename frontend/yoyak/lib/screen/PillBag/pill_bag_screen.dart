@@ -1,9 +1,12 @@
+import 'dart:convert';
+import 'package:yoyak/models/user/account_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/components/pill_bag_dialog.dart';
 import 'package:yoyak/screen/PillBag/pill_bag_detail_screen.dart';
 import 'package:yoyak/store/pill_bag_store.dart';
+import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 
 class PillBagScreen extends StatefulWidget {
@@ -17,9 +20,11 @@ class _PillBagScreenState extends State<PillBagScreen> {
   // 약 봉투 삭제
   final List<int> _checkedPillBags = <int>[]; // 체크된 약 봉투 Seq
   bool _isDeleteMode = false; // 삭제 모드
+  // 돌보미별 약 봉투 필터
+  int? _selectedAccountSeq; // 선택된 accountSeq
 
+  // 삭제 모드 토글
   void _toggleDeleteMode() {
-    // 삭제 모드 토글
     setState(() {
       _isDeleteMode = !_isDeleteMode;
       _checkedPillBags.clear(); // 삭제 모드를 끄면 체크된 약 봉투 항목 초기화
@@ -161,10 +166,76 @@ class _PillBagScreenState extends State<PillBagScreen> {
     );
   }
 
+  // 돌보미 목록을 드롭다운 아이템
+  // List<DropdownMenuItem<int>> getAccountDropdownItems() {
+  //   List<DropdownMenuItem<int>> dropdownItems = [
+  //     const DropdownMenuItem(
+  //       value: null, // '모두' 옵션
+  //       child: Text("모두의 약 봉투"),
+  //     ),
+  //   ];
+  //   // pillBags 데이터에서 고유한 accountSeq와 nickname을 추출하여 목록 생성
+  //   // 예시로 직접 추가한 항목들, 실제로는 API에서 받은 데이터 사용
+  //   var accounts = [
+  //     {"accountSeq": 1, "nickname": "사용자1"},
+  //     {"accountSeq": 2, "nickname": "사용자2"},
+  //   ];
+  //   for (var account in accounts) {
+  //     dropdownItems.add(
+  //       DropdownMenuItem(
+  //         value: account['accountSeq'],
+  //         child: Text(account['nickname']),
+  //       ),
+  //     );
+  //   }
+  //   return dropdownItems;
+  // }
+
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> pillBags = context.watch<PillBagStore>().pillBags;
+    Map<String, dynamic> pillBags =
+        context.watch<PillBagStore>().pillBags; // 약 봉투 데이터
     print("@@@@@pillBags: $pillBags");
+    final List<AccountModel> accountList =
+        context.watch<LoginStore>().accountList; // 돌보미 목록
+
+    // 돌보미 필터링 드롭다운 메뉴 항목 생성
+    // ????
+    List<DropdownMenuItem<int>> dropdownItems = [
+      const DropdownMenuItem(
+        value: null, // '모두' 옵션
+        child: Text("모두  "),
+      ),
+    ];
+
+    // accountList의 각 요소를 순회하면서 드롭다운 메뉴 항목(DropdownMenuItem) 생성
+    for (var account in accountList) {
+      dropdownItems.add(
+        DropdownMenuItem(
+          value: account.seq,
+          child: Text(account.nickname!),
+        ),
+      );
+    }
+
+    // 필터링된 약 봉투 위젯 목록 생성
+    List<Widget> filteredPillBagsWidgets = pillBags['result']
+            // 주어진 조건을 만족하는지 확인하고, 그 조건을 만족하는 항목들만을 모아 새로운 리스트를 생성
+            // ?. : null이 아닌 경우에만
+            ?.where((pillBag) =>
+                _selectedAccountSeq == null || // 모든 약 봉투 보기 선택 시
+                pillBag['accountSeq'] ==
+                    _selectedAccountSeq) // 특정 사용자의 약 봉투만 보기 선택 시
+            .map<Widget>((pillBag) => _pillBagComponent(
+                  // 위젯으로 변환
+                  pillBag['medicineEnvelopSeq'],
+                  pillBag['envelopName'],
+                  pillBag['accountSeq'],
+                  pillBag['nickname'],
+                  pillBag['color'],
+                ))
+            .toList() ??
+        []; // pillBags["result"] is null이면 빈 리스트를 반환
 
     return Scaffold(
       backgroundColor: Palette.BG_BLUE,
@@ -212,20 +283,55 @@ class _PillBagScreenState extends State<PillBagScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(
-                      height: 10,
+                    // 돌보미 필터링 드롭다운 메뉴
+                    if (accountList.length > 1)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          DropdownButton<int>(
+                            value: _selectedAccountSeq,
+                            items: dropdownItems,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedAccountSeq =
+                                    value; // 선택된 accountSeq 업데이트
+                              });
+                            },
+                            underline: Container(), // 드롭다운 메뉴의 밑줄 제거
+                          ),
+                        ],
+                      ),
+
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.03,
                     ),
                     Column(
                       children: [
-                        if (pillBags['count'] != 0)
-                          for (var pillBag in pillBags['result'])
-                            _pillBagComponent(
-                              pillBag['medicineEnvelopSeq'],
-                              pillBag['envelopName'],
-                              pillBag['accountSeq'],
-                              pillBag['nickname'],
-                              pillBag['color'],
-                            )
+                        // 필터링된 약 봉투 위젯 목록
+                        if (filteredPillBagsWidgets.isNotEmpty)
+                          ...filteredPillBagsWidgets
+                        else
+                          Center(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // 가운데가 안 먹어
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.2,
+                                ),
+                                const Text(
+                                  "약 봉투가 없습니다.",
+                                  style: TextStyle(
+                                    color: Palette.SUB_BLACK,
+                                    fontFamily: 'Pretendard',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                   ],
