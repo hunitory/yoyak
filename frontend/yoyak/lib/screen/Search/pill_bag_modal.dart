@@ -146,7 +146,7 @@ class _PillBagModalState extends State<PillBagModal> {
             ],
           ),
           Container(
-            height: 50,
+            height: 45,
             width: ScreenSize.getWidth(context) * 0.9,
             decoration: BoxDecoration(
               color: Palette.MAIN_BLUE,
