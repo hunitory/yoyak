@@ -3,6 +3,7 @@ package com.yoyak.yoyak.util.elasticsearch;
 import com.yoyak.yoyak.medicine.dto.MedicineFullTextDto;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,7 +39,7 @@ public class SearchParameters<T> {
      * @param keyword 검색할 키워드입니다.
      * @return 약품 검색을 위해 구성된 SearchParameters 인스턴스를 반환합니다.
      */
-    public static SearchParameters createMedicineSearchParameters(
+    public static SearchParameters createRegexSearchParameters(
         int page, String keyword) {
 
         int start = (page - 1) * DEFAULT_SIZE;
@@ -51,6 +52,33 @@ public class SearchParameters<T> {
             .fieldsToSearch(DEFAULT_MEDICINE_FIELDS)
             .tClass(DEFAULT_MEDICINE_CLASS)
             .sourceIncludes(DEFAULT_MEDICINE_SOURCE_FIELDS) // SourceConfig에 포함할 필드 설정
+            .build();
+    }
+
+
+    /**
+     * 풀 텍스트 검색을 위한 검색 파라미터를 생성합니다.
+     *
+     * @param page    페이지 번호입니다.
+     * @param keyword 검색할 키워드입니다.
+     * @return 풀 텍스트 검색을 위해 구성된 SearchParameters 인스턴스를 반환합니다.
+     */
+    public static SearchParameters createMedicineFullTextSearchParameters(
+        int page, String keyword) {
+        int start = (page - 1) * DEFAULT_SIZE;
+
+        List<String> nGramFields = DEFAULT_MEDICINE_FIELDS.stream()
+            .map(field -> field + ".ngram")  // 각 필드명에 .ngram을 추가
+            .collect(Collectors.toList());
+
+        return SearchParameters.<MedicineFullTextDto>builder()
+            .index(DEFAULT_MEDICINE_INDEX)
+            .keyword(keyword)
+            .start(start)
+            .size(DEFAULT_SIZE)
+            .fieldsToSearch(nGramFields)  // 여기서는 기본 필드를 사용
+            .tClass(DEFAULT_MEDICINE_CLASS)
+            .sourceIncludes(DEFAULT_MEDICINE_SOURCE_FIELDS)
             .build();
     }
 }
