@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:yoyak/screen/Main/main_screen.dart';
 import 'package:yoyak/screen/SignUp/greeting_screen.dart';
 import 'package:yoyak/store/login_store.dart';
-import '../../apis/url.dart';
+import '../../../apis/url.dart';
 
 // 뷰 모델
 class KakaoViewModel {

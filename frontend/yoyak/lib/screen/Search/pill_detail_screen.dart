@@ -144,12 +144,6 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
                       if (Logined.isNotEmpty)
                         BaseButton(
                           onPressed: () {
-                            // 약 봉투 api get 요청
-                            // context.read<PillBagStore>().getPillBagDatas(
-                            //       context,
-                            //       widget.medicineInfo["medicineSeq"]!,
-                            //     );
-                            // 약 봉투 모달창 띄우기
                             showModalBottomSheet(
                                 context: context,
                                 builder: (BuildContext context) {

@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyak/apis/url.dart';
-import 'package:yoyak/auto_login/singleton_secure_storage.dart';
 import 'package:yoyak/components/base_button.dart';
 import 'package:yoyak/components/base_input.dart';
 import 'package:yoyak/models/user/account_models.dart';
@@ -12,10 +12,10 @@ import 'package:yoyak/styles/colors/palette.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 
 class UpdateAccountScreen extends StatefulWidget {
-  AccountModel accountitem;
+  final AccountModel accountitem;
   final bool isUser;
 
-  UpdateAccountScreen({
+  const UpdateAccountScreen({
     super.key,
     required this.accountitem,
     required this.isUser,
@@ -150,11 +150,12 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
 
   Future<void> deleteAccountData(int accountSeq) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = context.read<LoginStore>().accessToken;
+    final prefs = await SharedPreferences.getInstance();
     String url = '$yoyakURL/account/$accountSeq'; // 서버 URL
 
     try {
       // DELETE 요청 보내기
+      String? accessToken = prefs.getString('accessToken');
       var response = await http.delete(
         Uri.parse(url),
         headers: {
@@ -179,11 +180,9 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
     }
   }
 
-  Future<void> updateAlarmData() async {
+  Future<void> updateAccountData() async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    // String accessToken = context.read<LoginStore>().accessToken;
-    final storage = SingletonSecureStorage().storage;
-    String? accessToken = await storage.read(key: 'accessToken');
+    final prefs = await SharedPreferences.getInstance();
 
     String url = '$yoyakURL/account'; // 서버 URL
     String formattedMonth = monthController.text.length == 1
@@ -203,6 +202,7 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
 
     try {
       // POST 요청 보내기
+      String? accessToken = prefs.getString('accessToken');
       var response = await http.put(
         Uri.parse(url),
         headers: {
@@ -231,11 +231,9 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
     }
   }
 
-  Future<void> createAlarmData() async {
+  Future<void> createAccountData() async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    // String accessToken = context.read<LoginStore>().accessToken;
-    final storage = SingletonSecureStorage().storage;
-    String? accessToken = await storage.read(key: 'accessToken');
+    final prefs = await SharedPreferences.getInstance();
     String url = '$yoyakURL/account'; // 서버 URL
     String formattedMonth = monthController.text.length == 1
         ? '0${monthController.text}'
@@ -253,6 +251,7 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
 
     try {
       // POST 요청 보내기
+      String? accessToken = prefs.getString('accessToken');
       var response = await http.post(
         Uri.parse(url),
         headers: {
@@ -696,10 +695,10 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
           }
           // 알림 생성 시
           if (widget.accountitem.seq == null) {
-            await createAlarmData();
+            await createAccountData();
           } else {
             // 알림 수정 시
-            await updateAlarmData();
+            await updateAccountData();
           }
           if (context.mounted) {
             Navigator.pop(context);
