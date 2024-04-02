@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyak/components/base_button.dart';
 import 'package:yoyak/store/challenge_store.dart';
 import 'package:yoyak/store/login_store.dart';
@@ -7,12 +8,26 @@ import 'package:yoyak/styles/screenSize/screen_size.dart';
 import '../styles/colors/palette.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
-class LookAroundChallengeCard extends StatelessWidget {
-  const LookAroundChallengeCard({super.key, this.challenge});
+class LookAroundChallengeCard extends StatefulWidget {
+  LookAroundChallengeCard({super.key, this.challenge});
+
   final challenge;
 
   @override
+  State<LookAroundChallengeCard> createState() =>
+      _LookAroundChallengeCardState();
+}
+
+class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
+
+  @override
   Widget build(BuildContext context) {
+    context.watch<ChallengeStore>().othersChallengeList;
+    var isCheered = context.watch<ChallengeStore>().isCheered;
+
+    Color basicHeartColor = Colors.white;
+    Color cheeredHeartColor = Colors.red;
+
     double cardWidth = ScreenSize.getWidth(context) * 0.4;
     return Padding(
       padding: const EdgeInsets.only(top: 15, right: 10),
@@ -35,7 +50,7 @@ class LookAroundChallengeCard extends StatelessWidget {
                   topRight: Radius.circular(15),
                 ), // 둥근 모서리 반경 설정
                 child: Image.network(
-                  challenge?['imgUrl'],
+                  widget.challenge?['imgUrl'],
                   width: 200, // 이미지의 가로 크기
                   height: 110, // 이미지의 세로 크기
                   fit: BoxFit.cover, // 이미지의 크기를 설정한 크기에 맞게 조정
@@ -47,7 +62,7 @@ class LookAroundChallengeCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      challenge?['title'] ?? "챌린지 이름",
+                      widget.challenge?['title'] ?? "챌린지 이름",
                       style: const TextStyle(
                         color: Palette.MAIN_BLACK,
                         fontFamily: 'Pretendard',
@@ -56,7 +71,7 @@ class LookAroundChallengeCard extends StatelessWidget {
                       ),
                     ), // 게시물 제목
                     Text(
-                      challenge?['userNickname'] ?? "유저 닉네임",
+                      widget.challenge?['userNickname'] ?? "유저 닉네임",
                       style: const TextStyle(
                         color: Palette.SUB_BLACK,
                         fontFamily: 'Pretendard',
@@ -68,7 +83,7 @@ class LookAroundChallengeCard extends StatelessWidget {
                       height: 10,
                     ),
                     Text(
-                      "${challenge?['cheerCnt']}명이 좋아해요",
+                      "${widget.challenge?['cheerCnt']}명이 응원해요",
                       style: const TextStyle(
                         color: Palette.SUB_BLACK,
                         fontFamily: 'Pretendard',
@@ -83,15 +98,25 @@ class LookAroundChallengeCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         IconButton(
-                          icon: Icon(Icons.favorite_border, size: 23, color: Palette.MAIN_RED.withOpacity(0.5),),
-                          onPressed: () {
-                            context.read<ChallengeStore>().cheerUp(challenge?['articleSeq']);
-                            context.watch<ChallengeStore>().othersChallengeList;
+                          icon: Icon(
+                            widget.challenge?['cheered']
+                                ? Icons.favorite_rounded
+                                : Icons.favorite_border_rounded,
+                            size: 23,
+                            color: Palette.MAIN_RED.withOpacity(0.5),
+                          ),
+                          onPressed: () async {
+                            final prefs = await SharedPreferences.getInstance();
+                            String? accessToken = prefs.getString('accessToken');
+                            context
+                                .read<ChallengeStore>()
+                                .cheerUp(widget.challenge?['articleSeq']);
+                            context.read<ChallengeStore>().getOthersChallenge(accessToken);
+                            isCheered = !isCheered;
                           },
                         ),
                       ],
                     ),
-
                   ],
                 ),
               )
