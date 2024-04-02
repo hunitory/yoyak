@@ -103,12 +103,6 @@ public class RecognitionController {
         } catch (IOException e) {
 
             return ResponseEntity.internalServerError().body(e.getMessage());
-        }catch (CustomException e){
-            StatusResponseDto statusResponseDto = StatusResponseDto.builder()
-                .code(e.getStatus().getCode())
-                .message(e.getStatus().getMessage())
-                .build();
-            return ResponseEntity.badRequest().body(statusResponseDto);
         }
     }
 

@@ -41,9 +41,6 @@ public class PythonService {
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode node = objectMapper.readTree(response);
-        if(node == null){
-            log.info("node is null");
-        }
         log.info("node = {}", node);
 
         return node;
