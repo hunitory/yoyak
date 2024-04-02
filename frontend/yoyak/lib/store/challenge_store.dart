@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:yoyak/hooks/goto_screen.dart';
 import 'package:yoyak/screen/Main/main_screen.dart';
 import 'package:http_parser/http_parser.dart';
-import '../auto_login/singleton_secure_storage.dart';
 
 class ChallengeStore extends ChangeNotifier {
   var yoyakUrl = API.yoyakUrl;
@@ -16,7 +15,6 @@ class ChallengeStore extends ChangeNotifier {
   String challengeContent = "";
   List<dynamic> myChallengeList = [];
   List<dynamic> othersChallengeList = [];
-  var storage = SingletonSecureStorage().storage;
   var accessToken = "";
   bool isCheered = false;
 
@@ -36,12 +34,12 @@ class ChallengeStore extends ChangeNotifier {
         var responseBody = utf8.decode(response.bodyBytes);
         myChallengeCard = json.decode(responseBody);
         challengeSeq = myChallengeCard['challengeSeq'];
-        // print('챌린지 덱: $myChallengeCard');
-        // print('챌린지 시퀀스: $challengeSeq');
-
+        print('챌린지 덱: $myChallengeCard');
+        print('챌린지 시퀀스: $challengeSeq');
         notifyListeners();
       } else {
         print("내 챌린지 덱 목록 조회 실패");
+        print("챌린지 덱 목록 조회 시 오류 : ${response.body}");
       }
     } catch (error) {
       print(error);
@@ -106,7 +104,11 @@ class ChallengeStore extends ChangeNotifier {
     }
   }
 
-  Future<void> uploadDailyChallenge(context, image, String accessToken) async {
+  Future<void> uploadDailyChallenge(context, image) async {
+
+    final prefs = await SharedPreferences.getInstance();
+      String? accessToken = prefs.getString('accessToken');
+
     var dto = MultipartFile.fromString(
       json.encode({
         "challengeSeq": challengeSeq,
@@ -114,7 +116,7 @@ class ChallengeStore extends ChangeNotifier {
       }),
       contentType: MediaType.parse('application/json'),
     );
-
+    print("챌린지 등록시 accessToken 있나? $accessToken");
     var dio = Dio();
     MultipartFile file =
         MultipartFile.fromFileSync(image.path, filename: image.name);
@@ -140,6 +142,7 @@ class ChallengeStore extends ChangeNotifier {
         print("일일 챌린지 등록 후 내 챌린지 리스트:  $myChallengeList");
         goToScreen(context, const MainScreen());
       } else {
+
         print("일일 챌린지 등록 실패");
         // 응답 본문을 출력하기 위해 response.stream을 bytes로 변환한 후, 문자열로 디코딩합니다.
       }

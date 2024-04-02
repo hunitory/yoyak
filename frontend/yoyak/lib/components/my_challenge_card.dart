@@ -66,7 +66,7 @@ class MyChallengeCard extends StatelessWidget {
             ),
 
           // 챌린지 시작했을 때, 안했을 때 분기
-          myChallengeCard.isNotEmpty
+          myChallengeCard.length != 0
               ?
           myChallengeList.isNotEmpty ?
           SizedBox(
@@ -99,7 +99,6 @@ class MyChallengeCard extends StatelessWidget {
               ],
             )),
           )
-
               : SizedBox(
                   width: ScreenSize.getWidth(context),
                   height: 200,
