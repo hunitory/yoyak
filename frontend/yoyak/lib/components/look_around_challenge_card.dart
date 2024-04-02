@@ -25,9 +25,6 @@ class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
     context.watch<ChallengeStore>().othersChallengeList;
     var isCheered = context.watch<ChallengeStore>().isCheered;
 
-    Color basicHeartColor = Colors.white;
-    Color cheeredHeartColor = Colors.red;
-
     double cardWidth = ScreenSize.getWidth(context) * 0.4;
     return Padding(
       padding: const EdgeInsets.only(top: 15, right: 10),
@@ -40,7 +37,7 @@ class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
             border: Border.all(width: 0.4, color: Palette.SHADOW_GREY),
           ),
           width: cardWidth,
-          height: 270,
+          height: 280,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

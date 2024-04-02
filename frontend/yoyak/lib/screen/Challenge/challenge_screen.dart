@@ -3,7 +3,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
-import 'package:yoyak/auto_login/singleton_secure_storage.dart';
 import 'package:yoyak/components/my_challenge_card.dart';
 import 'package:yoyak/screen/Challenge/regist_challenge_screen.dart';
 import 'package:yoyak/store/challenge_store.dart';
@@ -52,10 +51,11 @@ class _ChallengeScreenState extends State<ChallengeScreen>
 
   @override
   Widget build(BuildContext context) {
+    // getAccessToken();
     context.read<ChallengeStore>().getMyChallenge(accessToken); // 내 챌린지 호출
     context
         .read<ChallengeStore>()
-        .getMyChallengeList(); // 내 챌린지 덱 호출
+        .getMyChallengeList(accessToken); // 내 챌린지 덱 호출
     context
         .read<ChallengeStore>()
         .getOthersChallenge(accessToken); // 챌린지 둘러보기 호출
@@ -112,12 +112,6 @@ class _ChallengeScreenState extends State<ChallengeScreen>
 
 class _ChallengeTitleSection extends StatelessWidget {
   const _ChallengeTitleSection({super.key});
-
-  Future<String?> getUserName() async {
-    var storage = SingletonSecureStorage().storage;
-    var userName = await storage.read(key: 'userName');
-    return userName;
-  }
 
   @override
   Widget build(BuildContext context) {
