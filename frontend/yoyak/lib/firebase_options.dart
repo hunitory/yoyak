@@ -19,31 +19,28 @@ class DefaultFirebaseOptions {
     if (kIsWeb) {
       throw UnsupportedError(
         'DefaultFirebaseOptions have not been configured for web - '
-            'you can reconfigure this by running the FlutterFire CLI again.',
+        'you can reconfigure this by running the FlutterFire CLI again.',
       );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-              'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
-              'you can reconfigure this by running the FlutterFire CLI again.',
+          'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
-              'you can reconfigure this by running the FlutterFire CLI again.',
+          'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
-              'you can reconfigure this by running the FlutterFire CLI again.',
+          'you can reconfigure this by running the FlutterFire CLI again.',
         );
       default:
         throw UnsupportedError(
@@ -54,9 +51,18 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDAWiA0yhrkZ3ixxieNerF0R6K-U2X4wzw',
-    appId: '1:898684700308:android:68d84a8e5e33501a7d5681',
+    appId: '1:898684700308:android:15e335d6dccec3c27d5681',
     messagingSenderId: '898684700308',
     projectId: 'yoyak-4800c',
     storageBucket: 'yoyak-4800c.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyCxGrqRrvOnhXzuPdypPK5Tuz3T3TsBotE',
+    appId: '1:898684700308:ios:8048db6a4df3c8fd7d5681',
+    messagingSenderId: '898684700308',
+    projectId: 'yoyak-4800c',
+    storageBucket: 'yoyak-4800c.appspot.com',
+    iosBundleId: 'com.ssafy.yoyak',
   );
 }
