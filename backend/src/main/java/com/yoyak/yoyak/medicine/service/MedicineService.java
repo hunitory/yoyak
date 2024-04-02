@@ -77,18 +77,42 @@ public class MedicineService {
         return result;
     }
 
+
+    public BasicResponseDto findMedicineByFullText(SearchParameters<MedicineFullTextDto> params) {
+
+        List<MedicineDto> resultList = new ArrayList<>();
+        long totalCount = 0;
+        try {
+            HitsMetadata<MedicineFullTextDto> metadata =
+                elasticsearchService.findByFullText(params).hits();
+            totalCount = metadata.total().value();
+
+            resultList = metadata.hits().stream()
+                .map(this::mapToMedicineDto)
+                .collect(Collectors.toList());
+        } catch (IOException e) {
+            log.error("Error executing full text search", e);
+        }
+
+        return BasicResponseDto.
+            builder()
+            .count((int) totalCount)
+            .result(resultList)
+            .build();
+    }
+
     /**
      * 사용자가 제공한 검색 파라미터를 기반으로 엘라스틱서치를 사용하여 약에 대한 전체 텍스트 검색을 수행
      *
      * @param params 사용자로부터 받은 검색 파라미터를 담고 있는 SearchParameters 객체
      * @return 검색 결과에 해당하는 MedicineDto 객체의 리스트. 결과가 없거나 오류가 발생한 경우 빈 리스트 반환.
      */
-    public BasicResponseDto findMedicineByFullText(SearchParameters<MedicineFullTextDto> params) {
+    public BasicResponseDto findMedicineByRegex(SearchParameters<MedicineFullTextDto> params) {
         List<MedicineDto> resultList = new ArrayList<>();
         long totalCount = 0;
         try {
             HitsMetadata<MedicineFullTextDto> metadata =
-                elasticsearchService.regexFullTextSearch(params).hits();
+                elasticsearchService.searchByRegex(params).hits();
             totalCount = metadata.total().value();
 
             resultList = metadata.hits().stream()
