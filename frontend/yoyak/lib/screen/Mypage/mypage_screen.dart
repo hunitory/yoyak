@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyak/components/accountlist_view.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/hooks/goto_screen.dart';
@@ -14,11 +16,43 @@ import 'package:yoyak/styles/colors/palette.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 import '../../store/challenge_store.dart';
 
-class MypageScreen extends StatelessWidget {
+class MypageScreen extends StatefulWidget {
   const MypageScreen({super.key});
 
   @override
+  State<MypageScreen> createState() => _MypageScreenState();
+}
+
+class _MypageScreenState extends State<MypageScreen>
+    with WidgetsBindingObserver {
+  String accessToken = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getAccessToken();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  Future<void> getAccessToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      accessToken =
+          prefs.getString('accessToken') ?? ''; // accessToken state 업데이트
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Future<void> logout() async {
+      // SharedPreferences 인스턴스 가져오기
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+
+      goToScreen(context, const MainScreen());
+    }
+
     void goToAccountUpdate(AccountModel? accountitem, bool isUser) {
       accountitem ??= AccountModel();
       Navigator.push(
@@ -31,29 +65,6 @@ class MypageScreen extends StatelessWidget {
         ),
       );
     }
-
-
-    // final List<AccountModel> accountList =
-    //     context.watch<LoginStore>().accountList;
-
-    // final AccountModel accountitem = context.read<LoginStore>().accountList[0];
-
-    // final String userName = context.read<LoginStore>().accountList[0].nickname!;
-
-    // final String userGender = context.read<LoginStore>().accountList[0].gender!;
-    // String gender = userGender == 'F' ? '여자' : '남자';
-
-    // final String userBirth = context.read<LoginStore>().accountList[0].birth!;
-
-    // final String userdisease =
-    //     context.read<LoginStore>().accountList[0].disease ?? '없음';
-
-    // String displayDisease = userdisease.length > 5
-    //     ? '${userdisease.substring(0, 5)}...'
-    //     : userdisease;
-
-    // final int profileImg =
-    //     context.read<LoginStore>().accountList[0].profileImg!;
 
     final List<AccountModel> accountList =
         context.watch<LoginStore>().accountList;
@@ -100,7 +111,7 @@ class MypageScreen extends StatelessWidget {
                   height: 200,
                   child: Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+                        const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
                     child: Column(
                       children: [
                         Row(
@@ -404,10 +415,12 @@ class MypageScreen extends StatelessWidget {
                   width: double.infinity,
                   height: 50,
                   onTap: () {
-                    // 로그아웃 시 할 것들
+                    // 로그아웃 시 할 것들\
+                    logout();
                     context.read<ChallengeStore>().clearChallenges();
                     context.read<LoginStore>().clearAccounts();
                     context.read<AlarmStore>().clearAlarms();
+                    context.read<LoginStore>().loginedUser = null;
                     goToScreen(context, const MainScreen());
                   },
                   child: const Center(
@@ -422,6 +435,7 @@ class MypageScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                const SizedBox(height: 20),
               ],
             ),
           ),

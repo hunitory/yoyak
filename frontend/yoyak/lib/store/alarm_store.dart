@@ -1,20 +1,22 @@
 import 'dart:convert';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:yoyak/models/alarm/alarm_models.dart';
 
 class AlarmStore extends ChangeNotifier {
   List<AlarmModel> alarms = [];
-  final storage = new FlutterSecureStorage();
 
   Future<void> getAlarmDatas(BuildContext context) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String? accessToken = await storage.read(key: 'accessToken');
+    final prefs = await SharedPreferences.getInstance();
+
     String url = '$yoyakURL/noti/time'; // 요청할 URL
 
     try {
+      // 액세스 토큰 가져오기
+      String? accessToken = prefs.getString('accessToken');
       final response = await http.get(
         Uri.parse(url),
         headers: {

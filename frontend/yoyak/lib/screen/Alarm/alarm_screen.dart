@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:yoyak/components/bottom_modal.dart';
@@ -480,8 +481,8 @@ class CheckEatPillButton extends StatefulWidget {
 class CheckEatPillButtonState extends State<CheckEatPillButton> {
   // 약 먹었어요
   Future<void> takenPill(int notiTimeSeq, DateTime takenTime) async {
-    String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = context.read<LoginStore>().accessToken; // 액세스 토큰
+    final prefs = await SharedPreferences.getInstance();
+    String yoyakURL = API.yoyakUrl; // 서버 URL// 액세스 토큰
     String url = '$yoyakURL/noti/time/taken';
 
     String formattedTakenTime = takenTime.toIso8601String();
@@ -492,6 +493,7 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
     };
 
     try {
+      String? accessToken = prefs.getString('accessToken');
       var response = await http.put(
         Uri.parse(url),
         headers: {
@@ -519,10 +521,11 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
   // 건너 뛰었어요
   Future<void> skipPill(int notiTimeSeq) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = context.read<LoginStore>().accessToken; // 액세스 토큰
+    final prefs = await SharedPreferences.getInstance(); // 액세스 토큰
     String url = '$yoyakURL/noti/time/not/$notiTimeSeq';
 
     try {
+      String? accessToken = prefs.getString('accessToken');
       var response = await http.put(
         Uri.parse(url),
         headers: {
@@ -548,10 +551,11 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
   // 건너 뛰기 취소
   Future<void> cancelSkipPill(int notiTimeSeq) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = context.read<LoginStore>().accessToken; // 액세스 토큰
+    final prefs = await SharedPreferences.getInstance(); // 액세스 토큰
     String url = '$yoyakURL/noti/time/yet/$notiTimeSeq';
 
     try {
+      String? accessToken = prefs.getString('accessToken');
       var response = await http.put(
         Uri.parse(url),
         headers: {
@@ -578,7 +582,7 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
   // 복용 시간 수정
   Future<void> updateTimePill(int notiTimeSeq, DateTime takenTime) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = context.read<LoginStore>().accessToken; // 액세스 토큰
+    final prefs = await SharedPreferences.getInstance(); // 액세스 토큰
     String url = '$yoyakURL/noti/time/taken';
 
     String formattedTakenTime = takenTime.toIso8601String();
@@ -589,6 +593,7 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
     };
 
     try {
+      String? accessToken = prefs.getString('accessToken');
       var response = await http.put(
         Uri.parse(url),
         headers: {
@@ -615,10 +620,11 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
   // 먹지 않았어요
   Future<void> notTakenPill(int notiTimeSeq) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = context.read<LoginStore>().accessToken; // 액세스 토큰
+    final prefs = await SharedPreferences.getInstance(); // 액세스 토큰
     String url = '$yoyakURL/noti/time/yet/$notiTimeSeq';
 
     try {
+      String? accessToken = prefs.getString('accessToken');
       var response = await http.put(
         Uri.parse(url),
         headers: {

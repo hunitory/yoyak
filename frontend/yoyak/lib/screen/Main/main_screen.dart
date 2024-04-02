@@ -1,7 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:yoyak/auto_login/singleton_secure_storage.dart';
 import 'package:yoyak/components/bottom_bar.dart';
 import 'package:yoyak/main.dart';
 import 'package:yoyak/screen/Alarm/alarm_screen.dart';
@@ -10,7 +9,9 @@ import 'package:yoyak/store/alarm_store.dart';
 import 'package:yoyak/store/login_store.dart';
 import '../../store/challenge_store.dart';
 import '../Home/home_screen.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+
+
 // MainScreen
 // - AlarmScreen, HomeScreen, ChallengeScreen을 담고 있는 Screen
 // BottomBar를 여기에 둬서 사용자가 탭할 때 index를 변화시켜 이동시킬 것임
@@ -23,7 +24,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final storage = SingletonSecureStorage().storage; // FlutterSecureStorage storage 저장
 
   var curTabIdx = 1;
   final mainTabs = [
@@ -61,13 +61,15 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
+
+  
+
   @override
   void initState() {
     super.initState();
     requestPermission();
     setupFirebaseMessaging();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -84,3 +86,5 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
+
+
