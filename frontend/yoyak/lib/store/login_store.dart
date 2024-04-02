@@ -81,7 +81,6 @@ class LoginStore extends ChangeNotifier {
           'deviceToken': context.read<LoginStore>().deviceToken,
         }));
 
-    print('너 뭔데 정체가 ${response.body}');
     var accessToken = response.body; // 액세스 토큰 저장
     if (response.statusCode == 200) {
       print("로그인 성공");
@@ -97,8 +96,7 @@ class LoginStore extends ChangeNotifier {
       );
       // return accessToken;
     } else {
-      print("회원정보가 없는경우");
-      throw Error();
+      return false;
     }
   }
 

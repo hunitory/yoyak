@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yoyak/screen/Login/kakao/kakao_login_screen.dart';
+import 'package:yoyak/models/user/account_models.dart';
 import 'package:yoyak/screen/Login/login_screen.dart';
 import 'package:yoyak/screen/Mypage/mypage_screen.dart';
+import 'package:yoyak/store/login_store.dart';
 import 'main_appbar_button.dart';
 
 class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -65,6 +68,41 @@ class _MainAppBarState extends State<MainAppBar> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     loadUserData();
+    LoginStore loginStore = context.read<LoginStore>();
+    Widget profileWidget; // 사용자 프로필 위젯
+
+    if (loginStore.accountList.isNotEmpty) {
+      // 로그인 상태일 때
+      AccountModel account = loginStore.accountList[0];
+      profileWidget = GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const MypageScreen()),
+          );
+        },
+        child: SizedBox(
+          width: 35,
+          height: 35,
+          child: Image.asset(
+              "assets/images/profiles/profile${account.profileImg}.png"),
+        ),
+      );
+    } else {
+      profileWidget = GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+          );
+        },
+        child: SizedBox(
+          width: 35,
+          height: 35,
+          child: Image.asset("assets/images/person1.png"),
+        ),
+      );
+    }
     return AppBar(
       centerTitle: true,
       automaticallyImplyLeading: false,
@@ -90,19 +128,7 @@ class _MainAppBarState extends State<MainAppBar> with WidgetsBindingObserver {
                   );
                 })
           else
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const MypageScreen()));
-              },
-              child: SizedBox(
-                width: 35,
-                height: 35,
-                child: Image.asset("assets/images/person2.png"),
-              ),
-            ),
+            profileWidget
         ],
       ),
     );

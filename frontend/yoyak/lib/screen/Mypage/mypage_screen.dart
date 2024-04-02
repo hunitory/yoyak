@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyak/components/accountlist_view.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/hooks/goto_screen.dart';
@@ -361,29 +360,29 @@ class _MypageScreenState extends State<MypageScreen>
                   ),
                 ),
                 const SizedBox(height: 20),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Palette.MAIN_WHITE,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Palette.SUB_BLACK.withOpacity(0.15),
-                        spreadRadius: 2,
-                        blurRadius: 10,
-                        offset: const Offset(0, 2),
+                GestureDetector(
+                  onTap: () {
+                    // 개인정보 처리방침 페이지로 이동
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PrivacyPolicyScreen(),
                       ),
-                    ],
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      // 개인정보 처리방침 페이지로 이동
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const PrivacyPolicyScreen(),
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Palette.MAIN_WHITE,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Palette.SUB_BLACK.withOpacity(0.15),
+                          spreadRadius: 2,
+                          blurRadius: 10,
+                          offset: const Offset(0, 2),
                         ),
-                      );
-                    },
+                      ],
+                    ),
                     child: const Padding(
                       padding: EdgeInsets.all(20.0),
                       child: Column(
