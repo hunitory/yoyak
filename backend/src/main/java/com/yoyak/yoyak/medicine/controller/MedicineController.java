@@ -50,19 +50,29 @@ public class MedicineController {
                 .build());
     }
 
-    @GetMapping("/full-text")
+
+    @GetMapping("full-text")
     public ResponseEntity<BasicResponseDto> searchMedicineByFullText(
         @RequestParam(name = "keyword") String keyword,
         @RequestParam(name = "page", defaultValue = "1") int page
     ) {
 
-//        log.info("[{}.{}] parmeters = {}", this.getClass().getName(),
-//            Thread.currentThread().getStackTrace()[1].getMethodName(),
-//            "keyword: " + keyword + " page: " + page);
-
         BasicResponseDto responseDto =
             medicineService.findMedicineByFullText(
-                SearchParameters.createMedicineSearchParameters(page, keyword));
+                SearchParameters.createMedicineFullTextSearchParameters(page, keyword));
+
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(responseDto);
+    }
+
+    public ResponseEntity<BasicResponseDto> searchMedicineByRegex(
+        @RequestParam(name = "keyword") String keyword,
+        @RequestParam(name = "page", defaultValue = "1") int page
+    ) {
+
+        BasicResponseDto responseDto =
+            medicineService.findMedicineByRegex(
+                SearchParameters.createRegexSearchParameters(page, keyword));
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(responseDto);
@@ -72,10 +82,6 @@ public class MedicineController {
     @Deprecated
     public ResponseEntity<BasicResponseDto> searchMedicineByKeyword(
         @RequestParam(name = "keyword") String keyword) {
-
-//        log.info("[{}.{}] parmeters = {}", this.getClass().getName(),
-//            Thread.currentThread().getStackTrace()[1].getMethodName(),
-//            "keyword: " + keyword);
 
         List<MedicineDto> medicineDtoList = medicineService.findMedicineByKeyword(keyword);
         return ResponseEntity.status(HttpStatus.OK)

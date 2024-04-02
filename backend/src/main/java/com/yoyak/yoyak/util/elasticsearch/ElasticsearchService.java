@@ -19,7 +19,7 @@ public class ElasticsearchService {
         this.restClient = restClient;
     }
 
-    public <T> SearchResponse regexFullTextSearch(SearchParameters<T> parameters)
+    public <T> SearchResponse searchByRegex(SearchParameters<T> parameters)
         throws IOException {
         ElasticsearchClient esClient = new ElasticsearchClient(
             new RestClientTransport(restClient, new JacksonJsonpMapper()));
@@ -41,6 +41,30 @@ public class ElasticsearchService {
                     );
                     return b.minimumShouldMatch("1");
                 })
+            )
+        );
+
+        return esClient.search(searchRequest, parameters.getTClass());
+    }
+
+    public <T> SearchResponse findByFullText(SearchParameters<T> parameters) throws IOException {
+        ElasticsearchClient esClient = new ElasticsearchClient(
+            new RestClientTransport(restClient, new JacksonJsonpMapper()));
+
+        SearchRequest searchRequest = SearchRequest.of(s -> s
+            .index(parameters.getIndex())
+            .from(parameters.getStart())
+            .size(parameters.getSize())
+            .source(SourceConfig.of(src -> src
+                .filter(f -> f
+                    .includes(parameters.getSourceIncludes())
+                )
+            ))
+            .query(q -> q
+                .multiMatch(m -> m
+                    .query(parameters.getKeyword())
+                    .fields(parameters.getFieldsToSearch())
+                )
             )
         );
 
