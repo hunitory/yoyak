@@ -127,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         alarmAccounts.isNotEmpty ? alarmAccounts.first : null;
 
     // 약 봉투 read 요청 - 로그인 됐을 때
-    if (alarmAccounts.isNotEmpty) {
+    if (accessToken.isNotEmpty) {
       context.read<PillBagStore>().getPillBagDatas(context, medicineSeq: 0);
     }
     goTo(destination) {

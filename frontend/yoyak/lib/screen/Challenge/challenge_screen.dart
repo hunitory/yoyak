@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 import 'package:yoyak/auto_login/singleton_secure_storage.dart';
 import 'package:yoyak/components/my_challenge_card.dart';
-import 'package:yoyak/components/challenge_appbar.dart';
 import 'package:yoyak/screen/Challenge/regist_challenge_screen.dart';
 import 'package:yoyak/store/challenge_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
@@ -29,8 +28,6 @@ class ChallengeScreen extends StatefulWidget {
 class _ChallengeScreenState extends State<ChallengeScreen> with WidgetsBindingObserver {
   String accessToken = '';
 
-
-
   Future<void> getAccessToken() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -45,47 +42,18 @@ class _ChallengeScreenState extends State<ChallengeScreen> with WidgetsBindingOb
     WidgetsBinding.instance.addObserver(this);
   }
 
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch (state) {
-      case AppLifecycleState.resumed:
-        print('resumed123');
-        break;
-      case AppLifecycleState.inactive:
-        print('inactive123');
-        break;
-      case AppLifecycleState.detached:
-        print('detached123');
-        // DO SOMETHING!
-        break;
-      case AppLifecycleState.paused:
-        print('paused123');
-        break;
-      default:
-        break;
-    }
-  }
-
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     context.read<ChallengeStore>().getMyChallenge(accessToken); // 내 챌린지 호출
     context.read<ChallengeStore>().getMyChallengeList(accessToken); // 내 챌린지 덱 호출
     context.read<ChallengeStore>().getOthersChallenge(accessToken); // 챌린지 둘러보기 호출
-
-    // storage에서 사용자 이름 불러오기 - 수정하기
-    Future<String?> getUserName() async {
-      var storage = SingletonSecureStorage().storage;
-      var userName = await storage.read(key: 'userName');
-      return userName;
-    }
+    var loginedUser = context.watch<LoginStore>().loginedUser;
 
     return Scaffold(
       backgroundColor: Palette.BG_BLUE,
@@ -113,24 +81,11 @@ class _ChallengeScreenState extends State<ChallengeScreen> with WidgetsBindingOb
                   const SizedBox(
                     height: 5,
                   ),
-                  FutureBuilder<String?>(
-                    future: getUserName(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        // 데이터를 기다리는 중일 때의 UI
-                        return const CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        // 에러가 발생한 경우의 UI
-                        return Text('Error: ${snapshot.error}');
-                      } else {
-                        // 데이터를 성공적으로 받아온 경우의 UI
-                        var userName = snapshot.data;
-                        return MyChallengeCard(
-                          title: "$userName님이 진행 중인 챌린지",
-                          titleImagePath: "assets/images/medal.png",
-                        );
-                      }
-                    },
+                  // FutureBuilder 삭제하고 그 안의 내용을 그대로 MyChallengeCard로 옮김
+                  if (accessToken.isNotEmpty)
+                  MyChallengeCard(
+                    title: "${loginedUser?.nickname}님이 진행 중인 챌린지",
+                    titleImagePath: "assets/images/medal.png",
                   ),
                   const SizedBox(
                     height: 15,
@@ -162,7 +117,6 @@ class _ChallengeTitleSection extends StatelessWidget {
   Widget build(BuildContext context) {
     var myChallengeList = context.watch<ChallengeStore>().myChallengeList;
     var myChallengeCard = context.watch<ChallengeStore>().myChallengeCard;
-
     var storage = context.read<LoginStore>().storage;
     var getImageAndNavigate = context.read<CameraStore>().getImageAndNavigate;
 
@@ -276,9 +230,10 @@ class _ChallengeTitleSection extends StatelessWidget {
                         child: BaseButton(
                           height: 40,
                           fontSize: 15,
-                          onPressed: () {
-                            // print("tqtqtqtq: ${storage.read(key: 'accessToken')}");
-                            storage.read(key: 'accessToken') != null ? goToScreen(context, const RegistChallengeScreen()) // 로그인 되어있다면
+                          onPressed: () async {
+                            final prefs = await SharedPreferences.getInstance();
+
+                            prefs.getString('accessToken')!.isNotEmpty ? goToScreen(context, const RegistChallengeScreen()) // 로그인 되어있다면
                                 : showDialog(context: context, builder: (context) { // 로그인 안되어있을 경우
                               return const DialogUI(destination: LoginScreen(destination: RegistChallengeScreen(),),);
                             });
