@@ -58,6 +58,7 @@ class _ChallengeScreenState extends State<ChallengeScreen>
     context
         .read<ChallengeStore>()
         .getOthersChallenge(accessToken); // 챌린지 둘러보기 호출
+    context.read<ChallengeStore>().getAllChallenge();
     var loginedUser = context.watch<LoginStore>().loginedUser;
 
     return Scaffold(
@@ -92,9 +93,11 @@ class _ChallengeScreenState extends State<ChallengeScreen>
                       title: "${loginedUser?.nickname}님이 진행 중인 챌린지",
                       titleImagePath: "assets/images/medal.png",
                     ),
+
                   const SizedBox(
                     height: 15,
                   ),
+
                   const OtherChallengeCard(
                     title: "챌린지 둘러보기",
                     titleImagePath: "assets/images/medal.png",
