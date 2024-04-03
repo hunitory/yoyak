@@ -15,10 +15,12 @@ import 'package:yoyak/apis/url.dart';
 // 약 봉투 생성 다이얼로그
 class PillBagDialog extends StatefulWidget {
   final int medicineSeq;
+  final Function(String)? onError; // 스낵바
 
   const PillBagDialog({
     super.key,
     required this.medicineSeq,
+    this.onError,
   });
 
   @override
@@ -41,7 +43,8 @@ class _PillBagDialogState extends State<PillBagDialog> {
   Future<void> createPillBag(int accountSeq, String name) async {
     final prefs = await SharedPreferences.getInstance();
     String yoyakURL = API.yoyakUrl; // 호스트 URL
-    var accessToken = prefs.getString('accessToken') ?? ''; // accessToken state 업데이트
+    var accessToken =
+        prefs.getString('accessToken') ?? ''; // accessToken state 업데이트
     String url = '$yoyakURL/medicineEnvelop'; // path
     // 색상 리스트
     List<String> colors = [
@@ -205,6 +208,12 @@ class _PillBagDialogState extends State<PillBagDialog> {
                     );
                     return;
                   }
+
+                  // 약 봉투 이름 null인지 확인 -> 에러 메시지 전달
+                  // if (_nameController.text.isEmpty) {
+                  //   widget.onError?.call('약 봉투 이름을 입력해주세요.');
+                  //   return;
+                  // }
 
                   createPillBag(
                     _selectedAccountSeq ?? accountList[0].seq!,
