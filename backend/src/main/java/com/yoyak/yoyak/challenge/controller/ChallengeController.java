@@ -1,7 +1,6 @@
 package com.yoyak.yoyak.challenge.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleCreateDto;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleResponseDto;
@@ -98,8 +97,13 @@ public class ChallengeController {
     }
 
     @GetMapping("/article")
-    public ResponseEntity<List<ChallengeArticleResponseDto>> getChallengeArticles() {
-        return ResponseEntity.ok(challengeArticleService.getArticles());
+    public ResponseEntity<List<ChallengeArticleResponseDto>> getChallengeArticlesExceptUserSeq() {
+        return ResponseEntity.ok(challengeArticleService.getArticlesExceptUserSeq());
+    }
+
+    @GetMapping("/article/all")
+    public ResponseEntity<List<ChallengeArticleResponseDto>> getAllArticles(){
+        return ResponseEntity.ok(challengeArticleService.getAllArticles());
     }
 
     @GetMapping("/article/my")

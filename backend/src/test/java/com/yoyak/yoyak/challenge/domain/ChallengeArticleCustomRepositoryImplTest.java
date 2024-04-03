@@ -1,10 +1,14 @@
 package com.yoyak.yoyak.challenge.domain;
 
+import com.yoyak.yoyak.challenge.dto.ChallengeArticleResponseDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class ChallengeArticleCustomRepositoryImplTest {
@@ -22,10 +26,17 @@ class ChallengeArticleCustomRepositoryImplTest {
     }
 
     @Test
-    public void findAllArticlesTest(){
-        challengeArticleRepository.findAllArticles(1L).forEach(challengeArticleResponseDto -> {
-            System.out.println("challengeArticleResponseDto.getArticleSeq() = " + challengeArticleResponseDto.getArticleSeq());
+    public void findExceptUserSeq(){
+        Long userSeq = 7L;
+        List<ChallengeArticleResponseDto> list =  challengeArticleRepository.findAllArticlesExceptUserSeq(userSeq);
+        assertThat(list.size()).isEqualTo(28);
 
+    }
+
+    @Test
+    public void findAllArticlesTest(){
+        challengeArticleRepository.findAllArticlesExceptUserSeq(1L).forEach(challengeArticleResponseDto -> {
+            System.out.println("challengeArticleResponseDto.getArticleSeq() = " + challengeArticleResponseDto.getArticleSeq());
         });
     }
 
@@ -38,7 +49,7 @@ class ChallengeArticleCustomRepositoryImplTest {
             System.out.println("challengeArticleResponseDto.isCheered() = " + challengeArticleResponseDto.isCheered());
         });
 
-        challengeArticleRepository.findAllArticles(1L).forEach(challengeArticleResponseDto -> {
+        challengeArticleRepository.findAllArticlesExceptUserSeq(1L).forEach(challengeArticleResponseDto -> {
             System.out.println("challengeArticleResponseDto.getArticleSeq() = " + challengeArticleResponseDto.getArticleSeq());
             System.out.println("challengeArticleResponseDto.isCheered() = " + challengeArticleResponseDto.isCheered());
         });
