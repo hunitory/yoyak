@@ -107,6 +107,7 @@ class ChallengeStore extends ChangeNotifier {
   Future<void> uploadDailyChallenge(context, image) async {
     final prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
+    final BuildContext dialogContext = context;
 
     var dto = MultipartFile.fromString(
       json.encode({
@@ -153,7 +154,7 @@ class ChallengeStore extends ChangeNotifier {
         if (finishedCnt == 1) {
           print("1이다");
           showDialog(
-            context: context,
+            context: dialogContext, // 이전에 저장한 context를 사용
             builder: (BuildContext context) {
               return const CongratulationDialogUI(
                 destination: MainScreen(),
