@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:yoyak/components/congratulation_dialog.dart';
+import 'package:yoyak/screen/Main/main_screen.dart';
 
 class ChallengeStore extends ChangeNotifier {
   var yoyakUrl = API.yoyakUrl;
@@ -92,6 +94,7 @@ class ChallengeStore extends ChangeNotifier {
       print(response.statusCode);
       if (response.statusCode == 200) {
         print("챌린지 등록 성공");
+        getMyChallengeList();
         Navigator.of(context).pop();
       } else {
         print("챌린지 등록 실패");
@@ -140,8 +143,23 @@ class ChallengeStore extends ChangeNotifier {
         print("일일 챌린지 등록 성공");
         print("일일 챌린지 등록 후 내 챌린지 리스트:  $myChallengeList");
         Navigator.of(context).pop();
-        getMyChallengeList();
-        getMyChallenge(accessToken);
+        await getMyChallengeList();
+        await getMyChallenge(accessToken);
+
+        for (int i = 0; i < myChallengeList.length; i++) {
+          if (myChallengeList[i]['createdDate'] == myChallengeCard['endDate']) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return const CongratulationDialogUI(
+                  destination: MainScreen(),
+                );
+              },
+            );
+          }
+        }
+
+
         notifyListeners();
       } else {
         print("일일 챌린지 등록 실패");
