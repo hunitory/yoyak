@@ -317,7 +317,7 @@ class _PillBagDetailScreenState extends State<PillBagDetailScreen> {
                           widget.envelopSeq,
                         );
                   }
-                  _showSnackbar("약 봉투가 삭제되었습니다.", 'red');
+                  _showSnackbar("약이 삭제되었습니다.", 'red');
                   // 삭제 모드 종료
                   _toggleDeleteMode();
                 },
