@@ -226,7 +226,7 @@ class _PillBagDetailScreenState extends State<PillBagDetailScreen> {
               onPressed: _toggleDeleteMode, // 삭제 모드 토글 버튼
             ),
         ],
-        backgroundColor: Palette.BG_BLUE,
+        backgroundColor: Palette.MAIN_WHITE,
         centerTitle: true,
         toolbarHeight: 55,
       ),

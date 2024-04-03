@@ -238,7 +238,7 @@ class _PillBagScreenState extends State<PillBagScreen> {
       backgroundColor: Palette.BG_BLUE,
       appBar: AppBar(
         title: const Text(
-          '내 약 봉투',
+          '약 봉투',
           style: TextStyle(
             color: Palette.MAIN_BLACK,
             fontFamily: 'Pretendard',
@@ -252,7 +252,7 @@ class _PillBagScreenState extends State<PillBagScreen> {
             onPressed: _toggleDeleteMode, // 삭제 모드 토글 버튼
           ),
         ],
-        backgroundColor: Palette.BG_BLUE,
+        backgroundColor: Palette.MAIN_WHITE,
         centerTitle: true,
         toolbarHeight: 55,
       ),

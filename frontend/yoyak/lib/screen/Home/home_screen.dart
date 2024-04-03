@@ -318,7 +318,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           },
                           child: const IconInRectangle(
                             subTitle: "내 약을 한눈에",
-                            title: "MY 약 봉투",
+                            title: "약 봉투",
                             imagePath: "assets/images/envelop.png",
                           ),
                         ),

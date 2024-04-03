@@ -74,7 +74,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
       backgroundColor: Palette.BG_BLUE,
       appBar: AppBar(
         // AppBar 배경색
-        backgroundColor: Palette.BG_BLUE,
+        backgroundColor: Palette.MAIN_WHITE,
         // AppBar의 제목
         title: const Text(
           '알림 관리',

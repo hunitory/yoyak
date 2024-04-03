@@ -54,7 +54,7 @@ class _PhotoResultScreenState extends State<PhotoResultScreen> {
             fontSize: 16,
           ),
         ),
-        backgroundColor: Palette.BG_BLUE,
+        backgroundColor: Palette.MAIN_WHITE,
         centerTitle: true,
         toolbarHeight: 55,
       ),
