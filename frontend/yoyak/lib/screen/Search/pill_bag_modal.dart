@@ -128,15 +128,15 @@ class _PillBagModalState extends State<PillBagModal> {
                             // 이제 innerContext는 모달 내부의 context를 참조합니다.
                             return PillBagDialog(
                               medicineSeq: widget.medicineSeq,
-                              onError: (errorMessage) {
-                                // ScaffoldMessenger.of(innerContext).showSnackBar(
-                                //   // innerContext를 사용
-                                //   SnackBar(
-                                //     content: Text(errorMessage),
-                                //     backgroundColor: Colors.red,
-                                //   ),
-                                // );
-                              },
+                              // onError: (errorMessage) {
+                              // ScaffoldMessenger.of(innerContext).showSnackBar(
+                              //   // innerContext를 사용
+                              //   SnackBar(
+                              //     content: Text(errorMessage),
+                              //     backgroundColor: Colors.red,
+                              //   ),
+                              // );
+                              // },
                             );
                           },
                         );
