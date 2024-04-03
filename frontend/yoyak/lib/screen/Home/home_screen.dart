@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,7 +26,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   String accessToken = '';
-  late final FlickManager flickManager;
   AccountModel? account;
 
   @override
@@ -37,19 +34,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     loadUserData();
     loadAccountData();
     WidgetsBinding.instance.addObserver(this);
-    flickManager = FlickManager(
-      autoPlay: true,
-      videoPlayerController: VideoPlayerController.asset(
-        'assets/videos/hangang.mp4',
-      )
-        ..setLooping(true)
-        ..setVolume(0), // 비디오 반복 재생 설정
-      onVideoEnd: () {
-        // 비디오가 끝나면 다시 처음부터 재생
-        flickManager.flickControlManager?.seekTo(Duration.zero);
-        flickManager.flickControlManager?.play();
-      },
-    );
   }
 
   @override
@@ -77,7 +61,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    flickManager.dispose(); // FlickManager 리소스 해제
     super.dispose();
   }
 
@@ -148,17 +131,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   height: 250,
                   color: Palette.MAIN_BLUE,
                 ),
-                // Positioned.fill(
-                //   child: FlickVideoPlayer(
-                //     flickManager: flickManager,
-                //     flickVideoWithControls: FlickVideoWithControls(
-                //       controls: Container(),
-                //     ),
-                //     flickVideoWithControlsFullscreen: FlickVideoWithControls(
-                //       controls: Container(),
-                //     ),
-                //   ),
-                // ),
                 MainAppBar(
                   color: Colors.black.withOpacity(0),
                 ),

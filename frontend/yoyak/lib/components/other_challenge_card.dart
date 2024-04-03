@@ -34,6 +34,13 @@ class _OtherChallengeCardState extends State<OtherChallengeCard> with WidgetsBin
   }
 
   @override
+  void initState() {
+    super.initState();
+    getAccessToken();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
@@ -100,9 +107,12 @@ class _OtherChallengeCardState extends State<OtherChallengeCard> with WidgetsBin
                 itemCount: accessToken != '' ? othersChallengeList.length : allChallengeList.length, // 개수 고치기 배열의 길이로
                 itemBuilder: (context, i) {
                   if (accessToken != '') {
+                    print("토큰있");
                     return LookAroundChallengeCard(
                         challenge: othersChallengeList[i]);
                   } else {
+                    print("토큰없");
+                    print(accessToken);
                     return AllChallengeCard(
                         challenge: allChallengeList[i]);
                   }

@@ -108,9 +108,8 @@ class ChallengeStore extends ChangeNotifier {
   }
 
   Future<void> uploadDailyChallenge(context, image) async {
-
     final prefs = await SharedPreferences.getInstance();
-      String? accessToken = prefs.getString('accessToken');
+    String? accessToken = prefs.getString('accessToken');
 
     var dto = MultipartFile.fromString(
       json.encode({
@@ -146,19 +145,26 @@ class ChallengeStore extends ChangeNotifier {
         Navigator.of(context).pop();
         await getMyChallengeList();
         await getMyChallenge(accessToken);
-
+        int finishedCnt = 0;
         for (int i = 0; i < myChallengeList.length; i++) {
           if (myChallengeList[i]['createdDate'] == myChallengeCard['endDate']) {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return const CongratulationDialogUI(
-                  destination: MainScreen(),
-                );
-              },
-            );
+            finishedCnt++;
+            print("finishedCnt : $finishedCnt");
           }
         }
+
+        if (finishedCnt == 1) {
+          print("1이다");
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return const CongratulationDialogUI(
+                destination: MainScreen(),
+              );
+            },
+          );
+        }
+
         notifyListeners();
       } else {
         print("일일 챌린지 등록 실패");
@@ -199,7 +205,7 @@ class ChallengeStore extends ChangeNotifier {
   Future getAllChallenge() async {
     try {
       var response =
-        await http.get(Uri.parse('$yoyakUrl/challenge/article/all'));
+          await http.get(Uri.parse('$yoyakUrl/challenge/article/all'));
 
       print("All 챌린지 둘러보기 리스트: ${response.body}");
 
