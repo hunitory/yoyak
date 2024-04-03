@@ -63,6 +63,7 @@ public class ChallengeArticleService {
 
     public List<ChallengeArticleResponseDto> getArticles() {
         Long userSeq = SecurityUtil.getUserSeq() == null ? -1L : SecurityUtil.getUserSeq();
+        log.info("userSeq: {}", userSeq);
         return challengeArticleRepository.findAllArticles(userSeq);
     }
 
