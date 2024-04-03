@@ -13,5 +13,3 @@ String formatTime(DateTime time) {
   String minute = time.minute.toString().padLeft(2, '0');
   return '$period $hour:$minute';
 }
-
-

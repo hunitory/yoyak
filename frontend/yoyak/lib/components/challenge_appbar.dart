@@ -30,8 +30,6 @@ class ChallengeaAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             // 챌린지 등록을 안했다면
-
-
           ],
         ));
   }

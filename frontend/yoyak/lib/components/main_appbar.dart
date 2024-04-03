@@ -11,6 +11,7 @@ class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
   const MainAppBar({super.key, this.color});
 
   final Color? color;
+
   @override
   State<MainAppBar> createState() => _MainAppBarState();
 
@@ -20,6 +21,7 @@ class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _MainAppBarState extends State<MainAppBar> with WidgetsBindingObserver {
   String accessToken = '';
+
   Size get preferredSize => const Size.fromHeight(10 + kToolbarHeight);
 
   @override

@@ -193,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               "요 약이 궁금할 땐, ",
                               style: TextStyle(
                                 fontSize: 22,
-                                color: Colors.white,
+                                color: Palette.MAIN_WHITE,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'Pretendard',
                               ),

@@ -68,7 +68,7 @@ class _ChallengeScreenState extends State<ChallengeScreen>
           children: [
             Container(
               height: 10,
-              color: Colors.white,
+              color: Palette.MAIN_WHITE,
             ),
             Container(
               width: ScreenSize.getWidth(context),
@@ -239,7 +239,6 @@ class _ChallengeTitleSection extends StatelessWidget {
       String formattedStartDate = DateFormat('M월 d일').format(startDate);
       String formattedEndDate = DateFormat('M월 d일').format(endDate);
 
-
       // 챌린지를 시작했다면
       return Column(
         children: [
@@ -303,7 +302,7 @@ class _ChallengeTitleSection extends StatelessWidget {
                               return Container(
                                 height: 170,
                                 decoration: const BoxDecoration(
-                                  color: Colors.white,
+                                  color: Palette.MAIN_WHITE,
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(20),
                                     topRight: Radius.circular(20),
@@ -387,7 +386,7 @@ class _ChallengeTitleSection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "D-${totalDay-1}",
+                  "D-${totalDay - 1}",
                   style: const TextStyle(
                     fontSize: 22,
                     color: Palette.MAIN_BLUE,
@@ -407,8 +406,7 @@ class _ChallengeTitleSection extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text:
-                        "${(completedRatio * 100).toInt()}",
+                    text: "${(completedRatio * 100).toInt()}",
                     style: const TextStyle(
                       fontSize: 30,
                       color: Palette.MAIN_BLACK,

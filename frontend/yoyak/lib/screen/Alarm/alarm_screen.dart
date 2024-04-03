@@ -436,11 +436,11 @@ class AlarmCreateButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.add, color: Colors.white, size: 23),
+              Icon(Icons.add, color: Palette.MAIN_WHITE, size: 23),
               Text(
                 '알림',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Palette.MAIN_WHITE,
                   fontSize: 17,
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w600,
@@ -1074,7 +1074,7 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
             return RoundedRectangle(
               height: 380,
               width: ScreenSize.getWidth(context),
-              color: Colors.white,
+              color: Palette.MAIN_WHITE,
               child: Column(
                 children: [
                   Padding(

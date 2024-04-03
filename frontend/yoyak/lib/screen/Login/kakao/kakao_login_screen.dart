@@ -65,7 +65,9 @@ class _KakaoLoginScreenState extends State<KakaoLoginScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const LoginScreen(destination: MainScreen(),)));
+                                builder: (context) => const LoginScreen(
+                                      destination: MainScreen(),
+                                    )));
                       },
                     )),
                 const SizedBox(
@@ -84,7 +86,7 @@ class _KakaoLoginScreenState extends State<KakaoLoginScreen> {
                           SizedBox(
                             width: 5,
                           ),
-                          Icon(Icons.mail_sharp, color: Colors.white),
+                          Icon(Icons.mail_sharp, color: Palette.MAIN_WHITE),
                           SizedBox(
                             width: 70,
                           ),
@@ -92,7 +94,7 @@ class _KakaoLoginScreenState extends State<KakaoLoginScreen> {
                             "카카오 로그인",
                             style: TextStyle(
                                 fontFamily: "Pretendard",
-                                color: Colors.white,
+                                color: Palette.MAIN_WHITE,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 15),
                           ),

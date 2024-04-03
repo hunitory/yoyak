@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../screen/Login/login_screen.dart';
 import '../screen/Main/main_screen.dart';
+import '../styles/colors/palette.dart';
 import 'dialog.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar(
       {super.key, this.curTabIdx, this.setCurTabIdx, this.mainTabs});
+
   final curTabIdx;
   final setCurTabIdx;
   final mainTabs;
@@ -17,10 +19,11 @@ class BottomBar extends StatefulWidget {
 
 class _BottomBarState extends State<BottomBar> {
   bool isLogined = false;
+
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Palette.MAIN_WHITE,
         selectedLabelStyle: const TextStyle(color: Colors.blueAccent),
         unselectedLabelStyle: const TextStyle(color: Color(0xFFD3D3D3)),
         showUnselectedLabels: false,
@@ -54,19 +57,19 @@ class _BottomBarState extends State<BottomBar> {
         items: const [
           BottomNavigationBarItem(
             label: '알람',
-            backgroundColor: Colors.white,
+            backgroundColor: Palette.MAIN_WHITE,
             icon: Icon(Icons.alarm, color: Color(0xFFD3D3D3)),
             activeIcon: Icon(Icons.alarm, color: Colors.blueAccent),
           ),
           BottomNavigationBarItem(
             label: '홈',
-            backgroundColor: Colors.white,
+            backgroundColor: Palette.MAIN_WHITE,
             icon: Icon(Icons.home, color: Color(0xFFD3D3D3)),
             activeIcon: Icon(Icons.home_filled, color: Colors.blueAccent),
           ),
           BottomNavigationBarItem(
             label: '챌린지',
-            backgroundColor: Colors.white,
+            backgroundColor: Palette.MAIN_WHITE,
             icon: Icon(Icons.outlined_flag, color: Color(0xFFD3D3D3)),
             activeIcon: Icon(Icons.flag, color: Colors.blueAccent),
           ),

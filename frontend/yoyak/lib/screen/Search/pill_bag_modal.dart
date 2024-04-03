@@ -122,18 +122,6 @@ class _PillBagModalState extends State<PillBagModal> {
                     builder: (BuildContext context) {
                       // 실시간 반영을 위한 StatefulBuilder
                       return StatefulBuilder(builder: (context, setState) {
-                        // return PillBagDialog(
-                        //   medicineSeq: widget.medicineSeq,
-                        //   // 약 봉투 이름 null 스낵바
-                        //   onError: (errorMessage) {
-                        //     ScaffoldMessenger.of(context).showSnackBar(
-                        //       SnackBar(
-                        //         content: Text(errorMessage),
-                        //         backgroundColor: Colors.red,
-                        //       ),
-                        //     );
-                        //   },
-                        // );
                         return Builder(
                           // Builder를 사용하여 새로운 context를 생성
                           builder: (innerContext) {
