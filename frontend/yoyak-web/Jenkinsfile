@@ -14,9 +14,8 @@ pipeline {
             steps{
                 dir('frontend/yoyak-web'){
                     echo 'Nextjs build...'
-                    nodejs(nodeJSInstallationName: 'nodejs-20.4.0') {
-                        sh 'npm install && npm run build'
-                    }
+                    sh 'npm install'
+                    sh 'CI=false npm run build'
                 }
             }
         }
