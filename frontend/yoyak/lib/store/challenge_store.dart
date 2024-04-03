@@ -26,9 +26,6 @@ class ChallengeStore extends ChangeNotifier {
       var response = await http.get(Uri.parse('$yoyakUrl/challenge'), headers: {
         'Authorization': 'Bearer $accessToken',
       });
-      // print(yoyakUrl);
-      // print(response.body);
-      // print(accessToken);
 
       if (response.statusCode == 200) {
         print("내 챌린지 덱 조회 성공");

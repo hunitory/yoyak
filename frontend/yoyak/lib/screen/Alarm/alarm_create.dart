@@ -51,11 +51,29 @@ class _AlarmCreateState extends State<AlarmCreate> {
     'SUNDAY',
   ];
   late List<DateTime> _alarmTime = [];
+
   // 주기 관련 변수
   late bool isEveryday = true;
   late int _alarmAccountSeq; // 실제 계정번호로 대체 필요
 
   late TextEditingController _alarmNameController;
+
+  void _showSnackbar(String message, String color) {
+    final snackbar = SnackBar(
+      backgroundColor: color == 'red' ? Palette.MAIN_RED : Palette.MAIN_BLUE,
+      content: Text(
+        message,
+        style: const TextStyle(
+          color: Palette.MAIN_WHITE,
+          fontSize: 14,
+          fontFamily: 'Pretendard',
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
 
   Future<void> fetchAlarmData(int notiSeq) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
@@ -143,6 +161,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
       );
 
       if (response.statusCode == 200) {
+        _showSnackbar('알람이 생성되었습니다.', 'blue');
         print('Alarm data sent successfully');
         // 알람 데이터를 다시 불러오기
         if (mounted) {
@@ -193,6 +212,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
       );
 
       if (response.statusCode == 200) {
+        _showSnackbar('알람이 수정되었습니다.', 'blue');
         print('수정 완료');
         // 알람 데이터를 다시 불러오기
         if (mounted) {
@@ -225,6 +245,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
       );
 
       if (response.statusCode == 200) {
+        _showSnackbar('알람이 삭제되었습니다.', 'red');
         print('삭제 완료');
         if (mounted) {
           context.read<AlarmStore>().getAlarmDatas(context);
@@ -679,7 +700,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
             return RoundedRectangle(
               height: 380,
               width: ScreenSize.getWidth(context),
-              color: Colors.white,
+              color: Palette.MAIN_WHITE,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

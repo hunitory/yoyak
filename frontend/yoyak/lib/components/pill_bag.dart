@@ -74,8 +74,8 @@ class _PillBagState extends State<PillBag> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.only(bottom: 5),
+      margin: const EdgeInsets.only(bottom: 5),
+      // padding: const EdgeInsets.only(bottom: 5),
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(color: Palette.MAIN_BLACK, width: 0.1),

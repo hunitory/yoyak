@@ -11,8 +11,7 @@ class AllChallengeCard extends StatefulWidget {
   final challenge;
 
   @override
-  State<AllChallengeCard> createState() =>
-      _LookAroundChallengeCardState();
+  State<AllChallengeCard> createState() => _LookAroundChallengeCardState();
 }
 
 class _LookAroundChallengeCardState extends State<AllChallengeCard> {
@@ -26,9 +25,9 @@ class _LookAroundChallengeCardState extends State<AllChallengeCard> {
       padding: const EdgeInsets.only(top: 15, right: 10),
       child: GestureDetector(
         onTap: () {},
-            child: Container(
+        child: Container(
           decoration: BoxDecoration(
-          color: Colors.white,
+            color: Palette.MAIN_WHITE,
             borderRadius: BorderRadius.circular(15),
             border: Border.all(width: 0.4, color: Palette.SHADOW_GREY),
           ),
@@ -49,7 +48,11 @@ class _LookAroundChallengeCardState extends State<AllChallengeCard> {
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
                     // 오류 발생 시 대체할 이미지
-                    return Image.asset("assets/images/pillbox.jpg", width: 200, height: 110,);
+                    return Image.asset(
+                      "assets/images/pillbox.jpg",
+                      width: 200,
+                      height: 110,
+                    );
                   },
                 ),
               ),

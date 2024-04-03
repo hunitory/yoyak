@@ -74,6 +74,7 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                   const Text(
                     "약을 검색하고",
                     style: TextStyle(
+                      fontFamily: "Pretendard",
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
                     ),
@@ -85,6 +86,7 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                           text: '내 약통',
                           style: TextStyle(
                             color: Palette.MAIN_BLUE,
+                            fontFamily: "Pretendard",
                             fontSize: 22,
                             fontWeight: FontWeight.w600,
                           ),
@@ -93,6 +95,7 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                           text: '에 저장해보세요',
                           style: TextStyle(
                             fontSize: 22,
+                            fontFamily: "Pretendard",
                             color: Palette.MAIN_BLACK,
                             fontWeight: FontWeight.w600,
                           ),
@@ -121,6 +124,7 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                         TextSpan(
                           text: context.watch<LoginStore>().userName,
                           style: const TextStyle(
+                            fontFamily: "Pretendard",
                             color: Palette.MAIN_BLUE, // 영양이 부분의 색상을 빨간색으로 지정
                             fontSize: 20,
                             fontWeight: FontWeight.w600,
@@ -130,6 +134,7 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                           text: '님의 생일을 알려주세요.',
                           style: TextStyle(
                             fontSize: 20,
+                            fontFamily: "Pretendard",
                             color: Palette.MAIN_BLACK,
                             fontWeight: FontWeight.w600,
                           ),
@@ -153,9 +158,9 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                           height: 60,
                           decoration: BoxDecoration(
                             border: Border.all(
-                                color: Colors.grey.shade200, width: 0.1),
+                                color: Palette.SHADOW_GREY, width: 0.1),
                             borderRadius: BorderRadius.circular(20),
-                            color: Palette.MAIN_BLACK.withOpacity(0.1),
+                            color: Palette.SUB_BLACK.withOpacity(0.1),
                           ),
                           child: Center(
                             child: TextField(
@@ -197,9 +202,9 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                             height: 60,
                             decoration: BoxDecoration(
                               border: Border.all(
-                                  color: Colors.grey.shade200, width: 0.1),
+                                  color: Palette.SHADOW_GREY, width: 0.1),
                               borderRadius: BorderRadius.circular(20),
-                              color: Palette.SUB_BLACK.withOpacity(0.1),
+                              color: Palette.SHADOW_GREY.withOpacity(0.1),
                             ),
                             child: Center(
                               child: TextField(
@@ -240,9 +245,9 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                             height: 60,
                             decoration: BoxDecoration(
                               border: Border.all(
-                                  color: Colors.grey.shade200, width: 0.1),
+                                  color: Palette.SHADOW_GREY, width: 0.1),
                               borderRadius: BorderRadius.circular(20),
-                              color: Palette.SUB_BLACK.withOpacity(0.1),
+                              color: Palette.SHADOW_GREY.withOpacity(0.1),
                             ),
                             child: Center(
                               child: TextField(
@@ -260,6 +265,7 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                                   counterText: '',
                                   hintText: "일",
                                   hintStyle: TextStyle(
+                                    fontFamily: "Pretendard",
                                     fontWeight: FontWeight.w400,
                                     fontSize: 16,
                                   ),
@@ -281,6 +287,21 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                         context.read<LoginStore>().setDay(day);
 
                         context.read<LoginStore>().signUp(context); // 회원 가입
+
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          backgroundColor: Palette.MAIN_BLUE,
+                          content: Text(
+                            '회원가입이 완료되었습니다.',
+                            style: TextStyle(
+                              color: Palette.MAIN_WHITE,
+                              fontSize: 14,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          duration: Duration(seconds: 2),
+                        ));
 
                         Navigator.pushNamedAndRemoveUntil(
                             context, '/', (_) => false);
@@ -314,7 +335,8 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                         child: const Text(
                           '가입하기',
                           style: TextStyle(
-                            color: Colors.white, // 텍스트의 색상
+                            fontFamily: "Pretendard",
+                            color: Palette.MAIN_WHITE, // 텍스트의 색상
                           ),
                         ),
                       ),

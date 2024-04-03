@@ -204,6 +204,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
     // options을 포함하는 리스트
 
     return Scaffold(
+      backgroundColor: Palette.BG_BLUE,
       appBar: AppBar(
         title: const Text('약 검색',
             style: TextStyle(
@@ -212,6 +213,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
               fontWeight: FontWeight.w500,
               fontSize: 16,
             )),
+        // backgroundColor: Palette.MAIN_WHITE,
         backgroundColor: Palette.BG_BLUE,
         centerTitle: true,
         toolbarHeight: 55,
@@ -220,7 +222,10 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
         child: Container(
           width: double.infinity,
           color: Palette.BG_BLUE,
-          padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+          padding: const EdgeInsets.symmetric(
+            vertical: 40,
+            horizontal: 20,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -239,7 +244,8 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                 height: 20,
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: RoundedRectangle(
                   width: double.infinity,
                   height: MediaQuery.of(context).size.width * 0.1,
@@ -285,10 +291,10 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
               const SizedBox(
                 height: 20,
               ),
-        
+
               // filterOptions 순회하면서 FilterComponent 출력
               // type을 List<FilterContainer>로 바꿔줌
-        
+
               // selectedOptions를 이용하여 현재 선택된 옵션을 전달
               // default로 선택된 옵션을 전달
               // 화살표 있는 영역 (모양, 색상)
@@ -297,7 +303,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                     filterOption['options'].entries.map<FilterContainer>((e) {
                   return FilterContainer(imagePath: e.value, text: e.key);
                 }).toList();
-        
+
                 return FilterComponent(
                   options: options,
                   selectedOption: options.firstWhere(
@@ -319,14 +325,15 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                   },
                 );
               }),
-        
+
               // 화살표 없어야하는 영역 (제형, 분할선)
               ...filterOptionsNoDi.map<Widget>((filterOption) {
-                var options =
-                    filterOption['options'].entries.map<FilterContainerNoDi>((e) {
+                var options = filterOption['options']
+                    .entries
+                    .map<FilterContainerNoDi>((e) {
                   return FilterContainerNoDi(imagePath: e.value, text: e.key);
                 }).toList();
-        
+
                 return FilterComponentNoDi(
                   options: options,
                   selectedOption: options.firstWhere(

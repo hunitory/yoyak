@@ -15,7 +15,6 @@ import 'package:yoyak/store/pill_bag_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 import '../../components/icon_in_rectangle.dart';
 import '../../store/login_store.dart';
-import 'package:video_player/video_player.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -194,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               "요 약이 궁금할 땐, ",
                               style: TextStyle(
                                 fontSize: 22,
-                                color: Colors.white,
+                                color: Palette.MAIN_WHITE,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'Pretendard',
                               ),
@@ -276,17 +275,21 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           width: rectangleSize,
                           height: rectangleSize,
                           onTap: () {
-                            accessToken.isNotEmpty
-                                ? goTo(const PillBagScreen())
-                                : goTo(
-                                    const DialogUI(
-                                      destination: (LoginScreen()),
-                                    ),
-                                  );
+                            if (accessToken.isNotEmpty) {
+                              goTo(const PillBagScreen());
+                            } else {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const DialogUI(
+                                      destination: LoginScreen());
+                                },
+                              );
+                            }
                           },
                           child: const IconInRectangle(
                             subTitle: "내 약을 한눈에",
-                            title: "MY 약 봉투",
+                            title: "약 봉투",
                             imagePath: "assets/images/envelop.png",
                           ),
                         ),
@@ -301,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           },
                           child: const IconInRectangle(
                             subTitle: "복약 시간 알려드려요",
-                            title: "알림",
+                            title: "복용 알림",
                             imagePath: "assets/images/alarm.png",
                           ),
                         ),

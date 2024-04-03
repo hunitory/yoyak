@@ -11,6 +11,7 @@ class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
   const MainAppBar({super.key, this.color});
 
   final Color? color;
+
   @override
   State<MainAppBar> createState() => _MainAppBarState();
 
@@ -20,6 +21,7 @@ class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _MainAppBarState extends State<MainAppBar> with WidgetsBindingObserver {
   String accessToken = '';
+
   Size get preferredSize => const Size.fromHeight(10 + kToolbarHeight);
 
   @override
@@ -83,8 +85,11 @@ class _MainAppBarState extends State<MainAppBar> with WidgetsBindingObserver {
         child: SizedBox(
           width: 35,
           height: 35,
-          child: Image.asset(
-              "assets/images/profiles/profile${account.profileImg}.png"),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: Image.asset(
+                "assets/images/profiles/profile${account.profileImg}.png"),
+          ),
         ),
       );
     } else {

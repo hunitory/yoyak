@@ -76,18 +76,17 @@ class _AlarmScreenState extends State<AlarmScreen> {
         // AppBar 배경색
         backgroundColor: Palette.BG_BLUE,
         // AppBar의 제목
-        title: const Center(
-          child: Text(
-            '알림 관리',
-            style: TextStyle(
-              color: Palette.MAIN_BLACK,
-              fontSize: 16,
-              fontFamily: 'Pretendard',
-              fontWeight: FontWeight.w500,
-            ),
+        title: const Text(
+          '복용 알림',
+          style: TextStyle(
+            color: Palette.MAIN_BLACK,
+            fontSize: 16,
+            fontFamily: 'Pretendard',
+            fontWeight: FontWeight.w500,
           ),
         ),
         toolbarHeight: 55,
+        centerTitle: true,
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: paddingValue),
@@ -437,11 +436,11 @@ class AlarmCreateButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.add, color: Colors.white, size: 23),
+              Icon(Icons.add, color: Palette.MAIN_WHITE, size: 23),
               Text(
                 '알림',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Palette.MAIN_WHITE,
                   fontSize: 17,
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w600,
@@ -678,8 +677,8 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
                 : taken == 'YET_TAKEN'
                     ? Image.asset(
                         'assets/images/medicine.png',
-                        width: 45,
-                        height: 45,
+                        width: 30,
+                        height: 30,
                       )
                     : const Icon(
                         Icons.close,
@@ -1075,7 +1074,7 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
             return RoundedRectangle(
               height: 380,
               width: ScreenSize.getWidth(context),
-              color: Colors.white,
+              color: Palette.MAIN_WHITE,
               child: Column(
                 children: [
                   Padding(

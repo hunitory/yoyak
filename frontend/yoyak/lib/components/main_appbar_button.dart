@@ -26,7 +26,7 @@ class MainAppBarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // non-nullable 변수이므로, 초기화
-    Color backgroundColor = Colors.white;
+    Color backgroundColor = Palette.MAIN_WHITE;
     Color textColor = Palette.MAIN_BLUE;
 
     // colorMode 값에 따라 버튼 색 결정
@@ -35,7 +35,7 @@ class MainAppBarButton extends StatelessWidget {
       textColor = Palette.MAIN_BLUE;
     } else if (colorMode == 'blue') {
       backgroundColor = Palette.MAIN_BLUE;
-      textColor = Colors.white;
+      textColor = Palette.MAIN_WHITE;
     }
 
     // 버튼을 눌렀을 때  기본효과(inkwell)를 제거하기 위한 ButtonStyle
@@ -57,7 +57,8 @@ class MainAppBarButton extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         style: buttonStyle,
-        child: Center( // 텍스트를 가운데 정렬하기 위해 Center 위젯 추가
+        child: Center(
+          // 텍스트를 가운데 정렬하기 위해 Center 위젯 추가
           child: Text(
             text,
             textAlign: TextAlign.center, // 텍스트를 수평 가운데 정렬
@@ -71,6 +72,5 @@ class MainAppBarButton extends StatelessWidget {
         ),
       ),
     );
-
   }
 }

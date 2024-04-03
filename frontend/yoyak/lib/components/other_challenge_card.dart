@@ -22,7 +22,8 @@ class OtherChallengeCard extends StatefulWidget {
   State<OtherChallengeCard> createState() => _OtherChallengeCardState();
 }
 
-class _OtherChallengeCardState extends State<OtherChallengeCard> with WidgetsBindingObserver {
+class _OtherChallengeCardState extends State<OtherChallengeCard>
+    with WidgetsBindingObserver {
   String accessToken = '';
 
   Future<void> getAccessToken() async {
@@ -46,18 +47,18 @@ class _OtherChallengeCardState extends State<OtherChallengeCard> with WidgetsBin
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     double cardListWidth = MediaQuery.of(context).size.width * 0.9;
-    var othersChallengeList = context.watch<ChallengeStore>().othersChallengeList;
+    var othersChallengeList =
+        context.watch<ChallengeStore>().othersChallengeList;
     var allChallengeList = context.watch<ChallengeStore>().allChallengeList;
     context.watch<ChallengeStore>().isCheered;
     // 응원했으면 배경 색, 글씨 색 바꾸기
     return RoundedRectangle(
       width: ScreenSize.getWidth(context),
       height: 400,
-      color: Colors.white,
+      color: Palette.MAIN_WHITE,
       child: Padding(
         padding: const EdgeInsets.all(15),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -104,17 +105,23 @@ class _OtherChallengeCardState extends State<OtherChallengeCard> with WidgetsBin
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
-                itemCount: accessToken != '' ? othersChallengeList.length : allChallengeList.length, // 개수 고치기 배열의 길이로
+                itemCount: accessToken != ''
+                    ? othersChallengeList.length
+                    : allChallengeList.length, // 개수 고치기 배열의 길이로
                 itemBuilder: (context, i) {
                   if (accessToken != '') {
                     print("토큰있");
                     return LookAroundChallengeCard(
                         challenge: othersChallengeList[i]);
                   } else {
+<<<<<<< HEAD
                     print("토큰없");
                     print(accessToken);
                     return AllChallengeCard(
                         challenge: allChallengeList[i]);
+=======
+                    return AllChallengeCard(challenge: allChallengeList[i]);
+>>>>>>> 25cbf072d89b34ed867bae1e9bbed4125757e944
                   }
                 }),
           )

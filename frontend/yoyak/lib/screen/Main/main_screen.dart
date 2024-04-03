@@ -31,7 +31,6 @@ class _MainScreenState extends State<MainScreen> {
   // tabIdx 수정
   setCurTabIdx(int idx) {
     setState(() {
-      print(idx);
       curTabIdx = idx;
     });
   }
@@ -49,9 +48,9 @@ class _MainScreenState extends State<MainScreen> {
       sound: true,
     );
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
+      print('유저 알림 권한 승인');
     } else {
-      print("알림 권한이 거부되었습니다");
+      print("유저 알림 권한 거부");
     }
   }
 
