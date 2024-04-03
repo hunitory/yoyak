@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yoyak/components/all_challenge_card.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 import '../store/challenge_store.dart';
 import '../styles/colors/palette.dart';
 import 'look_around_challenge_card.dart';
 
-class OtherChallengeCard extends StatelessWidget {
+class OtherChallengeCard extends StatefulWidget {
   const OtherChallengeCard(
       {super.key,
       this.subTitle,
@@ -17,9 +19,32 @@ class OtherChallengeCard extends StatelessWidget {
   final subTitle, title, imagePath, titleImagePath;
 
   @override
+  State<OtherChallengeCard> createState() => _OtherChallengeCardState();
+}
+
+class _OtherChallengeCardState extends State<OtherChallengeCard> with WidgetsBindingObserver {
+  String accessToken = '';
+
+  Future<void> getAccessToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      accessToken =
+          prefs.getString('accessToken') ?? ''; // accessToken state 업데이트
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     double cardListWidth = MediaQuery.of(context).size.width * 0.9;
     var othersChallengeList = context.watch<ChallengeStore>().othersChallengeList;
+    var allChallengeList = context.watch<ChallengeStore>().allChallengeList;
     context.watch<ChallengeStore>().isCheered;
     // 응원했으면 배경 색, 글씨 색 바꾸기
     return RoundedRectangle(
@@ -29,9 +54,9 @@ class OtherChallengeCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(15),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          if (subTitle != null)
+          if (widget.subTitle != null)
             Text(
-              "$subTitle",
+              "${widget.subTitle}",
               style: const TextStyle(
                   fontFamily: "Pretendard",
                   color: Palette.SUB_BLACK,
@@ -41,16 +66,16 @@ class OtherChallengeCard extends StatelessWidget {
           Row(
             children: [
               Text(
-                "$title",
+                "${widget.title}",
                 style: const TextStyle(
                     fontFamily: "Pretendard",
                     color: Palette.MAIN_BLACK,
                     fontWeight: FontWeight.w600,
                     fontSize: 19),
               ),
-              if (titleImagePath != null)
+              if (widget.titleImagePath != null)
                 Image.asset(
-                  titleImagePath,
+                  widget.titleImagePath,
                   width: 50,
                   height: 50,
                 ),
@@ -58,9 +83,9 @@ class OtherChallengeCard extends StatelessWidget {
           ),
           // Spacer 제거 또는 SizedBox로 변경
           const SizedBox(height: 10), // 예시로 추가한 SizedBox
-          if (imagePath != null)
+          if (widget.imagePath != null)
             Image.asset(
-              imagePath,
+              widget.imagePath,
               width: 70,
               height: 70,
             ),
@@ -72,9 +97,15 @@ class OtherChallengeCard extends StatelessWidget {
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
-                itemCount: othersChallengeList?.length, // 개수 고치기 배열의 길이로
+                itemCount: accessToken != '' ? othersChallengeList.length : allChallengeList.length, // 개수 고치기 배열의 길이로
                 itemBuilder: (context, i) {
-                  return LookAroundChallengeCard(challenge: othersChallengeList[i]);
+                  if (accessToken != '') {
+                    return LookAroundChallengeCard(
+                        challenge: othersChallengeList[i]);
+                  } else {
+                    return AllChallengeCard(
+                        challenge: allChallengeList[i]);
+                  }
                 }),
           )
         ]),

@@ -5,17 +5,17 @@ import 'package:yoyak/store/challenge_store.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 import '../styles/colors/palette.dart';
 
-class LookAroundChallengeCard extends StatefulWidget {
-  LookAroundChallengeCard({super.key, this.challenge});
+class AllChallengeCard extends StatefulWidget {
+  AllChallengeCard({super.key, this.challenge});
 
   final challenge;
 
   @override
-  State<LookAroundChallengeCard> createState() =>
+  State<AllChallengeCard> createState() =>
       _LookAroundChallengeCardState();
 }
 
-class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
+class _LookAroundChallengeCardState extends State<AllChallengeCard> {
   @override
   Widget build(BuildContext context) {
     context.watch<ChallengeStore>().othersChallengeList;
@@ -33,7 +33,7 @@ class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
             border: Border.all(width: 0.4, color: Palette.SHADOW_GREY),
           ),
           width: cardWidth,
-          height: 280,
+          height: 270,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -94,31 +94,6 @@ class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
                     ), //
                     const SizedBox(
                       height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          icon: Icon(
-                            widget.challenge?['cheered']
-                                ? Icons.favorite_rounded
-                                : Icons.favorite_border_rounded,
-                            size: 23,
-                            color: Palette.MAIN_RED.withOpacity(0.5),
-                          ),
-                          onPressed: () async {
-                            final prefs = await SharedPreferences.getInstance();
-                            String? accessToken = prefs.getString('accessToken');
-                            await context
-                                .read<ChallengeStore>()
-                                .cheerUp(widget.challenge?['articleSeq']);
-                            await context.read<ChallengeStore>().getOthersChallenge(accessToken);
-                            setState(() {
-                              // isCheered++;
-                            });
-                          },
-                        ),
-                      ],
                     ),
                   ],
                 ),
