@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+
+    parameters{
+        string(name: 'NAME', defaultValue: 'nextjs')
+    }
+
+    tools {
+        nodejs "Node20"
+    }
+
+    stages {
+        stage('Nextjs build'){
+            steps{
+                dir('frontend/yoyak-web'){
+                    echo 'Nextjs build...'
+                    sh 'npm install'
+                    sh 'CI=false npm run build'
+                }
+            }
+        }
+    }
+}
