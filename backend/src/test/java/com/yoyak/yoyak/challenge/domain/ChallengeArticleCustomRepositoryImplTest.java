@@ -23,7 +23,7 @@ class ChallengeArticleCustomRepositoryImplTest {
 
     @Test
     public void findAllArticlesTest(){
-        challengeArticleRepository.findAllArticles().forEach(challengeArticleResponseDto -> {
+        challengeArticleRepository.findAllArticles(1L).forEach(challengeArticleResponseDto -> {
             System.out.println("challengeArticleResponseDto.getArticleSeq() = " + challengeArticleResponseDto.getArticleSeq());
 
         });
@@ -38,7 +38,7 @@ class ChallengeArticleCustomRepositoryImplTest {
             System.out.println("challengeArticleResponseDto.isCheered() = " + challengeArticleResponseDto.isCheered());
         });
 
-        challengeArticleRepository.findAllArticles().forEach(challengeArticleResponseDto -> {
+        challengeArticleRepository.findAllArticles(1L).forEach(challengeArticleResponseDto -> {
             System.out.println("challengeArticleResponseDto.getArticleSeq() = " + challengeArticleResponseDto.getArticleSeq());
             System.out.println("challengeArticleResponseDto.isCheered() = " + challengeArticleResponseDto.isCheered());
         });

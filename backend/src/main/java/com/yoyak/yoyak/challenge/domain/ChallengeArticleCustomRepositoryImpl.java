@@ -5,6 +5,7 @@ import static com.yoyak.yoyak.challenge.domain.QChallengeArticle.challengeArticl
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yoyak.yoyak.challenge.dto.ChallengeArticleResponseDto;
+import com.yoyak.yoyak.util.security.SecurityUtil;
 import jakarta.persistence.EntityManager;
 
 import java.time.LocalDate;
@@ -26,11 +27,12 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
     // 추후에 n+1 문제 고려해서 수정할 것
     @Override
     @Transactional
-    public List<ChallengeArticleResponseDto> findAllArticles() {
+    public List<ChallengeArticleResponseDto> findAllArticles(Long userSeq) {
         List<Challenge> challenges = queryFactory.select(challenge)
             .from(challenge)
             .fetch();
-        return makeChallengeArticleResponseDto(challenges, -1L);
+
+        return makeChallengeArticleResponseDto(challenges, userSeq);
 
 
     }
@@ -75,7 +77,7 @@ public class ChallengeArticleCustomRepositoryImpl implements ChallengeArticleCus
                 if (article.getCheers() != null) {
                     cheerCnt = article.getCheers().size();
                     for(Cheer cheer: article.getCheers()){
-                        if(userSeq != 1L && cheer.getUser().getSeq() == userSeq){
+                        if(userSeq != -1L && cheer.getUser().getSeq() == userSeq){
                             cheered = true;
                             break;
                         }

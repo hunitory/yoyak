@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ChallengeArticleCustomRepository {
-    List<ChallengeArticleResponseDto> findAllArticles();
+    List<ChallengeArticleResponseDto> findAllArticles(Long userSeq);
 
     List<ChallengeArticleResponseDto> findMyArticles(Long userSeq);
 
