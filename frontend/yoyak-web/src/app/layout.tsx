@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { notoSansKr } from "styles/styles";
 
 export const metadata: Metadata = {
   title: "요약 - yoyak",
@@ -13,9 +12,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={notoSansKr.regular.className}>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
