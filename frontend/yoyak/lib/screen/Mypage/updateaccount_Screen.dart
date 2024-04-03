@@ -166,6 +166,7 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
         print('삭제 완료');
         if (mounted) {
           context.read<LoginStore>().getAccountData();
+          Navigator.pop(context);
         }
         // 알람 데이터를 다시 불러오기
       } else {
@@ -256,6 +257,7 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
         // 알람 데이터를 다시 불러오기
         if (mounted) {
           context.read<LoginStore>().getAccountData();
+          Navigator.pop(context);
         }
       } else {
         // 오류 처리
@@ -361,7 +363,6 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
                 height: 35,
                 onPressed: () {
                   deleteAlarmData(widget.accountitem.seq!);
-                  Navigator.pop(context);
                 },
                 text: '삭제하기',
                 colorMode: 'blue',
