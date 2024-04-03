@@ -216,183 +216,185 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
         centerTitle: true,
         toolbarHeight: 55,
       ),
-      body: Container(
-        width: double.infinity,
-        color: Palette.BG_BLUE,
-        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.only(left: 10),
-              child: const Text(
-                "필터로 약 검색",
-                style: TextStyle(
-                    color: Palette.MAIN_BLACK,
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 24),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: RoundedRectangle(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.width * 0.1,
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const TextSearchScreen()));
-                },
-                boxShadow: const [
-                  BoxShadow(
-                    color: Palette.SHADOW_GREY,
-                    blurRadius: 3,
-                    offset: Offset(0, 2),
-                  )
-                ],
-                child: const Row(
-                  children: [
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Icon(
-                      Icons.search,
-                      color: Palette.MAIN_BLUE,
-                      size: 25,
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Text(
-                      "약 이름, 성분, 증상을 입력해주세요",
-                      style: TextStyle(
-                        color: Palette.SUB_BLACK,
-                        fontSize: 15,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
+      body: SingleChildScrollView(
+        child: Container(
+          width: double.infinity,
+          color: Palette.BG_BLUE,
+          padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.only(left: 10),
+                child: const Text(
+                  "필터로 약 검색",
+                  style: TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 24),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-
-            // filterOptions 순회하면서 FilterComponent 출력
-            // type을 List<FilterContainer>로 바꿔줌
-
-            // selectedOptions를 이용하여 현재 선택된 옵션을 전달
-            // default로 선택된 옵션을 전달
-            // 화살표 있는 영역 (모양, 색상)
-            ...filterOptions.map<Widget>((filterOption) {
-              var options =
-                  filterOption['options'].entries.map<FilterContainer>((e) {
-                return FilterContainer(imagePath: e.value, text: e.key);
-              }).toList();
-
-              return FilterComponent(
-                options: options,
-                selectedOption: options.firstWhere(
-                    (option) => option.text == filterOption['default']),
-                // selectedOption: selectedOptions[filterOption['default']]!,
-                onSelectionChanged: (newSelection) {
-                  print('${filterOption['type']}: ${newSelection.text}');
-                  // setState(() {
-                  // 선택된 옵션이 전체일때는 api에 해당 타입을 보내지않음
-                  if (newSelection.text == '모양 전체') {
-                    selectedOptions.remove('drugShape');
-                  } else if (newSelection.text == '색상 전체') {
-                    selectedOptions.remove('colorClass');
-                  } else {
-                    selectedOptions[filterOption['type']] = newSelection.text;
-                  }
-                  // });
-                  print('api용 : $selectedOptions');
-                },
-              );
-            }),
-
-            // 화살표 없어야하는 영역 (제형, 분할선)
-            ...filterOptionsNoDi.map<Widget>((filterOption) {
-              var options =
-                  filterOption['options'].entries.map<FilterContainerNoDi>((e) {
-                return FilterContainerNoDi(imagePath: e.value, text: e.key);
-              }).toList();
-
-              return FilterComponentNoDi(
-                options: options,
-                selectedOption: options.firstWhere(
-                    (option) => option.text == filterOption['default']),
-                // selectedOption: selectedOptions[filterOption['default']]!,
-                onSelectionChanged: (newSelection) {
-                  print('${filterOption['type']} : ${newSelection.text}');
-                  // setState(() {
-                  if (newSelection.text == '제형 전체') {
-                    selectedOptions.remove('formCodeName');
-                  } else if (newSelection.text == '분할선 전체') {
-                    selectedOptions.remove('LINE');
-                  } else {
-                    selectedOptions[filterOption['type']] = newSelection.text;
-                  }
-                  // });
-                  print('api용 : $selectedOptions');
-                },
-              );
-            }),
-            // 초기화, 검색하기 버튼
-            const SizedBox(
-              height: 40,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                BaseButton(
-                  onPressed: () {
-                    setState(() {
-                      // _resetSelectedOptions();
-                      // 초기화 버튼을 누르면 다시 rebuild
-                      Navigator.pushReplacement(
-                        // 현재 화면을 스택에서 제거하고 새로운 화면을 띄움
+              const SizedBox(
+                height: 20,
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                child: RoundedRectangle(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.width * 0.1,
+                  onTap: () {
+                    Navigator.push(
                         context,
-                        PageRouteBuilder(
-                          // 커스텀 페이지 전환
-                          // context : 현재의 build context
-                          pageBuilder: (context, animation1, animation2) =>
-                              const FilterSearchScreen(),
-                          transitionDuration:
-                              const Duration(seconds: 0), // 화면전환 애니메이션 X
+                        MaterialPageRoute(
+                            builder: (context) => const TextSearchScreen()));
+                  },
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Palette.SHADOW_GREY,
+                      blurRadius: 3,
+                      offset: Offset(0, 2),
+                    )
+                  ],
+                  child: const Row(
+                    children: [
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Icon(
+                        Icons.search,
+                        color: Palette.MAIN_BLUE,
+                        size: 25,
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Text(
+                        "약 이름, 성분, 증상을 입력해주세요",
+                        style: TextStyle(
+                          color: Palette.SUB_BLACK,
+                          fontSize: 15,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
                         ),
-                      );
-                    });
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+        
+              // filterOptions 순회하면서 FilterComponent 출력
+              // type을 List<FilterContainer>로 바꿔줌
+        
+              // selectedOptions를 이용하여 현재 선택된 옵션을 전달
+              // default로 선택된 옵션을 전달
+              // 화살표 있는 영역 (모양, 색상)
+              ...filterOptions.map<Widget>((filterOption) {
+                var options =
+                    filterOption['options'].entries.map<FilterContainer>((e) {
+                  return FilterContainer(imagePath: e.value, text: e.key);
+                }).toList();
+        
+                return FilterComponent(
+                  options: options,
+                  selectedOption: options.firstWhere(
+                      (option) => option.text == filterOption['default']),
+                  // selectedOption: selectedOptions[filterOption['default']]!,
+                  onSelectionChanged: (newSelection) {
+                    print('${filterOption['type']}: ${newSelection.text}');
+                    // setState(() {
+                    // 선택된 옵션이 전체일때는 api에 해당 타입을 보내지않음
+                    if (newSelection.text == '모양 전체') {
+                      selectedOptions.remove('drugShape');
+                    } else if (newSelection.text == '색상 전체') {
+                      selectedOptions.remove('colorClass');
+                    } else {
+                      selectedOptions[filterOption['type']] = newSelection.text;
+                    }
+                    // });
+                    print('api용 : $selectedOptions');
                   },
-                  text: '초기화',
-                  // colorMode: 'blue',
-                  colorMode: 'white',
-                ),
-                const SizedBox(
-                  width: 40,
-                ),
-                BaseButton(
-                  // selectedOptions을 get으로 보내기
-                  // 결과를 변수에 저장 -> props로 전달
-                  // 그 후 검색 결과 화면으로 이동
-                  onPressed: () async {
-                    showLoadingDialog(context);
-                    await searchPills();
+                );
+              }),
+        
+              // 화살표 없어야하는 영역 (제형, 분할선)
+              ...filterOptionsNoDi.map<Widget>((filterOption) {
+                var options =
+                    filterOption['options'].entries.map<FilterContainerNoDi>((e) {
+                  return FilterContainerNoDi(imagePath: e.value, text: e.key);
+                }).toList();
+        
+                return FilterComponentNoDi(
+                  options: options,
+                  selectedOption: options.firstWhere(
+                      (option) => option.text == filterOption['default']),
+                  // selectedOption: selectedOptions[filterOption['default']]!,
+                  onSelectionChanged: (newSelection) {
+                    print('${filterOption['type']} : ${newSelection.text}');
+                    // setState(() {
+                    if (newSelection.text == '제형 전체') {
+                      selectedOptions.remove('formCodeName');
+                    } else if (newSelection.text == '분할선 전체') {
+                      selectedOptions.remove('LINE');
+                    } else {
+                      selectedOptions[filterOption['type']] = newSelection.text;
+                    }
+                    // });
+                    print('api용 : $selectedOptions');
                   },
-                  text: '검색하기',
-                  colorMode: 'blue',
-                ),
-              ],
-            )
-          ],
+                );
+              }),
+              // 초기화, 검색하기 버튼
+              const SizedBox(
+                height: 40,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  BaseButton(
+                    onPressed: () {
+                      setState(() {
+                        // _resetSelectedOptions();
+                        // 초기화 버튼을 누르면 다시 rebuild
+                        Navigator.pushReplacement(
+                          // 현재 화면을 스택에서 제거하고 새로운 화면을 띄움
+                          context,
+                          PageRouteBuilder(
+                            // 커스텀 페이지 전환
+                            // context : 현재의 build context
+                            pageBuilder: (context, animation1, animation2) =>
+                                const FilterSearchScreen(),
+                            transitionDuration:
+                                const Duration(seconds: 0), // 화면전환 애니메이션 X
+                          ),
+                        );
+                      });
+                    },
+                    text: '초기화',
+                    // colorMode: 'blue',
+                    colorMode: 'white',
+                  ),
+                  const SizedBox(
+                    width: 40,
+                  ),
+                  BaseButton(
+                    // selectedOptions을 get으로 보내기
+                    // 결과를 변수에 저장 -> props로 전달
+                    // 그 후 검색 결과 화면으로 이동
+                    onPressed: () async {
+                      showLoadingDialog(context);
+                      await searchPills();
+                    },
+                    text: '검색하기',
+                    colorMode: 'blue',
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
