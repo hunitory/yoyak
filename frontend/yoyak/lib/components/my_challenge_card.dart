@@ -24,7 +24,7 @@ class MyChallengeCard extends StatelessWidget {
     var myChallengeCard = context.watch<ChallengeStore>().myChallengeCard;
     return RoundedRectangle(
       width: ScreenSize.getWidth(context),
-      height: 335,
+      height: 350,
       color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(15),
@@ -71,7 +71,7 @@ class MyChallengeCard extends StatelessWidget {
           myChallengeList.isNotEmpty ?
           SizedBox(
                   width: cardListWidth,
-                  height: 245,
+                  height: 255,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
