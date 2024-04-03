@@ -19,20 +19,22 @@ class KakaoViewModel {
   // 구글, 애플 등 로그인도 쓸 수 있으니까 생성자의 매개변수로 추상 클래스를 넣어줌
   KakaoViewModel(this._socialLogin, this.context);
 
-  Future sendKakaoId (kakaoId) async {
+  Future sendKakaoId(kakaoId) async {
     try {
       var url = "${API.yoyakUrl}/user/login/kakao";
-      var response = await http.post(Uri.parse(url), headers: {
-        'Content-Type': 'application/json',
-      }, body: json.encode({
-        "id" : kakaoId,
-      }));
+      var response = await http.post(Uri.parse(url),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: json.encode({
+            "id": kakaoId,
+          }));
       if (response.statusCode == 200) {
         // 회원가입이 된 상태면 메인으로
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder : (context) => const MainScreen(),
+            builder: (context) => const MainScreen(),
           ),
         );
       } else {
@@ -43,18 +45,15 @@ class KakaoViewModel {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder : (context) => const GreetingScreen(),
+            builder: (context) => const GreetingScreen(),
           ),
         );
       }
-
     } catch (error) {
       print("카카오 토큰 전송 실패");
       print(error);
     }
   }
-
-
 
   Future login() async {
     isLogined = await _socialLogin.login();

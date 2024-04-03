@@ -56,6 +56,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
                     const Text(
                       "사진 한 장이면 충분해요",
                       style: TextStyle(
+                        fontFamily: "Pretendard",
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
                       ),
@@ -66,6 +67,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
                           TextSpan(
                             text: 'AI 약 검색 앱, ',
                             style: TextStyle(
+                              fontFamily: "Pretendard",
                               fontSize: 22,
                               color: Palette.MAIN_BLACK,
                               fontWeight: FontWeight.w600,
@@ -74,6 +76,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
                           TextSpan(
                             text: '요약 ',
                             style: TextStyle(
+                              fontFamily: "Pretendard",
                               color: Palette.MAIN_BLUE, // 영양이 부분의 색상을 빨간색으로 지정
                               fontSize: 22,
                               fontWeight: FontWeight.w600,
@@ -90,7 +93,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
                       child: Image.asset(
                         'assets/images/signup1.jpg',
                         width: 230, // 이미지의 가로 크기
-                        height: 260, // 이미지의 세로 크기
+                        height: 230, // 이미지의 세로 크기
                         fit: BoxFit.cover, // 이미지의 크기를 설정한 크기에 맞게 조정
                       ),
                     ),
@@ -101,8 +104,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
                         width: inputWidth,
                         height: 60,
                         decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Colors.grey.shade200, width: 0.1),
+                          border: Border.all(color: Palette.SHADOW_GREY),
                           borderRadius: BorderRadius.circular(20),
                           color: Palette.SHADOW_GREY.withOpacity(0.3),
                         ),
@@ -119,6 +121,8 @@ class _GreetingScreenState extends State<GreetingScreen> {
                               decoration: const InputDecoration(
                                 hintText: "닉네임을 입력해주세요",
                                 hintStyle: TextStyle(
+                                  fontFamily: "Pretendard",
+                                  color: Palette.MAIN_BLACK,
                                   fontWeight: FontWeight.w400,
                                   fontSize: 16,
                                 ),
@@ -165,7 +169,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
                             backgroundColor: Palette.MAIN_BLUE, // 원의 배경색
                             child: Icon(
                               Icons.arrow_forward_ios,
-                              color: Colors.white, // 화살표 아이콘의 색상
+                              color: Palette.MAIN_WHITE, // 화살표 아이콘의 색상
                             ),
                           ),
                         ),

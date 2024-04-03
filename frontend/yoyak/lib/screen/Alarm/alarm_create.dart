@@ -51,6 +51,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
     'SUNDAY',
   ];
   late List<DateTime> _alarmTime = [];
+
   // 주기 관련 변수
   late bool isEveryday = true;
   late int _alarmAccountSeq; // 실제 계정번호로 대체 필요
@@ -699,7 +700,7 @@ class _AlarmCreateState extends State<AlarmCreate> {
             return RoundedRectangle(
               height: 380,
               width: ScreenSize.getWidth(context),
-              color: Colors.white,
+              color: Palette.MAIN_WHITE,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

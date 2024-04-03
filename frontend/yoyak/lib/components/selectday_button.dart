@@ -43,7 +43,8 @@ class _SelectedDayState extends State<SelectedDay> {
     return GestureDetector(
       onTap: toggleSelection,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 100), // 애니메이션 지속 시간 설정
+        duration: const Duration(milliseconds: 100),
+        // 애니메이션 지속 시간 설정
         width: 40,
         height: 40,
         decoration: BoxDecoration(

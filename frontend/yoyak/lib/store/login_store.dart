@@ -38,17 +38,6 @@ class LoginStore extends ChangeNotifier {
     });
   }
 
-  // Future<void> testSave() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   var testId = prefs.getString('userId');
-  //   var testPassword = prefs.getString('password');
-  //   var accessToken = prefs.getString('accessToken');
-  //
-  //   print("testId : $testId");
-  //   print("testPassword : $testPassword");
-  //   print("accessToken $accessToken");
-  // }
-
   Future<void> saveUserData(
       String userId, String password, String token) async {
     final prefs = await SharedPreferences.getInstance();
