@@ -215,8 +215,8 @@ class _PhotoSearchScreenState extends State<PhotoSearchScreen> {
                           child: Center(
                             child: Image.asset(
                               'assets/images/camera.png',
-                              fit: BoxFit.cover,
-                              width: rectangleHeight * 0.45,
+                              fit: BoxFit.contain,
+                              width: rectangleHeight * 0.3,
                             ),
                           ),
                           onTap: () {
