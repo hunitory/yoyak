@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../screen/Login/login_screen.dart';
+import '../screen/Main/main_screen.dart';
+import 'dialog.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar(
@@ -12,6 +16,7 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
+  bool isLogined = false;
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
@@ -21,8 +26,30 @@ class _BottomBarState extends State<BottomBar> {
         showUnselectedLabels: false,
         showSelectedLabels: false,
         currentIndex: widget.curTabIdx,
-        onTap: (i) {
+        onTap: (i) async {
           widget.setCurTabIdx(i);
+          final prefs = await SharedPreferences.getInstance();
+          if (prefs.getString('accessToken')!.isNotEmpty) {
+            setState(() {
+              isLogined = true;
+            });
+          } else {
+            setState(() {
+              isLogined = false;
+            });
+          }
+          if (i == 2 && !isLogined) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return const DialogUI(
+                  destination: LoginScreen(
+                    destination: MainScreen(),
+                  ),
+                );
+              },
+            );
+          }
         },
         items: const [
           BottomNavigationBarItem(

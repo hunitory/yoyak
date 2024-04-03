@@ -74,11 +74,11 @@ class _PillBagState extends State<PillBag> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.only(bottom: 5),
+      margin: const EdgeInsets.only(bottom: 5),
+      // padding: const EdgeInsets.only(bottom: 5),
       decoration: const BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: Palette.SHADOW_GREY, width: 0.5),
+          bottom: BorderSide(color: Palette.MAIN_BLACK, width: 0.1),
         ),
       ),
       child: ListTile(
@@ -100,7 +100,7 @@ class _PillBagState extends State<PillBag> {
               borderRadius: BorderRadius.circular(5),
             ),
             side: const BorderSide(
-              color: Palette.SHADOW_GREY,
+              color: Palette.SUB_BLACK,
               width: 1,
             ),
             activeColor: Palette.MAIN_BLUE,
@@ -124,7 +124,10 @@ class _PillBagState extends State<PillBag> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
-                border: Border.all(color: Color(int.parse(widget.color))),
+                border: Border.all(
+                  color: Color(int.parse(widget.color)),
+                  width: 1.5,
+                ),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(

@@ -5,13 +5,12 @@ import 'package:provider/provider.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:http/http.dart' as http;
 import 'package:yoyak/models/user/account_models.dart';
-import '../auto_login/singleton_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginStore extends ChangeNotifier {
   dynamic userInfo = ""; // storage에 있는 유저 정보 저장
-  final storage = SingletonSecureStorage().storage;
   List<AccountModel> accountList = [];
-
+  var loginedUser;
   String accessToken = '';
   String? deviceToken = "";
 
@@ -35,7 +34,36 @@ class LoginStore extends ChangeNotifier {
   void getDeviceToken() async {
     await FirebaseMessaging.instance.getToken().then((token) {
       deviceToken = token;
+      print('deviceToken: $deviceToken');
     });
+  }
+
+  // Future<void> testSave() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   var testId = prefs.getString('userId');
+  //   var testPassword = prefs.getString('password');
+  //   var accessToken = prefs.getString('accessToken');
+  //
+  //   print("testId : $testId");
+  //   print("testPassword : $testPassword");
+  //   print("accessToken $accessToken");
+  // }
+
+  Future<void> saveUserData(
+      String userId, String password, String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('userId', userId); // 정수 저장
+    prefs.setString('password', password); // 불리언 저장
+    prefs.setString('accessToken', token); // 문자열 저장
+  }
+
+  Future<void> saveAccountList(List<AccountModel> accountList) async {
+    final prefs = await SharedPreferences.getInstance();
+    // AccountModel 리스트를 JSON 문자열 리스트로 변환
+    List<String> accountStringList =
+        accountList.map((account) => jsonEncode(account.toJson())).toList();
+    // 변환된 리스트를 SharedPreferences에 저장
+    prefs.setStringList('accountList', accountStringList);
   }
 
   Future login(BuildContext context, String email, String password,
@@ -53,24 +81,12 @@ class LoginStore extends ChangeNotifier {
           'deviceToken': context.read<LoginStore>().deviceToken,
         }));
 
-    print(response.body);
     var accessToken = response.body; // 액세스 토큰 저장
-    print("accessToken asdfasdf: $accessToken");
     if (response.statusCode == 200) {
       print("로그인 성공");
-
       // 로그인 성공 시 storage에 저장
-      await storage.write(key: 'userId', value: email);
-      await storage.write(key: 'password', value: password);
-      await storage.write(key: 'accessToken', value: accessToken);
-      // await storage.write(
-      //     key: 'userNickname', value: userInfo['nickname']); // 수정 가능성 있음
-      var tmpToken = await storage.read(key: 'accessToken');
-      setAccessToken(tmpToken); // provider에 받은 토큰 저장
-
-      storage.deleteAll(); // 기존 토큰 삭제
-      storage.write(key: 'accessToken', value: accessToken); // accessToken 저장
-      print("이게 로그인 accessToken 이다 가즈아 $tmpToken");
+      await saveUserData(email, password, accessToken);
+      // 아이디, 비밀번호, accessToken 이 SharedPreference에 저장 완료
       notifyListeners();
 
       Navigator.pushAndRemoveUntil(
@@ -80,40 +96,37 @@ class LoginStore extends ChangeNotifier {
       );
       // return accessToken;
     } else {
-      print("회원정보가 없는경우");
-      throw Error();
+      return false;
     }
   }
 
   Future<void> getAccountData() async {
+    final prefs = await SharedPreferences.getInstance();
     String yoyakURL = API.yoyakUrl; // 서버 URL
     String url = '$yoyakURL/account'; // 요청할 URL
-    String? accessToken = await storage.read(key: 'accessToken');
-    print("account시발의 accessToken $accessToken");
     try {
-      String? accesstoken = await storage.read(key: 'accessToken');
+      String? accessToken = prefs.getString('accessToken');
       final response = await http.get(
         Uri.parse(url),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $accesstoken',
+          'Authorization': 'Bearer $accessToken',
         },
       );
 
       if (response.statusCode == 200) {
-        print('유저야 ${response.statusCode}.');
         var decodedBody = utf8.decode(response.bodyBytes);
         List<dynamic> data = json.decode(decodedBody);
-        accountList =
-            data.map((json) => AccountModel.fromJson(json)).toList();
+        accountList = data.map((json) => AccountModel.fromJson(json)).toList();
+        loginedUser = accountList.first;
+        print('유저: ${response.body}.');
+
         notifyListeners();
       } else {
-        // 오류 처리
-        print('Request failed with status: ${response.statusCode}.');
+        print('유저 네임 받아오기 실패: ${response.statusCode}.');
       }
     } catch (error) {
-      // 예외 처리
-      print('An error occurred: $error');
+      print(error);
     }
   }
 
@@ -166,5 +179,10 @@ class LoginStore extends ChangeNotifier {
   setAccessToken(token) {
     accessToken = token;
     notifyListeners();
+  }
+
+  void clearAccounts() {
+    accountList.clear();
+    notifyListeners(); // UI에 변경사항을 알림
   }
 }

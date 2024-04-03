@@ -43,12 +43,14 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
   int _currentPage = 0; // 현재 페이지
   bool _isLoading = false; // 로딩 여부
   bool _hasMoreData = true; // 더 불러올 데이터가 있는지 여부
-  bool end = false;
+  bool end = false; // 끝!
+  bool isResult = false; // 검색 결과 유, 무
 
   // 초기 데이터 로드
   @override
   void initState() {
     super.initState();
+    end = false;
     // @ 검색 결과가 null이 아닐때 분기?
     // _fetchPills();
     // 사용자가 스크롤을 끝까지 내렸을 때 추가 데이터를 로드
@@ -58,12 +60,14 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
           // &&
           // !_isLoading) {
           ) {
+        print("###### 로딩 아이콘 end : $end");
         print("@@@@@@@@ Bottom reached");
         // 스크롤이 끝에 도달하고, 현재 데이터를 가져오고 있지 않은 경우 추가 데이터를 로드합니다.
-        if (_hasMoreData && !end) {
+        // if (_hasMoreData && !end) {
+        if (_hasMoreData) {
           print("왜 돼? : $_hasMoreData");
           _isLoading = false;
-          _fetchPills();
+          _fetchPills(showDialog: false); // 스크롤일때는 다이얼로그 안띄움
         }
         // _fetchPills();
       }
@@ -77,11 +81,52 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
       _pills.clear(); // 화면에 표시될 알약 리스트를 비움
       _hasMoreData = true; // 더 불러올 데이터가 있다고 가정
       _searchSuccess = false; // 검색 성공 여부를 false로 초기화
+      // end = true; // 끝 X
+      isResult = false; // 검색 결과 유, 무
     });
   }
 
+  // 로딩 다이얼로그
+  Future<void> showLoadingDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // 다른 곳을 터치해도 닫히지 않음
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Palette.WHITE_BLUE,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Lottie.asset(
+                  'assets/lotties/loading.json',
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width * 0.15,
+                  height: MediaQuery.of(context).size.height * 0.10,
+                  fit: BoxFit.fill,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.03,
+                ),
+                const Text(
+                  "해당하는 약을 찾는 중 입니다..",
+                  style: TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   // 알약 검색 api 호출
-  Future<void> _fetchPills() async {
+  Future<void> _fetchPills({bool showDialog = false}) async {
     // if (_isLoading) {
     //   print("isLoding이 true라서 안되네@@@");
     // }
@@ -96,6 +141,12 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
       setState(() {
         _isLoading = true;
       });
+
+      if (showDialog) {
+        // 로딩 다이얼로그 표시
+        showLoadingDialog(context);
+        print("로딩 다이얼로그 띄우기 : $showDialog");
+      }
 
       // API 호출
       String yoyakURL = API.yoyakUrl; // 호스트 URL
@@ -116,6 +167,14 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
         if (response.statusCode == 200) {
           var decodedBody = utf8.decode(response.bodyBytes);
           resultPills = jsonDecode(decodedBody);
+          isResult = true;
+
+          // // 로딩 다이얼로그 닫기
+          if (showDialog) {
+            // 로딩 다이얼로그 닫기
+            Navigator.of(context).pop();
+            print("로딩 다이얼로그 닫기?????????????");
+          }
 
           // Pill 리스트 생성
           List<dynamic> pillsJson = resultPills["result"];
@@ -128,7 +187,7 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
           print("얼른 되랏@@ : pillsJson : $pillsJson");
 
           // 마지막 처리
-          if (pillsJson.isEmpty) {
+          if (fetchedPills.isEmpty) {
             setState(() {
               _hasMoreData = false;
               end = true;
@@ -139,11 +198,31 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
             return;
           }
 
-          setState(() {
+          if (fetchedPills.length < 10) {
+            setState(() {
+              // _hasMoreData = false;
+              end = true;
+              _currentPage++;
+              _searchSuccess = true;
+              // 화면에 보여질 데이터 추가
+              _pills.addAll(fetchedPills);
+            });
+            print("@@@@@@끝@@@@@@");
+            return;
+          }
+
+          setState(() async {
             _currentPage++;
             _searchSuccess = true;
             // 화면에 보여질 데이터 추가
             _pills.addAll(fetchedPills);
+            _isLoading = false;
+            _hasMoreData = fetchedPills.isNotEmpty; // 더 불러올 데이터가 있는지 여부
+            end = fetchedPills.length < 10; // 마지막 페이지인지 확인
+            isResult =
+                _pills.isNotEmpty || fetchedPills.isEmpty; // 검색 결과 유무 업데이트
+
+            // end = false;
           });
 
           print("텍스트 검색????? :  $_pills");
@@ -158,7 +237,6 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
       } catch (e) {
         print("알약 검색 실패 에러 $e");
       } finally {
-        // @@ 이거 되나?
         setState(() {
           _isLoading = false;
           _hasMoreData = true;
@@ -172,17 +250,17 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
   Widget build(BuildContext context) {
     // 검색 결과 유, 무
     // bool isResult = data["result"] != null && data["result"].length > 0;
-    bool isResult = _pills.isNotEmpty;
+    // bool isResult = _pills.isNotEmpty;
     print("isResult : $isResult");
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('알약 검색',
+        title: const Text('약 검색',
             style: TextStyle(
               color: Palette.MAIN_BLACK,
               fontFamily: 'Pretendard',
-              fontWeight: FontWeight.w400,
-              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
             )),
         backgroundColor: Palette.BG_BLUE,
         centerTitle: true,
@@ -207,7 +285,7 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
                   Container(
                     // padding: const EdgeInsets.only(left: 7),
                     child: const Text(
-                      "텍스트로 알약 검색",
+                      "텍스트로 약 검색",
                       style: TextStyle(
                           color: Palette.MAIN_BLACK,
                           fontFamily: 'Pretendard',
@@ -251,7 +329,7 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
                       vertical: 11,
                     ),
                     border: InputBorder.none,
-                    hintText: '알약 이름, 성분, 증상을 입력해주세요',
+                    hintText: '약 이름, 성분, 증상을 입력해주세요',
                     filled: true,
                     fillColor: Palette.MAIN_WHITE,
                     enabledBorder: OutlineInputBorder(
@@ -286,16 +364,20 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
                     ),
                   ),
                   // api get
-                  onSubmitted: (value) {
+                  // 검색하기
+                  onSubmitted: (value) async {
                     print('검색어 = $value');
                     _resetSearch(); // 검색 결과 초기화
-                    _fetchPills();
+                    _fetchPills(showDialog: true); // 검색을 할 때 다이얼로그 출력
                   },
                 ),
               ),
             ),
-            // 검색 성공 시 검색 결과가 나옴(조건부 렌더링)
-            if (_searchSuccess)
+            // 로딩 다이얼로그 닫기
+            // Navigator.of(context).pop();
+
+            // 검색 성공 시 "검색 결과"가 나옴(조건부 렌더링)
+            if (isResult)
               Expanded(
                 child: SingleChildScrollView(
                   controller: _scrollController,
@@ -332,7 +414,7 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
                         height: 10,
                       ),
                       Column(
-                        children: isResult
+                        children: resultPills["count"] != 0
                             ? _pills.map<Widget>((pill) {
                                 var imgPath = pill["imgPath"];
                                 var itemName = pill["itemName"];
@@ -394,9 +476,8 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
                                 ),
                               ],
                       ),
-                      if (isResult &&
-                          _hasMoreData &&
-                          !end) // 더 로드할 데이터가 있으면 로딩 인디케이터 표시
+                      if (isResult && _hasMoreData && !end)
+                        // if (!end) //// 더 로드할 데이터가 있으면 로딩 인디케이터 표시
                         const Center(
                           child: CircularProgressIndicator(
                             color: Palette.MAIN_BLUE,

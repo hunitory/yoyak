@@ -1,14 +1,19 @@
+import 'dart:convert';
+
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yoyak/components/dialog.dart';
 import 'package:yoyak/components/main_appbar.dart';
 import 'package:yoyak/components/rounded_rectangle.dart';
 import 'package:yoyak/models/user/account_models.dart';
 import 'package:yoyak/screen/Alarm/alarm_screen.dart';
-import 'package:yoyak/screen/Challenge/challenge_screen.dart';
-import 'package:yoyak/screen/Login/kakao_login_screen.dart';
+import 'package:yoyak/screen/Login/login_screen.dart';
+import 'package:yoyak/screen/PillBag/pill_bag_screen.dart';
 import 'package:yoyak/screen/Search/filter_search_screen.dart';
 import 'package:yoyak/screen/Search/photo_search_screen.dart';
+import 'package:yoyak/store/pill_bag_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 import '../../components/icon_in_rectangle.dart';
 import '../../store/login_store.dart';
@@ -21,12 +26,17 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+  String accessToken = '';
   late final FlickManager flickManager;
+  AccountModel? account;
 
   @override
   void initState() {
     super.initState();
+    loadUserData();
+    loadAccountData();
+    WidgetsBinding.instance.addObserver(this);
     flickManager = FlickManager(
       autoPlay: true,
       videoPlayerController: VideoPlayerController.asset(
@@ -43,9 +53,64 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print("state는 이거임 : $state");
+    switch (state) {
+      case AppLifecycleState.resumed:
+        print('resumed123');
+        break;
+      case AppLifecycleState.inactive:
+        print('inactive123');
+        break;
+      case AppLifecycleState.detached:
+        print('detached123');
+        // DO SOMETHING!
+        break;
+      case AppLifecycleState.paused:
+        print('paused123');
+        break;
+      default:
+        break;
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     flickManager.dispose(); // FlickManager 리소스 해제
     super.dispose();
+  }
+
+  Future<void> loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      accessToken =
+          prefs.getString('accessToken') ?? ''; // accessToken state 업데이트
+      print('asdas asdasda $accessToken');
+    });
+  }
+
+  Future<AccountModel?> loadAccount() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? accountJson = prefs.getString('accountModel');
+    if (accountJson != null) {
+      return AccountModel.fromJson(jsonDecode(accountJson));
+    }
+    return null;
+  }
+
+  Future<void> loadAccountData() async {
+    AccountModel? accountData = await loadAccount();
+    setState(() {
+      account = accountData; // 로드된 데이터로 account 변수 업데이트
+    });
+  }
+
+  void goTo(destination) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => destination),
+    );
   }
 
   @override
@@ -53,12 +118,17 @@ class _HomeScreenState extends State<HomeScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
     double rectangleSize = MediaQuery.of(context).size.width * 0.44;
     // LoginStore에서 alarmAccounts 가져오기
-    List<AccountModel> alarmAccounts = context.watch<LoginStore>().accountList;
 
     // account 변수를 선언하고 조건에 따라 할당
+    List<AccountModel> alarmAccounts = context.watch<LoginStore>().accountList;
+
     AccountModel? account =
         alarmAccounts.isNotEmpty ? alarmAccounts.first : null;
 
+    // 약 봉투 read 요청 - 로그인 됐을 때
+    if (accessToken.isNotEmpty) {
+      context.read<PillBagStore>().getPillBagDatas(context, medicineSeq: 0);
+    }
     goTo(destination) {
       Navigator.push(
         context,
@@ -67,9 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return Scaffold(
-      // appBar: const MainAppBar(
-      //   color: Palette.MAIN_BLUE,
-      // ),
+      backgroundColor: Palette.MAIN_WHITE,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -80,42 +148,42 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 250,
                   color: Palette.MAIN_BLUE,
                 ),
-                Positioned.fill(
-                  child: FlickVideoPlayer(
-                    flickManager: flickManager,
-                    flickVideoWithControls: FlickVideoWithControls(
-                      controls: Container(), // 컨트롤을 비어 있는 컨테이너로 설정하여 숨깁니다.
-                    ),
-                    flickVideoWithControlsFullscreen: FlickVideoWithControls(
-                      controls: Container(), // 전체 화면 모드에서도 컨트롤을 숨깁니다.
-                    ),
-                  ),
-                ),
+                // Positioned.fill(
+                //   child: FlickVideoPlayer(
+                //     flickManager: flickManager,
+                //     flickVideoWithControls: FlickVideoWithControls(
+                //       controls: Container(),
+                //     ),
+                //     flickVideoWithControlsFullscreen: FlickVideoWithControls(
+                //       controls: Container(),
+                //     ),
+                //   ),
+                // ),
                 MainAppBar(
                   color: Colors.black.withOpacity(0),
                 ),
                 Positioned(
-                  bottom: 20, // 원하는 위치로 조정
-                  left: 20, // 원하는 위치로 조정
+                  bottom: 25,
+                  left: 20,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (account != null) ...[
+                      if (accessToken.isNotEmpty) ...[
                         Text(
-                          "안녕하세요 ${account.nickname}님",
+                          "안녕하세요 ${account?.nickname}님",
                           style: const TextStyle(
-                            fontSize: 20,
+                            fontSize: 23,
                             color: Palette.MAIN_WHITE,
                             fontWeight: FontWeight.w600,
                             fontFamily: 'Pretendard',
                           ),
                         ),
-                        const SizedBox(height: 3), // SizedBox로 간격 조정
+                        const SizedBox(height: 3),
                         RichText(
                           text: const TextSpan(
                             style: TextStyle(
                               color: Palette.MAIN_WHITE,
-                              fontSize: 20,
+                              fontSize: 23,
                               fontWeight: FontWeight.w500,
                               fontFamily: 'Pretendard',
                             ),
@@ -124,12 +192,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                 text: "오늘도 ",
                                 style: TextStyle(
                                   fontFamily: 'Pretendard',
+                                  fontSize: 23,
                                 ),
                               ),
                               TextSpan(
                                 text: "요약",
                                 style: TextStyle(
-                                  fontSize: 23,
+                                  fontSize: 26,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.yellow,
                                   fontFamily: 'Pretendard',
@@ -140,6 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Pretendard',
+                                  fontSize: 23,
                                 ),
                               ),
                             ],
@@ -149,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         const Row(
                           children: [
                             Text(
-                              "약이 궁금할 땐, ",
+                              "요 약이 궁금할 땐, ",
                               style: TextStyle(
                                 fontSize: 22,
                                 color: Colors.white,
@@ -161,24 +231,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               "요약",
                               style: TextStyle(
                                 fontSize: 24,
-                                color: Palette.MAIN_BLUE,
+                                color: Colors.yellow,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'Pretendard',
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 3), // SizedBox로 간격 조정
-
-                        // const Text(
-                        //   "더 많은 서비스를 이용하실 수 있습니다.",
-                        //   style: TextStyle(
-                        //     fontSize: 18,
-                        //     color: Colors.white,
-                        //     fontWeight: FontWeight.w600,
-                        //     fontFamily: 'Pretendard',
-                        //   ),
-                        // )
+                        const SizedBox(height: 3),
                       ]
                     ],
                   ),
@@ -188,102 +248,104 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               color: Palette.MAIN_WHITE,
               child: Container(
-                  decoration: BoxDecoration(
-                    color: Palette.MAIN_WHITE,
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20)),
-                    border: Border.all(
-                      width: 0.1,
-                      color: Colors.grey.withOpacity(0.5),
-                    ),
+                decoration: const BoxDecoration(
+                  color: Palette.MAIN_WHITE,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
                   ),
-                  width: screenWidth,
-                  child: Column(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(top: 40),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Spacer(),
-                          RoundedRectangle(
-                            width: rectangleSize,
-                            height: rectangleSize,
-                            onTap: () {
-                              goTo(const PhotoSearchScreen());
-                            },
-                            child: const IconInRectangle(
-                              subTitle: "AI가 약을 찾아줘요",
-                              title: "사진 찍기",
-                              imagePath: "assets/images/camera.png",
-                            ),
-                          ),
-                          const Spacer(),
-                          RoundedRectangle(
-                            width: rectangleSize,
-                            height: rectangleSize,
-                            onTap: () {
-                              goTo(const FilterSearchScreen());
-                            },
-                            child: const IconInRectangle(
-                              subTitle: "사진 찍기 힘들다면",
-                              title: "검색하기",
-                              imagePath: "assets/images/search.png",
-                            ),
-                          ),
-                          const Spacer(),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Spacer(),
-                          RoundedRectangle(
-                              width: rectangleSize,
-                              height: rectangleSize,
-                              onTap: () => goTo(const KakaoLoginScreen()),
-                              child: const IconInRectangle(
-                                subTitle: "내 약을 한눈에",
-                                title: "MY 약 봉투",
-                                imagePath: "assets/images/envelop.png",
-                              )),
-                          const Spacer(),
-                          RoundedRectangle(
-                              width: rectangleSize,
-                              height: rectangleSize,
-                              onTap: () {
-                                goTo(const AlarmScreen());
-                              },
-                              child: const IconInRectangle(
-                                subTitle: "복약 시간 알려드려요",
-                                title: "알림",
-                                imagePath: "assets/images/alarm.png",
-                              )),
-                          const Spacer(),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      RoundedRectangle(
-                          width: screenWidth * 0.91,
-                          height: 180,
-                          onTap: () => goTo(const ChallengeScreen()),
+                ),
+                width: screenWidth,
+                child: Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(top: 40),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Spacer(),
+                        RoundedRectangle(
+                          width: rectangleSize,
+                          height: rectangleSize,
+                          onTap: () {
+                            goTo(const PhotoSearchScreen());
+                          },
                           child: const IconInRectangle(
-                              subTitle: "꾸준히 복용해봐요",
-                              title: "챌린지 참여하기",
-                              imagePath: "assets/images/flag.png")),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                    ],
-                  )),
-            )
+                            subTitle: "AI가 약을 찾아줘요",
+                            title: "사진 찍기",
+                            imagePath: "assets/images/camera.png",
+                          ),
+                        ),
+                        const Spacer(),
+                        RoundedRectangle(
+                          width: rectangleSize,
+                          height: rectangleSize,
+                          onTap: () {
+                            goTo(const FilterSearchScreen());
+                          },
+                          child: const IconInRectangle(
+                            subTitle: "사진 찍기 힘들다면",
+                            title: "검색하기",
+                            imagePath: "assets/images/search.png",
+                          ),
+                        ),
+                        const Spacer(),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Spacer(),
+                        RoundedRectangle(
+                          width: rectangleSize,
+                          height: rectangleSize,
+                          onTap: () {
+                            accessToken.isNotEmpty
+                                ? goTo(const PillBagScreen())
+                                : goTo(
+                                    const DialogUI(
+                                      destination: (LoginScreen()),
+                                    ),
+                                  );
+                          },
+                          child: const IconInRectangle(
+                            subTitle: "내 약을 한눈에",
+                            title: "MY 약 봉투",
+                            imagePath: "assets/images/envelop.png",
+                          ),
+                        ),
+                        const Spacer(),
+                        RoundedRectangle(
+                          width: rectangleSize,
+                          height: rectangleSize,
+                          onTap: () {
+                            goTo(
+                              const AlarmScreen(),
+                            );
+                          },
+                          child: const IconInRectangle(
+                            subTitle: "복약 시간 알려드려요",
+                            title: "알림",
+                            imagePath: "assets/images/alarm.png",
+                          ),
+                        ),
+                        const Spacer(),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

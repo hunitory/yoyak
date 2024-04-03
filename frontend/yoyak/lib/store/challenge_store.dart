@@ -1,32 +1,31 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:http/http.dart' as http;
-import 'package:yoyak/hooks/goto_screen.dart';
-import 'package:yoyak/screen/Main/main_screen.dart';
 import 'package:http_parser/http_parser.dart';
-import '../auto_login/singleton_secure_storage.dart';
 
 class ChallengeStore extends ChangeNotifier {
   var yoyakUrl = API.yoyakUrl;
-  dynamic myChallengeCard = {};
+  dynamic myChallengeCard = [];
   int challengeSeq = 0;
   String challengeContent = "";
   List<dynamic> myChallengeList = [];
   List<dynamic> othersChallengeList = [];
-  var storage = SingletonSecureStorage().storage;
   var accessToken = "";
+  bool isCheered = false;
+
   Future getMyChallengeList() async {
     try {
-      String? accessToken = await storage.read(key: 'accessToken');
-      print("덱에서 accessToken 잘 들어오나: $accessToken");
+      final prefs = await SharedPreferences.getInstance();
+      String? accessToken = prefs.getString('accessToken');
       var response = await http.get(Uri.parse('$yoyakUrl/challenge'), headers: {
         'Authorization': 'Bearer $accessToken',
       });
-      print(yoyakUrl);
-      print(response.body);
-      print(accessToken);
+      // print(yoyakUrl);
+      // print(response.body);
+      // print(accessToken);
 
       if (response.statusCode == 200) {
         print("내 챌린지 덱 조회 성공");
@@ -35,19 +34,18 @@ class ChallengeStore extends ChangeNotifier {
         challengeSeq = myChallengeCard['challengeSeq'];
         print('챌린지 덱: $myChallengeCard');
         print('챌린지 시퀀스: $challengeSeq');
-
         notifyListeners();
       } else {
         print("내 챌린지 덱 목록 조회 실패");
+        print("챌린지 덱 목록 조회 시 오류 : ${response.body}");
       }
     } catch (error) {
       print(error);
     }
   }
 
-  Future getMyChallenge() async {
+  Future getMyChallenge(String? accessToken) async {
     try {
-      String? accessToken = await storage.read(key: 'accessToken');
       print("내 챌린지 목록에서 accessToken 잘 들어오나: $accessToken");
       var response =
           await http.get(Uri.parse('$yoyakUrl/challenge/article/my'), headers: {
@@ -59,7 +57,9 @@ class ChallengeStore extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         print("내 챌린지 게시글 조회 성공");
+        print("내 챌린지 게시글 : $myChallengeList");
         myChallengeList = json.decode(utf8.decode(response.bodyBytes));
+        myChallengeList = myChallengeList.reversed.toList();
         notifyListeners();
       } else {
         print("내 챌린지 목록 조회 실패");
@@ -71,8 +71,9 @@ class ChallengeStore extends ChangeNotifier {
 
   Future registChallenge(String name, DateTime startDate, DateTime endDate,
       BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
     try {
-      String? accessToken = await storage.read(key: 'accessToken');
+      String? accessToken = prefs.getString('accessToken');
       String startMonth = "${startDate.month}".padLeft(2, "0");
       String startDay = "${startDate.day}".padLeft(2, "0");
       String endMonth = "${endDate.month}".padLeft(2, "0");
@@ -91,7 +92,7 @@ class ChallengeStore extends ChangeNotifier {
       print(response.statusCode);
       if (response.statusCode == 200) {
         print("챌린지 등록 성공");
-        goToScreen(context, const MainScreen());
+        Navigator.of(context).pop();
       } else {
         print("챌린지 등록 실패");
       }
@@ -102,7 +103,11 @@ class ChallengeStore extends ChangeNotifier {
     }
   }
 
-  Future<void> uploadDailyChallenge(context, image, String accessToken) async {
+  Future<void> uploadDailyChallenge(context, image) async {
+
+    final prefs = await SharedPreferences.getInstance();
+      String? accessToken = prefs.getString('accessToken');
+
     var dto = MultipartFile.fromString(
       json.encode({
         "challengeSeq": challengeSeq,
@@ -110,7 +115,7 @@ class ChallengeStore extends ChangeNotifier {
       }),
       contentType: MediaType.parse('application/json'),
     );
-
+    print("챌린지 등록시 accessToken 있나? $accessToken");
     var dio = Dio();
     MultipartFile file =
         MultipartFile.fromFileSync(image.path, filename: image.name);
@@ -134,7 +139,10 @@ class ChallengeStore extends ChangeNotifier {
       if (response.statusCode == 200) {
         print("일일 챌린지 등록 성공");
         print("일일 챌린지 등록 후 내 챌린지 리스트:  $myChallengeList");
-        goToScreen(context, const MainScreen());
+        Navigator.of(context).pop();
+        getMyChallengeList();
+        getMyChallenge(accessToken);
+        notifyListeners();
       } else {
         print("일일 챌린지 등록 실패");
         // 응답 본문을 출력하기 위해 response.stream을 bytes로 변환한 후, 문자열로 디코딩합니다.
@@ -147,9 +155,8 @@ class ChallengeStore extends ChangeNotifier {
   }
 
   // 챌린지 둘러보기 get
-  Future getOthersChallenge() async {
+  Future getOthersChallenge(String? accessToken) async {
     try {
-      String? accessToken = await storage.read(key: 'accessToken');
       print("다른 사람 챌린지 목록에서 accessToken 잘 들어오나: $accessToken");
       var response =
           await http.get(Uri.parse('$yoyakUrl/challenge/article'), headers: {
@@ -161,6 +168,7 @@ class ChallengeStore extends ChangeNotifier {
       if (response.statusCode == 200) {
         print("챌린지 둘러보기 조회 성공");
         othersChallengeList = json.decode(utf8.decode(response.bodyBytes));
+        othersChallengeList = othersChallengeList.reversed.toList();
         notifyListeners();
       } else {
         print("챌린지 둘러보기 조회 실패");
@@ -173,7 +181,8 @@ class ChallengeStore extends ChangeNotifier {
   // 응원하기
   Future cheerUp(var articleSeq) async {
     try {
-      String? accessToken = await storage.read(key: 'accessToken');
+      final prefs = await SharedPreferences.getInstance();
+      String? accessToken = prefs.getString('accessToken');
       var response =
           await http.put(Uri.parse("$yoyakUrl/challenge/article/cheer-up"),
               headers: {
@@ -186,6 +195,7 @@ class ChallengeStore extends ChangeNotifier {
       print(response.statusCode);
       if (response.statusCode == 200) {
         print("챌린지 응원하기 성공");
+        isCheered = !isCheered;
       } else {
         print("챌린지 응원하기 실패");
       }

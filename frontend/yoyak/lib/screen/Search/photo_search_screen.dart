@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:yoyak/components/base_button.dart';
 import 'dart:io';
 import 'package:yoyak/components/rounded_rectangle.dart';
-import 'package:yoyak/screen/Camera/Camera.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/screen/Search/photo_result_screen.dart';
 import 'package:yoyak/store/camera_store.dart';
 import '../../styles/colors/palette.dart';
+import 'package:lottie/lottie.dart';
 
 class PhotoSearchScreen extends StatefulWidget {
   const PhotoSearchScreen({super.key});
@@ -17,6 +17,57 @@ class PhotoSearchScreen extends StatefulWidget {
 }
 
 class _PhotoSearchScreenState extends State<PhotoSearchScreen> {
+  // 로딩 다이얼로그
+  Future<void> showLoadingDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // 다른 곳을 터치해도 닫히지 않음
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Palette.WHITE_BLUE,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Lottie.asset(
+                  'assets/lotties/loading.json',
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width * 0.15,
+                  height: MediaQuery.of(context).size.height * 0.10,
+                  fit: BoxFit.fill,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.03,
+                ),
+                const Text(
+                  "AI로 분석하는 중입니다..",
+                  style: TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // 초기 데이터 로드
+  @override
+  void initState() {
+    super.initState();
+    // 이미지변수 초기화
+    // context.read<CameraStore>().clearImage();
+    // 프레임이 렌더링된 직후에 코드가 실행
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CameraStore>().clearImage();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var sendImageToServer = context.read<CameraStore>().sendImageToServer;
@@ -34,8 +85,8 @@ class _PhotoSearchScreenState extends State<PhotoSearchScreen> {
           style: TextStyle(
             color: Palette.MAIN_BLACK,
             fontFamily: 'Pretendard',
-            fontWeight: FontWeight.w400,
-            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            fontSize: 16,
           ),
         ),
         backgroundColor: Palette.BG_BLUE,
@@ -67,19 +118,19 @@ class _PhotoSearchScreenState extends State<PhotoSearchScreen> {
                   color: Palette.MAIN_BLACK,
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,
-                  fontSize: 15),
+                  fontSize: 14),
             ),
             const Text(
-              "밝은 곳에서 알약의 문자가 잘 보이게 촬영해주세요.",
+              "밝은 곳에서 알약의 문자가 잘 보이게 촬영해 주세요.",
               style: TextStyle(
                   color: Palette.MAIN_BLACK,
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,
-                  fontSize: 15),
+                  fontSize: 14),
             ),
             // 가이드 사진
             Container(
-              margin: const EdgeInsets.only(top: 50, bottom: 40),
+              margin: const EdgeInsets.only(top: 30, bottom: 40),
               child: RoundedRectangle(
                 width: rectangleWidth,
                 height: rectangleHeight,
@@ -179,58 +230,42 @@ class _PhotoSearchScreenState extends State<PhotoSearchScreen> {
                             fontWeight: FontWeight.w500,
                             fontSize: 16),
                       ),
-                      // RoundedRectangle(
-                      //   width: 50,
-                      //   height: 50,
-                      //   child: const Text("카메라"),
-                      //   onTap: () {
-                      //     Navigator.push(
-                      //         context,
-                      //         MaterialPageRoute(
-                      //             builder: (context) => const CameraScreen()));
-                      //   },
-                      // ),
                     ],
                   ),
                 ),
               ],
             ),
             //  검색하기 버튼
-            // 스탈 입히기..
             if (image != null) ...[
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.04,
+                height: MediaQuery.of(context).size.height * 0.06,
               ),
               Center(
                 child: BaseButton(
                   onPressed: () async {
+                    // 로딩 다이얼로그 표시
+                    showLoadingDialog(context);
                     // 함수가 완료 될 때까지 기다렸다가 결과 페이지로 이동 async await
-                    await sendImageToServer();
-                    // 약 검색 결과 담기면 사진 결과 페이지로 이동
+                    await sendImageToServer(context);
+
+                    // 로딩 다이얼로그 닫기
+                    Navigator.of(context).pop();
+                    // 약 검색 결과 담기면 사진 결과 페이지로 이동 -> sendImageToServer 에서 네비게이터까지 처리
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => PhotoResultScreen(
                                   photoResults: photoResults,
                                 )));
+
+                    // 결과페이지로 이동하면 원래 img는 초기화
+                    image = null;
                   },
                   text: "검색하기",
                   colorMode: "white",
                 ),
               )
             ],
-            // SizedBox(
-            //   height: MediaQuery.of(context).size.height * 0.04,
-            // ),
-            // Center(
-            //   child: BaseButton(
-            //     onPressed: () {
-            //       sendImageToServer();
-            //     },
-            //     text: "검색하기",
-            //     colorMode: "white",
-            //   ),
-            // )
           ],
         ),
       ),

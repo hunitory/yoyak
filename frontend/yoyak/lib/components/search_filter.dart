@@ -111,7 +111,7 @@ class _FilterComponentState extends State<FilterComponent> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.only(bottom: 25),
       child: RoundedRectangle(
         width: MediaQuery.of(context).size.width * 0.90,
         height: MediaQuery.of(context).size.width * 0.25,
@@ -178,17 +178,78 @@ class _FilterComponentState extends State<FilterComponent> {
                           if (option.imagePath != null)
                             const SizedBox(height: 3),
 
-                          Text(
-                            option.text,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 15,
-                                color: selectedOption == widget.options[index]
-                                    ? Palette.MAIN_BLUE
-                                    : Palette.MAIN_BLACK),
-                          ),
+                          if (option.text == '모양 전체')
+                            Column(
+                              children: [
+                                Text(
+                                  '모양',
+                                  style: TextStyle(
+                                    color:
+                                        selectedOption == widget.options[index]
+                                            ? Palette.MAIN_BLUE
+                                            : Palette.MAIN_BLACK,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Pretendard',
+                                  ),
+                                ),
+                                Text(
+                                  '전체',
+                                  style: TextStyle(
+                                    color:
+                                        selectedOption == widget.options[index]
+                                            ? Palette.MAIN_BLUE
+                                            : Palette.MAIN_BLACK,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Pretendard',
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                          if (option.text == '색상 전체')
+                            Column(
+                              children: [
+                                Text(
+                                  '색상',
+                                  style: TextStyle(
+                                    color:
+                                        selectedOption == widget.options[index]
+                                            ? Palette.MAIN_BLUE
+                                            : Palette.MAIN_BLACK,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Pretendard',
+                                  ),
+                                ),
+                                Text(
+                                  '전체',
+                                  style: TextStyle(
+                                    color:
+                                        selectedOption == widget.options[index]
+                                            ? Palette.MAIN_BLUE
+                                            : Palette.MAIN_BLACK,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Pretendard',
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                          if (option.imagePath != null)
+                            Text(
+                              option.text,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 15,
+                                  color: selectedOption == widget.options[index]
+                                      ? Palette.MAIN_BLUE
+                                      : Palette.MAIN_BLACK),
+                            ),
                         ],
                       ),
                     ),

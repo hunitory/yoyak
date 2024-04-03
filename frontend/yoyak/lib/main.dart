@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/screen/Main/main_screen.dart';
@@ -14,22 +15,54 @@ import 'package:yoyak/store/pill_bag_store.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'firebase_options.dart';
 
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'high_importance_channel', // id
+  'High Importance Notifications', // title
+  description:
+      'This channel is used for important notifications.', // description
+  importance: Importance.high,
+);
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
+  final flutterLocalNotificationPlugin = FlutterLocalNotificationsPlugin();
+  await flutterLocalNotificationPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(const AndroidNotificationChannel('id', '네임',
+          importance: Importance.max));
 
-  print("Handling a background message: ${message.messageId}");
+  await flutterLocalNotificationPlugin.initialize(const InitializationSettings(
+      android: AndroidInitializationSettings("@mipmap/logo ")));
 }
 
+// 포그라운드 알림 처리
 void setupFirebaseMessaging() {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
-    print('Message data: ${message.data}');
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
 
-    if (message.notification != null) {
-      print('Message also contained a notification: ${message.notification}');
+    if (notification != null && android != null) {
+      flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            'channel_id',
+            'channel_name',
+            channelDescription: 'channel description',
+            icon: android.smallIcon,
+            // other properties...
+          ),
+        ),
+      );
     }
   });
 }
@@ -44,8 +77,15 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  setupFirebaseMessaging();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  WidgetsFlutterBinding.ensureInitialized();
+  var initializationSettingsAndroid =
+      const AndroidInitializationSettings('@mipmap/logo');
+  var initializationSettings =
+      InitializationSettings(android: initializationSettingsAndroid);
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   runApp(
     MultiProvider(
@@ -67,7 +107,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return const SafeArea(
         child: MaterialApp(
       // 알림 날짜 선택기를 위한 한국어 설정

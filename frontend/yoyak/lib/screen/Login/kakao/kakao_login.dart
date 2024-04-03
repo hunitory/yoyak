@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
@@ -44,7 +42,6 @@ class KakaoLogin extends StatelessWidget implements SocialLogin {
         print('카톡 설치 안됐을 때 카카오계정으로 로그인 성공');
         print(kakaoToken.accessToken);
         // sendKakaoId(kakaoToken);
-
 
         return true;
       } catch (error) {

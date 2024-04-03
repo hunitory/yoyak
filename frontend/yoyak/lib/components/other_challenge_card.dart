@@ -20,6 +20,7 @@ class OtherChallengeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     double cardListWidth = MediaQuery.of(context).size.width * 0.9;
     var othersChallengeList = context.watch<ChallengeStore>().othersChallengeList;
+    context.watch<ChallengeStore>().isCheered;
     // 응원했으면 배경 색, 글씨 색 바꾸기
     return RoundedRectangle(
       width: ScreenSize.getWidth(context),
@@ -67,7 +68,7 @@ class OtherChallengeCard extends StatelessWidget {
           // 챌린지 시작했을 때, 안했을 때 분기
           SizedBox(
             width: cardListWidth,
-            height: 300,
+            height: 290,
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
