@@ -204,6 +204,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
     // options을 포함하는 리스트
 
     return Scaffold(
+      backgroundColor: Palette.BG_BLUE,
       appBar: AppBar(
         title: const Text('약 검색',
             style: TextStyle(
@@ -212,7 +213,8 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
               fontWeight: FontWeight.w500,
               fontSize: 16,
             )),
-        backgroundColor: Palette.MAIN_WHITE,
+        // backgroundColor: Palette.MAIN_WHITE,
+        backgroundColor: Palette.BG_BLUE,
         centerTitle: true,
         toolbarHeight: 55,
       ),

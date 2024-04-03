@@ -30,6 +30,23 @@ class _PillBagScreenState extends State<PillBagScreen> {
     print("삭제 모드: $_isDeleteMode");
   }
 
+  _showSnackbar(String message, String color) {
+    final snackbar = SnackBar(
+      backgroundColor: color == 'red' ? Palette.MAIN_RED : Palette.MAIN_BLUE,
+      content: Text(
+        message,
+        style: const TextStyle(
+          color: Palette.MAIN_WHITE,
+          fontSize: 14,
+          fontFamily: 'Pretendard',
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
   // 약 봉투 컴포넌트
   Widget _pillBagComponent(
     int medicineEnvelopSeq,
@@ -244,6 +261,7 @@ class _PillBagScreenState extends State<PillBagScreen> {
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w500,
             fontSize: 16,
+            backgroundColor: Palette.BG_BLUE,
           ),
         ),
         actions: <Widget>[
@@ -252,7 +270,7 @@ class _PillBagScreenState extends State<PillBagScreen> {
             onPressed: _toggleDeleteMode, // 삭제 모드 토글 버튼
           ),
         ],
-        backgroundColor: Palette.MAIN_WHITE,
+        backgroundColor: Palette.BG_BLUE,
         centerTitle: true,
         toolbarHeight: 55,
       ),
@@ -360,6 +378,7 @@ class _PillBagScreenState extends State<PillBagScreen> {
                         .read<PillBagStore>()
                         .deletePillBag(context, medicineEnvelopSeq);
                   }
+                  _showSnackbar("약 봉투가 삭제되었습니다.", 'red');
                   // 삭제 모드 종료
                   _toggleDeleteMode();
                 },

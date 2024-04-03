@@ -47,7 +47,7 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
               fontSize: 16,
             ),
           ),
-          backgroundColor: Palette.MAIN_WHITE,
+          backgroundColor: Palette.BG_BLUE,
           centerTitle: true,
           toolbarHeight: 55,
         ),

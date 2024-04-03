@@ -262,7 +262,7 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
               fontWeight: FontWeight.w500,
               fontSize: 16,
             )),
-        backgroundColor: Palette.MAIN_WHITE,
+        backgroundColor: Palette.BG_BLUE,
         centerTitle: true,
         toolbarHeight: 55,
       ),

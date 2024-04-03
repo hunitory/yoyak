@@ -79,7 +79,7 @@ class _FilterResultState extends State<FilterResult> {
             fontSize: 16,
           ),
         ),
-        backgroundColor: Palette.MAIN_WHITE,
+        backgroundColor: Palette.BG_BLUE,
         centerTitle: true,
         toolbarHeight: 55,
       ),

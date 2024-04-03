@@ -333,7 +333,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           },
                           child: const IconInRectangle(
                             subTitle: "복약 시간 알려드려요",
-                            title: "알림",
+                            title: "복용 알림",
                             imagePath: "assets/images/alarm.png",
                           ),
                         ),

@@ -86,7 +86,7 @@ class _MypageScreenState extends State<MypageScreen>
         backgroundColor: Palette.BG_BLUE,
         appBar: AppBar(
           centerTitle: true,
-          backgroundColor: Palette.MAIN_WHITE,
+          backgroundColor: Palette.BG_BLUE,
           elevation: 0,
           title: const Text(
             '내 정보',

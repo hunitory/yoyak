@@ -89,7 +89,7 @@ class _PhotoSearchScreenState extends State<PhotoSearchScreen> {
             fontSize: 16,
           ),
         ),
-        backgroundColor: Palette.MAIN_WHITE,
+        backgroundColor: Palette.BG_BLUE,
         centerTitle: true,
         toolbarHeight: 55,
       ),
