@@ -85,16 +85,17 @@ class _PillBagState extends State<PillBag> {
         leading: Transform.scale(
           scale: 1.5, // 체크박스 크기 조절
           child: Checkbox(
-            value: ischecked,
+            // value: ischecked,
+            value: context
+                .watch<PillBagStore>()
+                .isMedicineSaved(widget.medicineEnvelopSeq),
             // 체크 박스
+            // 필터 변경 시 PillBagModal 내부에서 상태가 업데이트
             onChanged: (bool? value) {
-              // 체크박스 클릭할때마다 상태 변경
-              // api 연결해서 수정하기 !
-              // setState(() {
-              //   isSavedMedicine = value!;
-              // });
-              // widget.onClick(); // 부모 위젯에 이벤트 알림
               _toggleSavedMedicine(value!);
+              context
+                  .read<PillBagStore>()
+                  .toggleSavedMedicine(widget.medicineEnvelopSeq, value);
             },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5),

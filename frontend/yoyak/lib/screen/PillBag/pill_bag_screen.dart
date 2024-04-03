@@ -81,6 +81,15 @@ class _PillBagScreenState extends State<PillBagScreen> {
               ),
             ),
           );
+        } else {
+          // 삭제 모드일 때, 체크박스 토글
+          setState(() {
+            if (isChecked) {
+              _checkedPillBags.remove(medicineEnvelopSeq);
+            } else {
+              _checkedPillBags.add(medicineEnvelopSeq);
+            }
+          });
         }
       },
       child: Container(
@@ -182,31 +191,6 @@ class _PillBagScreenState extends State<PillBagScreen> {
     );
   }
 
-  // 돌보미 목록을 드롭다운 아이템
-  // List<DropdownMenuItem<int>> getAccountDropdownItems() {
-  //   List<DropdownMenuItem<int>> dropdownItems = [
-  //     const DropdownMenuItem(
-  //       value: null, // '모두' 옵션
-  //       child: Text("모두의 약 봉투"),
-  //     ),
-  //   ];
-  //   // pillBags 데이터에서 고유한 accountSeq와 nickname을 추출하여 목록 생성
-  //   // 예시로 직접 추가한 항목들, 실제로는 API에서 받은 데이터 사용
-  //   var accounts = [
-  //     {"accountSeq": 1, "nickname": "사용자1"},
-  //     {"accountSeq": 2, "nickname": "사용자2"},
-  //   ];
-  //   for (var account in accounts) {
-  //     dropdownItems.add(
-  //       DropdownMenuItem(
-  //         value: account['accountSeq'],
-  //         child: Text(account['nickname']),
-  //       ),
-  //     );
-  //   }
-  //   return dropdownItems;
-  // }
-
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> pillBags =
@@ -266,10 +250,12 @@ class _PillBagScreenState extends State<PillBagScreen> {
           ),
         ),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.delete_outline),
-            onPressed: _toggleDeleteMode, // 삭제 모드 토글 버튼
-          ),
+          // 약 봉투 있을때만 삭제 모드 버튼 출력
+          if (pillBags['count'] > 0)
+            IconButton(
+              icon: const Icon(Icons.delete_outline),
+              onPressed: _toggleDeleteMode, // 삭제 모드 토글 버튼
+            ),
         ],
         backgroundColor: Palette.BG_BLUE,
         centerTitle: true,
