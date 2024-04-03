@@ -46,7 +46,7 @@ class _PhotoResultScreenState extends State<PhotoResultScreen> {
       backgroundColor: Palette.BG_BLUE,
       appBar: AppBar(
         title: const Text(
-          '알약 검색',
+          '약 검색',
           style: TextStyle(
             color: Palette.MAIN_BLACK,
             fontFamily: 'Pretendard',

@@ -71,7 +71,7 @@ class _FilterResultState extends State<FilterResult> {
       backgroundColor: Palette.BG_BLUE,
       appBar: AppBar(
         title: const Text(
-          '알약 검색',
+          '약 검색',
           style: TextStyle(
             color: Palette.MAIN_BLACK,
             fontFamily: 'Pretendard',
@@ -98,7 +98,7 @@ class _FilterResultState extends State<FilterResult> {
                     Container(
                       padding: const EdgeInsets.only(left: 10),
                       child: const Text(
-                        "필터로 알약 검색",
+                        "필터로 약 검색",
                         style: TextStyle(
                             color: Palette.MAIN_BLACK,
                             fontFamily: 'Pretendard',
