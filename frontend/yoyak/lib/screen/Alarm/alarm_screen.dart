@@ -163,11 +163,8 @@ class _AlarmScreenState extends State<AlarmScreen> {
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w500,
                     ),
-                    underline: Container(
-                      color: Palette.SUB_WHITE,
-                      height: 1,
-                    ),
                     iconSize: 30,
+                    underline: Container(),
                     iconEnabledColor: Palette.MAIN_BLACK,
                     borderRadius: BorderRadius.circular(10),
                     value: selectedAccountSeq,

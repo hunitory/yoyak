@@ -246,7 +246,6 @@ class _PillBagScreenState extends State<PillBagScreen> {
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w500,
             fontSize: 16,
-            backgroundColor: Palette.BG_BLUE,
           ),
         ),
         actions: <Widget>[
@@ -275,75 +274,81 @@ class _PillBagScreenState extends State<PillBagScreen> {
               ),
             )
           // 약 봉투가 있을 때
-          : SingleChildScrollView(
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(
-                  vertical: MediaQuery.of(context).size.height * 0.02,
-                  horizontal: MediaQuery.of(context).size.height * 0.03,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 돌보미 필터링 드롭다운 메뉴
-                    if (accountList.length > 1)
-                      Padding(
-                        padding: EdgeInsets.only(
-                          right: MediaQuery.of(context).size.height * 0.004,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            DropdownButton<int>(
-                              value: _selectedAccountSeq,
-                              items: dropdownItems,
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedAccountSeq =
-                                      value; // 선택된 accountSeq 업데이트
-                                });
-                              },
-                              underline: Container(), // 드롭다운 메뉴의 밑줄 제거
-                            ),
-                          ],
-                        ),
-                      ),
-
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.03,
+          : Column(
+              children: [
+                // 돌보미 필터링 드롭다운 메뉴
+                if (accountList.length > 1)
+                  Padding(
+                    padding: EdgeInsets.only(
+                      right: MediaQuery.of(context).size.height * 0.014,
                     ),
-                    Column(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        // 필터링된 약 봉투 위젯 목록
-                        if (filteredPillBagsWidgets.isNotEmpty)
-                          ...filteredPillBagsWidgets
-                        else
-                          Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                // 가운데가 안 먹어
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.2,
-                                ),
-                                const Text(
-                                  "약 봉투가 없습니다.",
-                                  style: TextStyle(
-                                    color: Palette.SUB_BLACK,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                        DropdownButton<int>(
+                          value: _selectedAccountSeq,
+                          items: dropdownItems,
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedAccountSeq =
+                                  value; // 선택된 accountSeq 업데이트
+                            });
+                          },
+                          underline: Container(), // 드롭다운 메뉴의 밑줄 제거
+                        ),
                       ],
                     ),
-                  ],
+                  ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        vertical: MediaQuery.of(context).size.height * 0.02,
+                        horizontal: MediaQuery.of(context).size.height * 0.03,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.03,
+                          ),
+                          Column(
+                            children: [
+                              // 필터링된 약 봉투 위젯 목록
+                              if (filteredPillBagsWidgets.isNotEmpty)
+                                ...filteredPillBagsWidgets
+                              else
+                                Center(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      // 가운데가 안 먹어
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.2,
+                                      ),
+                                      const Text(
+                                        "약 봉투가 없습니다.",
+                                        style: TextStyle(
+                                          color: Palette.SUB_BLACK,
+                                          fontFamily: 'Pretendard',
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
       // 약 봉투 생성 or 삭제 버튼
       floatingActionButton: _isDeleteMode

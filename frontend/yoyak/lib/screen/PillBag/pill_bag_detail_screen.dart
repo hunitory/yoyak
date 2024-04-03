@@ -244,7 +244,6 @@ class _PillBagDetailScreenState extends State<PillBagDetailScreen> {
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w500,
             fontSize: 16,
-            backgroundColor: Palette.BG_BLUE,
           ),
         ),
         actions: <Widget>[
