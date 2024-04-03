@@ -20,15 +20,14 @@ class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
   Widget build(BuildContext context) {
     context.watch<ChallengeStore>().othersChallengeList;
     // var isCheered = context.watch<ChallengeStore>().isCheered;
-
     double cardWidth = ScreenSize.getWidth(context) * 0.4;
     return Padding(
       padding: const EdgeInsets.only(top: 15, right: 10),
       child: GestureDetector(
         onTap: () {},
-        child: Container(
+            child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+          color: Colors.white,
             borderRadius: BorderRadius.circular(15),
             border: Border.all(width: 0.4, color: Palette.SHADOW_GREY),
           ),
@@ -64,8 +63,10 @@ class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
                         color: Palette.MAIN_BLACK,
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w600,
-                        fontSize: 17,
+                        fontSize: 16,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ), // 게시물 제목
                     Text(
                       widget.challenge?['userNickname'] ?? "유저 닉네임",
@@ -75,6 +76,8 @@ class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
                         fontWeight: FontWeight.w500,
                         fontSize: 15,
                       ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                     const SizedBox(
                       height: 10,
@@ -109,9 +112,9 @@ class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
                                 .read<ChallengeStore>()
                                 .cheerUp(widget.challenge?['articleSeq']);
                             await context.read<ChallengeStore>().getOthersChallenge(accessToken);
-                            // setState(() {
-                            //   isCheered++;
-                            // });
+                            setState(() {
+                              // isCheered++;
+                            });
                           },
                         ),
                       ],
