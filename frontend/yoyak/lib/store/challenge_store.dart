@@ -105,9 +105,8 @@ class ChallengeStore extends ChangeNotifier {
   }
 
   Future<void> uploadDailyChallenge(context, image) async {
-
     final prefs = await SharedPreferences.getInstance();
-      String? accessToken = prefs.getString('accessToken');
+    String? accessToken = prefs.getString('accessToken');
 
     var dto = MultipartFile.fromString(
       json.encode({
@@ -196,7 +195,7 @@ class ChallengeStore extends ChangeNotifier {
   Future getAllChallenge() async {
     try {
       var response =
-        await http.get(Uri.parse('$yoyakUrl/challenge/article/all'));
+          await http.get(Uri.parse('$yoyakUrl/challenge/article/all'));
 
       print("All 챌린지 둘러보기 리스트: ${response.body}");
 

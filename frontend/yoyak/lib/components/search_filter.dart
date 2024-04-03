@@ -33,8 +33,10 @@ class FilterComponent extends StatefulWidget {
 
 class _FilterComponentState extends State<FilterComponent> {
   late FilterContainer selectedOption;
+
   // 화살표 자동 스크롤
   final ScrollController _scrollController = ScrollController();
+
   // 화살표 유무
   bool _showLeftArrow = false;
   bool _showRightArrow = true;
@@ -164,7 +166,7 @@ class _FilterComponentState extends State<FilterComponent> {
                         // 현재 선택된 옵션이면 배경을 파란색.
                         color: selectedOption == widget.options[index]
                             ? Palette.BG_BLUE
-                            : Colors.white,
+                            : Palette.MAIN_WHITE,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Column(

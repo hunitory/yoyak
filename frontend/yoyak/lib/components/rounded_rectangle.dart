@@ -33,7 +33,7 @@ class RoundedRectangle extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-            color: color ?? Colors.white,
+            color: color ?? Palette.MAIN_WHITE,
             borderRadius: borderRadius ?? BorderRadius.circular(15),
             border: border,
             boxShadow: boxShadow ??

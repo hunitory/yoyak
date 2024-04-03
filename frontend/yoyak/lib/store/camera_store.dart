@@ -42,16 +42,6 @@ class CameraStore extends ChangeNotifier {
         print(response.data);
         photoResults = response.data;
 
-        // 상세 페이지로 이동 (미완)
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => PhotoResultScreen(
-        //               photoResults: photoResults,
-        //             )));
-        // 이미지 변수 초기화
-        // image = null;
-
         notifyListeners();
       } else {
         print(response.statusCode);

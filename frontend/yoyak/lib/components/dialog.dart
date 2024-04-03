@@ -4,11 +4,13 @@ import '../styles/colors/palette.dart';
 
 class DialogUI extends StatelessWidget {
   const DialogUI({super.key, required this.destination});
+
   final Widget destination;
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Colors.white,
+      backgroundColor: Palette.MAIN_WHITE,
       child: Container(
         width: 300,
         height: 200,
@@ -44,7 +46,7 @@ class DialogUI extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: 'Pretendard',
                       fontSize: 15,
-                      color: Colors.white,
+                      color: Palette.MAIN_WHITE,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -62,7 +64,7 @@ class DialogUI extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: 'Pretendard',
                       fontSize: 15,
-                      color: Colors.white,
+                      color: Palette.MAIN_WHITE,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
