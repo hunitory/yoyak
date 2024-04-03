@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/screen/SignUp/more_info_screen.dart';
 import 'package:yoyak/styles/colors/palette.dart';
+import 'package:yoyak/styles/screenSize/screen_size.dart';
 import '../../store/login_store.dart';
 
 class GreetingScreen extends StatefulWidget {
@@ -19,16 +20,11 @@ class _GreetingScreenState extends State<GreetingScreen> {
     if (userNameController.text.isEmpty) {
       // Vibration.vibrate(duration: 300); // 진동
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        shape: RoundedRectangleBorder(
-          // ShapeDecoration을 사용하여 borderRadius 적용
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-        ),
         content: Text(
           "닉네임을 입력해주세요",
-          style: TextStyle(color: Palette.MAIN_BLACK),
+          style: TextStyle(color: Palette.MAIN_WHITE),
         ),
-        backgroundColor: Colors.yellow,
+        backgroundColor: Palette.MAIN_RED,
         duration: Duration(milliseconds: 1100),
       ));
       return false;
@@ -41,25 +37,22 @@ class _GreetingScreenState extends State<GreetingScreen> {
     var inputWidth = MediaQuery.of(context).size.width * 0.8;
 
     return Scaffold(
+      backgroundColor: Palette.MAIN_WHITE,
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         reverse: true,
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
-            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // SizedBox(
-              //   width: screenWidth,
-              //   child: Lottie.asset('assets/lottie/kickboard.json',
-              //       width: 300, height: 300),
-              // ),
+              SizedBox(
+                height: ScreenSize.getHeight(context) * 0.08,
+              ),
               Padding(
                 padding: const EdgeInsets.all(25.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-
                     const Text(
                       "사진 한 장이면 충분해요",
                       style: TextStyle(
@@ -89,7 +82,9 @@ class _GreetingScreenState extends State<GreetingScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 40,),
+                    const SizedBox(
+                      height: 40,
+                    ),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10), // 둥근 모서리 반경 설정
                       child: Image.asset(

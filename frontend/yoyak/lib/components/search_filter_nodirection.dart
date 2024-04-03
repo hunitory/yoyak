@@ -121,17 +121,78 @@ class _FilterComponentState extends State<FilterComponentNoDi> {
                           if (option.imagePath != null)
                             const SizedBox(height: 3),
 
-                          Text(
-                            option.text,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 15,
-                                color: selectedOption == widget.options[index]
-                                    ? Palette.MAIN_BLUE
-                                    : Palette.MAIN_BLACK),
-                          ),
+                          if (option.text == '제형 전체')
+                            Column(
+                              children: [
+                                Text(
+                                  '제형',
+                                  style: TextStyle(
+                                    color:
+                                        selectedOption == widget.options[index]
+                                            ? Palette.MAIN_BLUE
+                                            : Palette.MAIN_BLACK,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Pretendard',
+                                  ),
+                                ),
+                                Text(
+                                  '전체',
+                                  style: TextStyle(
+                                    color:
+                                        selectedOption == widget.options[index]
+                                            ? Palette.MAIN_BLUE
+                                            : Palette.MAIN_BLACK,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Pretendard',
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                          if (option.text == '분할선 전체')
+                            Column(
+                              children: [
+                                Text(
+                                  '분할선',
+                                  style: TextStyle(
+                                    color:
+                                        selectedOption == widget.options[index]
+                                            ? Palette.MAIN_BLUE
+                                            : Palette.MAIN_BLACK,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Pretendard',
+                                  ),
+                                ),
+                                Text(
+                                  '전체',
+                                  style: TextStyle(
+                                    color:
+                                        selectedOption == widget.options[index]
+                                            ? Palette.MAIN_BLUE
+                                            : Palette.MAIN_BLACK,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Pretendard',
+                                  ),
+                                ),
+                              ],
+                            ),
+                            
+                          if (option.imagePath != null)
+                            Text(
+                              option.text,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 15,
+                                  color: selectedOption == widget.options[index]
+                                      ? Palette.MAIN_BLUE
+                                      : Palette.MAIN_BLACK),
+                            ),
                         ],
                       ),
                     ),

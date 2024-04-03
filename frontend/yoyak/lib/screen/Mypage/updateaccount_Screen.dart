@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:yoyak/components/base_button.dart';
 import 'package:yoyak/components/base_input.dart';
@@ -11,10 +12,10 @@ import 'package:yoyak/styles/colors/palette.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 
 class UpdateAccountScreen extends StatefulWidget {
-  AccountModel accountitem;
+  final AccountModel accountitem;
   final bool isUser;
 
-  UpdateAccountScreen({
+  const UpdateAccountScreen({
     super.key,
     required this.accountitem,
     required this.isUser,
@@ -130,9 +131,9 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
     );
   }
 
-  void _showSnackbar(String message) {
+  void _showSnackbar(String message, String color) {
     final snackbar = SnackBar(
-      backgroundColor: Palette.MAIN_RED,
+      backgroundColor: color == 'red' ? Palette.MAIN_RED : Palette.MAIN_BLUE,
       content: Text(
         message,
         style: const TextStyle(
@@ -147,13 +148,14 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
-  Future<void> deleteAlarmData(int accountSeq) async {
+  Future<void> deleteAccountData(int accountSeq) async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = context.read<LoginStore>().accessToken;
+    final prefs = await SharedPreferences.getInstance();
     String url = '$yoyakURL/account/$accountSeq'; // 서버 URL
 
     try {
       // DELETE 요청 보내기
+      String? accessToken = prefs.getString('accessToken');
       var response = await http.delete(
         Uri.parse(url),
         headers: {
@@ -163,6 +165,7 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
       );
 
       if (response.statusCode == 200) {
+        _showSnackbar('돌봄 대상이 삭제되었습니다.', 'red');
         print('삭제 완료');
         if (mounted) {
           context.read<LoginStore>().getAccountData();
@@ -179,25 +182,29 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
     }
   }
 
-  Future<void> updateAlarmData() async {
+  Future<void> updateAccountData() async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = context.read<LoginStore>().accessToken;
+    final prefs = await SharedPreferences.getInstance();
+
     String url = '$yoyakURL/account'; // 서버 URL
+    String formattedMonth = monthController.text.length == 1
+        ? '0${monthController.text}'
+        : monthController.text;
 
     // 서버에 보낼 데이터 준비
     Map<String, dynamic> accountData = {
       'seq': widget.accountitem.seq,
-      // 'name': _userNameController.text,
+      'name': _userNameController.text,
       'nickname': _userNameController.text,
       'gender': gender,
-      'birth':
-          '${yearController.text}-${monthController.text}-${dayController.text}',
+      'birth': '${yearController.text}-$formattedMonth-${dayController.text}',
       'disease': _userDiseaseController.text,
       'profileImg': widget.accountitem.profileImg,
     };
 
     try {
       // POST 요청 보내기
+      String? accessToken = prefs.getString('accessToken');
       var response = await http.put(
         Uri.parse(url),
         headers: {
@@ -209,13 +216,16 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
 
       if (response.statusCode == 200) {
         print('수정 완료');
+        _showSnackbar('프로필이 수정되었습니다.', 'blue');
         // 알람 데이터를 다시 불러오기
         if (mounted) {
+          Navigator.pop(context);
           context.read<LoginStore>().getAccountData();
         }
       } else {
         // 오류 처리
-        print(accountData);
+        _showSnackbar('입력 정보가 올바르지 않습니다. 다시 확인해주세요.', 'red');
+
         print(
             'Failed to send account data, status code: ${response.statusCode}');
       }
@@ -225,24 +235,27 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
     }
   }
 
-  Future<void> createAlarmData() async {
+  Future<void> createAccountData() async {
     String yoyakURL = API.yoyakUrl; // 서버 URL
-    String accessToken = context.read<LoginStore>().accessToken;
+    final prefs = await SharedPreferences.getInstance();
     String url = '$yoyakURL/account'; // 서버 URL
+    String formattedMonth = monthController.text.length == 1
+        ? '0${monthController.text}'
+        : monthController.text;
 
     // 서버에 보낼 데이터 준비
     Map<String, dynamic> accountData = {
       'name': _userNameController.text,
       'nickname': _userNameController.text,
       'gender': gender,
-      'birth':
-          '${yearController.text}-${monthController.text}-${dayController.text}',
+      'birth': '${yearController.text}-$formattedMonth-${dayController.text}',
       'disease': _userDiseaseController.text,
       'profileImg': widget.accountitem.profileImg,
     };
 
     try {
       // POST 요청 보내기
+      String? accessToken = prefs.getString('accessToken');
       var response = await http.post(
         Uri.parse(url),
         headers: {
@@ -253,6 +266,7 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
       );
 
       if (response.statusCode == 200) {
+        _showSnackbar('돌봄 대상이 생성되었습니다.', 'blue');
         print('생성완료');
         // 알람 데이터를 다시 불러오기
         if (mounted) {
@@ -261,6 +275,7 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
         }
       } else {
         // 오류 처리
+        _showSnackbar('입력 정보가 올바르지 않습니다. 다시 확인해주세요.', 'red');
         print(accountData);
         print(
             'Failed to send account data, status code: ${response.statusCode}');
@@ -310,7 +325,7 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
         int yearValue = int.parse(yearText);
         int currentYear = DateTime.now().year;
         if (yearValue > currentYear) {
-          _showSnackbar("년도는 현재 년도를 초과할 수 없습니다.");
+          _showSnackbar("년도는 현재 년도를 초과할 수 없습니다.", 'red');
           yearController.text = currentYear.toString();
         }
       }
@@ -362,7 +377,7 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
                 width: 104,
                 height: 35,
                 onPressed: () {
-                  deleteAlarmData(widget.accountitem.seq!);
+                  deleteAccountData(widget.accountitem.seq!);
                 },
                 text: '삭제하기',
                 colorMode: 'blue',
@@ -551,7 +566,8 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
                                 if (monthValue == null ||
                                     monthValue < 1 ||
                                     monthValue > 12) {
-                                  _showSnackbar("월은 1과 12 사이의 숫자여야 합니다.");
+                                  _showSnackbar(
+                                      "월은 1과 12 사이의 숫자여야 합니다.", 'red');
                                   monthController.clear();
                                 } else {
                                   monthController.text =
@@ -599,7 +615,7 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
                               if (dayValue == null ||
                                   dayValue < 1 ||
                                   dayValue > 31) {
-                                _showSnackbar("일은 1과 31 사이의 숫자여야 합니다.");
+                                _showSnackbar("일은 1과 31 사이의 숫자여야 합니다.", 'red');
                                 dayController.clear();
                               } else {
                                 dayController.text =
@@ -686,13 +702,10 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
           }
           // 알림 생성 시
           if (widget.accountitem.seq == null) {
-            await createAlarmData();
+            await createAccountData();
           } else {
             // 알림 수정 시
-            await updateAlarmData();
-          }
-          if (context.mounted) {
-            Navigator.pop(context);
+            await updateAccountData();
           }
         },
         child: const Center(

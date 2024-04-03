@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:lottie/lottie.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:flutter/material.dart';
 import 'package:yoyak/components/base_button.dart';
@@ -20,10 +21,13 @@ class FilterSearchScreen extends StatefulWidget {
 class _FilterSearchScreenState extends State<FilterSearchScreen> {
   // 선택된 옵션을 저장하는 Map - 검색하기 api에 사용
   Map<String, String> selectedOptions = {}; // State 객체 내에 있으므로 변경 가능
+  // 검색 할 필터 데이터
+  var data;
+
   final List<Map<String, dynamic>> filterOptions = [
     {
       'options': {
-        '모양     전체': null,
+        '모양 전체': null,
         '원형': 'assets/images/shapes/circle.png',
         '타원형': 'assets/images/shapes/ellipse.png',
         '반원형': 'assets/images/shapes/half_circle.png',
@@ -36,12 +40,12 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
         '팔각형': 'assets/images/shapes/octagon.png',
         '기타': 'assets/images/shapes/etc.png',
       },
-      'default': '모양     전체',
+      'default': '모양 전체',
       'type': 'drugShape',
     },
     {
       'options': {
-        '색상     전체': null,
+        '색상 전체': null,
         '하양': 'assets/images/colors/white.png',
         '노랑': 'assets/images/colors/yellow.png',
         '주황': 'assets/images/colors/orange.png',
@@ -59,32 +63,20 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
         '검정': 'assets/images/colors/black.png',
         '투명': 'assets/images/colors/none.png',
       },
-      'default': '색상     전체',
+      'default': '색상 전체',
       'type': 'colorClass',
     },
   ];
   final List<Map<String, dynamic>> filterOptionsNoDi = [
     {
       'options': {
-        '제형     전체': null,
+        '제형 전체': null,
         '정제류': 'assets/images/pills/none.png',
         '경질캡슐': 'assets/images/pills/hard.png',
         '연질캡슐': 'assets/images/pills/soft.png',
       },
-      'default': '제형     전체',
+      'default': '제형 전체',
       'type': 'formCodeName',
-    },
-    // 분할선 없음
-    {
-      'options': {
-        '분할선 전체': null,
-        '없음': 'assets/images/lines/none.png',
-        '(-)형': 'assets/images/lines/minus.png',
-        '(+)형': 'assets/images/lines/plus.png',
-        '기타': 'assets/images/lines/etc2.png',
-      },
-      'default': '분할선 전체',
-      'type': 'LINE',
     },
   ];
 
@@ -105,9 +97,13 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
         print('api는 성공했는데 decodinf은?');
         // 결과를 변수에 저장
         // 문자열로 옴 => Map<String, dynamic>으로 변환
-        var data = jsonDecode(utf8.decode(response.bodyBytes));
+        data = jsonDecode(utf8.decode(response.bodyBytes));
         print(data);
         print('디코딩도 성공 !');
+
+        // 로딩 다이얼로그 닫기
+        Navigator.of(context).pop();
+
         // 결과를 props로 전달
         // 검색 결과 화면으로 이동
         Navigator.push(
@@ -120,6 +116,10 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
         );
       } else {
         // 400 오류 처리 -> 검색 결과 없음
+
+        // 로딩 다이얼로그 닫기
+        Navigator.of(context).pop();
+
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -128,13 +128,54 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
             ),
           ),
         );
-
+        print("${response.statusCode} : ${response.body}");
         print('검색 결과 없음');
       }
     } catch (e) {
       // 요청 실패 처리
+      // 로딩 다이얼로그 닫기
+      Navigator.of(context).pop();
       print('요청 안됐음: $e');
     }
+  }
+
+  // 로딩 다이얼로그
+  Future<void> showLoadingDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // 다른 곳을 터치해도 닫히지 않음
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Palette.WHITE_BLUE,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Lottie.asset(
+                  'assets/lotties/loading.json',
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width * 0.15,
+                  height: MediaQuery.of(context).size.height * 0.10,
+                  fit: BoxFit.fill,
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.03,
+                ),
+                const Text(
+                  "해당하는 약을 찾는 중 입니다..",
+                  style: TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -156,17 +197,20 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
   // }
 
   @override
+  // 이 클래스의 인스턴스를 항상 살아있게 유지합니다.
+
+  @override
   Widget build(BuildContext context) {
     // options을 포함하는 리스트
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('알약 검색',
+        title: const Text('약 검색',
             style: TextStyle(
               color: Palette.MAIN_BLACK,
               fontFamily: 'Pretendard',
-              fontWeight: FontWeight.w400,
-              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
             )),
         backgroundColor: Palette.BG_BLUE,
         centerTitle: true,
@@ -182,7 +226,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
             Container(
               padding: const EdgeInsets.only(left: 10),
               child: const Text(
-                "필터로 알약 검색",
+                "필터로 약 검색",
                 style: TextStyle(
                     color: Palette.MAIN_BLACK,
                     fontFamily: 'Pretendard',
@@ -225,7 +269,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                       width: 15,
                     ),
                     Text(
-                      "약의 이름, 증상을 입력해주세요",
+                      "약 이름, 성분, 증상을 입력해주세요",
                       style: TextStyle(
                         color: Palette.SUB_BLACK,
                         fontSize: 15,
@@ -238,7 +282,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
               ),
             ),
             const SizedBox(
-              height: 10,
+              height: 20,
             ),
 
             // filterOptions 순회하면서 FilterComponent 출력
@@ -262,9 +306,9 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                   print('${filterOption['type']}: ${newSelection.text}');
                   // setState(() {
                   // 선택된 옵션이 전체일때는 api에 해당 타입을 보내지않음
-                  if (newSelection.text == '모양     전체') {
+                  if (newSelection.text == '모양 전체') {
                     selectedOptions.remove('drugShape');
-                  } else if (newSelection.text == '색상     전체') {
+                  } else if (newSelection.text == '색상 전체') {
                     selectedOptions.remove('colorClass');
                   } else {
                     selectedOptions[filterOption['type']] = newSelection.text;
@@ -290,7 +334,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                 onSelectionChanged: (newSelection) {
                   print('${filterOption['type']} : ${newSelection.text}');
                   // setState(() {
-                  if (newSelection.text == '제형     전체') {
+                  if (newSelection.text == '제형 전체') {
                     selectedOptions.remove('formCodeName');
                   } else if (newSelection.text == '분할선 전체') {
                     selectedOptions.remove('LINE');
@@ -303,52 +347,50 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
               );
             }),
             // 초기화, 검색하기 버튼
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 30),
-              child: Row(
-                children: [
-                  BaseButton(
-                    onPressed: () {
-                      setState(() {
-                        // _resetSelectedOptions();
-                        // 초기화 버튼을 누르면 다시 rebuild
-                        Navigator.pushReplacement(
-                          // 현재 화면을 스택에서 제거하고 새로운 화면을 띄움
-                          context,
-                          PageRouteBuilder(
-                            // 커스텀 페이지 전환
-                            // context : 현재의 build context
-                            pageBuilder: (context, animation1, animation2) =>
-                                const FilterSearchScreen(),
-                            transitionDuration:
-                                const Duration(seconds: 0), // 화면전환 애니메이션 X
-                          ),
-                        );
-                      });
-                    },
-                    text: '초기화',
-                    // colorMode: 'blue',
-                    colorMode: 'white',
-                  ),
-                  const SizedBox(
-                    width: 40,
-                  ),
-                  BaseButton(
-                    // selectedOptions을 get으로 보내기
-                    // 결과를 변수에 저장 -> props로 전달
-                    // 그 후 검색 결과 화면으로 이동
-                    onPressed: () {
-                      searchPills();
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => const FilterResult()));
-                    },
-                    text: '검색하기',
-                    colorMode: 'blue',
-                  ),
-                ],
-              ),
+            const SizedBox(
+              height: 40,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                BaseButton(
+                  onPressed: () {
+                    setState(() {
+                      // _resetSelectedOptions();
+                      // 초기화 버튼을 누르면 다시 rebuild
+                      Navigator.pushReplacement(
+                        // 현재 화면을 스택에서 제거하고 새로운 화면을 띄움
+                        context,
+                        PageRouteBuilder(
+                          // 커스텀 페이지 전환
+                          // context : 현재의 build context
+                          pageBuilder: (context, animation1, animation2) =>
+                              const FilterSearchScreen(),
+                          transitionDuration:
+                              const Duration(seconds: 0), // 화면전환 애니메이션 X
+                        ),
+                      );
+                    });
+                  },
+                  text: '초기화',
+                  // colorMode: 'blue',
+                  colorMode: 'white',
+                ),
+                const SizedBox(
+                  width: 40,
+                ),
+                BaseButton(
+                  // selectedOptions을 get으로 보내기
+                  // 결과를 변수에 저장 -> props로 전달
+                  // 그 후 검색 결과 화면으로 이동
+                  onPressed: () async {
+                    showLoadingDialog(context);
+                    await searchPills();
+                  },
+                  text: '검색하기',
+                  colorMode: 'blue',
+                ),
+              ],
             )
           ],
         ),

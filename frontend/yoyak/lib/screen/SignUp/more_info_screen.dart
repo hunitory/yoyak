@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yoyak/screen/SignUp/last_info_screen.dart';
 import 'package:yoyak/store/login_store.dart';
+import 'package:yoyak/styles/screenSize/screen_size.dart';
 import '../../styles/colors/palette.dart';
 
 class MoreInfoScreen extends StatefulWidget {
@@ -19,6 +20,7 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
   Widget build(BuildContext context) {
     var inputWidth = MediaQuery.of(context).size.width * 0.83;
     return Scaffold(
+      backgroundColor: Palette.MAIN_WHITE,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -27,8 +29,8 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(
-                    height: 20,
+                  SizedBox(
+                    height: ScreenSize.getHeight(context) * 0.1,
                   ),
                   const Text(
                     "원하는 시간에",

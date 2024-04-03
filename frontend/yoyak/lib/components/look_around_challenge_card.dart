@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:yoyak/components/base_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyak/store/challenge_store.dart';
-import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 import '../styles/colors/palette.dart';
-import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
-class LookAroundChallengeCard extends StatelessWidget {
-  const LookAroundChallengeCard({super.key, this.challenge});
+class LookAroundChallengeCard extends StatefulWidget {
+  LookAroundChallengeCard({super.key, this.challenge});
+
   final challenge;
 
   @override
+  State<LookAroundChallengeCard> createState() =>
+      _LookAroundChallengeCardState();
+}
+
+class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
+  @override
   Widget build(BuildContext context) {
+    context.watch<ChallengeStore>().othersChallengeList;
+    // var isCheered = context.watch<ChallengeStore>().isCheered;
+
     double cardWidth = ScreenSize.getWidth(context) * 0.4;
     return Padding(
       padding: const EdgeInsets.only(top: 15, right: 10),
@@ -25,7 +33,7 @@ class LookAroundChallengeCard extends StatelessWidget {
             border: Border.all(width: 0.4, color: Palette.SHADOW_GREY),
           ),
           width: cardWidth,
-          height: 270,
+          height: 280,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -35,10 +43,14 @@ class LookAroundChallengeCard extends StatelessWidget {
                   topRight: Radius.circular(15),
                 ), // 둥근 모서리 반경 설정
                 child: Image.network(
-                  challenge?['imgUrl'],
-                  width: 200, // 이미지의 가로 크기
-                  height: 110, // 이미지의 세로 크기
-                  fit: BoxFit.cover, // 이미지의 크기를 설정한 크기에 맞게 조정
+                  widget.challenge?['imgUrl'],
+                  width: 200,
+                  height: 110,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    // 오류 발생 시 대체할 이미지
+                    return Image.asset("assets/images/pillbox.jpg", width: 200, height: 110,);
+                  },
                 ),
               ),
               Padding(
@@ -47,7 +59,7 @@ class LookAroundChallengeCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      challenge?['title'] ?? "챌린지 이름",
+                      widget.challenge?['title'] ?? "챌린지 이름",
                       style: const TextStyle(
                         color: Palette.MAIN_BLACK,
                         fontFamily: 'Pretendard',
@@ -56,7 +68,7 @@ class LookAroundChallengeCard extends StatelessWidget {
                       ),
                     ), // 게시물 제목
                     Text(
-                      challenge?['userNickname'] ?? "유저 닉네임",
+                      widget.challenge?['userNickname'] ?? "유저 닉네임",
                       style: const TextStyle(
                         color: Palette.SUB_BLACK,
                         fontFamily: 'Pretendard',
@@ -65,39 +77,45 @@ class LookAroundChallengeCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(
-                      height: 20,
-                    ),
-                    // Progress Bar
-                    AnimatedProgressBar(
-                      width: cardWidth * 0.9,
                       height: 10,
-                      value: 0.4,
-                      duration: const Duration(seconds: 1),
-                      gradient: const LinearGradient(
-                        colors: [
-                          Colors.lightBlue,
-                          Palette.MAIN_BLUE,
-                        ],
+                    ),
+                    Text(
+                      "${widget.challenge?['cheerCnt']}명이 응원해요",
+                      style: const TextStyle(
+                        color: Palette.SUB_BLACK,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 15,
                       ),
-                      backgroundColor: Palette.BG_BLUE,
-                    ),
+                    ), //
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
-
-
-                    BaseButton(
-                      width: cardWidth,
-                      height: 40,
-                      fontSize: 15,
-                      borderWidth: 1.0,
-                      onPressed: () {
-                        context.read<ChallengeStore>().cheerUp(challenge?['articleSeq']);
-                      },
-                      text: "응원하기",
-                      colorMode: 'white',
-                      borderRadius: BorderRadius.circular(10),
-                    )
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            widget.challenge?['cheered']
+                                ? Icons.favorite_rounded
+                                : Icons.favorite_border_rounded,
+                            size: 23,
+                            color: Palette.MAIN_RED.withOpacity(0.5),
+                          ),
+                          onPressed: () async {
+                            final prefs = await SharedPreferences.getInstance();
+                            String? accessToken = prefs.getString('accessToken');
+                            await context
+                                .read<ChallengeStore>()
+                                .cheerUp(widget.challenge?['articleSeq']);
+                            await context.read<ChallengeStore>().getOthersChallenge(accessToken);
+                            // setState(() {
+                            //   isCheered++;
+                            // });
+                          },
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               )

@@ -24,7 +24,7 @@ class MyChallengeCard extends StatelessWidget {
     var myChallengeCard = context.watch<ChallengeStore>().myChallengeCard;
     return RoundedRectangle(
       width: ScreenSize.getWidth(context),
-      height: 330,
+      height: 335,
       color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(15),
@@ -66,12 +66,12 @@ class MyChallengeCard extends StatelessWidget {
             ),
 
           // 챌린지 시작했을 때, 안했을 때 분기
-          myChallengeCard.isNotEmpty
+          myChallengeCard.length != 0
               ?
           myChallengeList.isNotEmpty ?
           SizedBox(
                   width: cardListWidth,
-                  height: 235,
+                  height: 245,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
@@ -99,7 +99,6 @@ class MyChallengeCard extends StatelessWidget {
               ],
             )),
           )
-
               : SizedBox(
                   width: ScreenSize.getWidth(context),
                   height: 200,

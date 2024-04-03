@@ -59,6 +59,7 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
   Widget build(BuildContext context) {
     var inputWidth = MediaQuery.of(context).size.width * 0.25;
     return Scaffold(
+      backgroundColor: Palette.MAIN_WHITE,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -280,6 +281,21 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                         context.read<LoginStore>().setDay(day);
 
                         context.read<LoginStore>().signUp(context); // 회원 가입
+
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          backgroundColor: Palette.MAIN_BLUE,
+                          content: Text(
+                            '회원가입이 완료되었습니다.',
+                            style: TextStyle(
+                              color: Palette.MAIN_WHITE,
+                              fontSize: 14,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          duration: Duration(seconds: 2),
+                        ));
 
                         Navigator.pushNamedAndRemoveUntil(
                             context, '/', (_) => false);
