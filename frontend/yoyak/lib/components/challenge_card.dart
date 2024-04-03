@@ -55,32 +55,50 @@ class ChallengeCard extends StatelessWidget {
                         color: Palette.MAIN_BLACK,
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w600,
-                        fontSize: 17,
+                        fontSize: 16,
                       ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ), // 게시물 제목
-                    Text(
-                      challenge?['userNickname'] ?? "유저 닉네임",
-                      style: const TextStyle(
-                        color: Palette.SUB_BLACK,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15,
-                      ),
-                    ),
                     const SizedBox(
                       height: 10,
                     ),
-                    Text(
-                      "${int.parse(curProgressDate) + 1}일 차" ?? "챌린지 업로드 날짜",
-                      style: TextStyle(
-                        color: Palette.MAIN_BLUE.withOpacity(0.7),
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "${int.parse(curProgressDate) + 1}일 차" ?? "챌린지 업로드 날짜",
+                          style: TextStyle(
+                            color: Palette.MAIN_BLUE.withOpacity(0.7),
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
                     ),
+                    const SizedBox(height: 20,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Icon(Icons.favorite_rounded, color: Palette.MAIN_RED.withOpacity(0.5),),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5),
+                          child: Text(
+                            "${challenge?['cheerCnt']}명이 응원했어요",
+                            style: const TextStyle(
+                              color: Palette.SUB_BLACK,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
                     const SizedBox(
-                      height: 20,
+                      height: 5,
                     ),
                   ],
                 ),
