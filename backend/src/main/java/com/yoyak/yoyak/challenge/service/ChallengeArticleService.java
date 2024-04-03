@@ -61,14 +61,20 @@ public class ChallengeArticleService {
 
     }
 
-    public List<ChallengeArticleResponseDto> getArticles() {
-        Long userSeq = SecurityUtil.getUserSeq() == null ? -1L : SecurityUtil.getUserSeq();
+    public List<ChallengeArticleResponseDto> getArticlesExceptUserSeq() {
+        Long userSeq = SecurityUtil.getUserSeq();
         log.info("userSeq: {}", userSeq);
-        return challengeArticleRepository.findAllArticles(userSeq);
+
+        return challengeArticleRepository.findAllArticlesExceptUserSeq(userSeq);
+    }
+
+    public List<ChallengeArticleResponseDto> getAllArticles(){
+        return challengeArticleRepository.findAllArticles();
     }
 
     public List<ChallengeArticleResponseDto> getMyChallengeArticles() {
         Long userSeq = SecurityUtil.getUserSeq();
+        log.info("userSeq: {}", userSeq);
         return challengeArticleRepository.findMyArticles(userSeq);
     }
 
