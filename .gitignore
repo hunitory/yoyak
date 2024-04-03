@@ -442,6 +442,3 @@ backend/src/main/resources/serviceAccountKey.json
 backend/src/main/resources/application.yml
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,linux,macos,java,flutter,intellij,visualstudiocode,node
-frontend/yoyak/ios/Podfile
-frontend/yoyak/ios/Flutter/Debug.xcconfig
-frontend/yoyak/ios/Flutter/Release.xcconfig
