@@ -32,6 +32,22 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
   //   }
   //   return true;
   // }
+  void showSnackbar(String message, String color) {
+    final snackbar = SnackBar(
+      backgroundColor: color == 'red' ? Palette.MAIN_RED : Palette.MAIN_BLUE,
+      content: Text(
+        message,
+        style: const TextStyle(
+          color: Palette.MAIN_WHITE,
+          fontSize: 14,
+          fontFamily: 'Pretendard',
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +56,12 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: const Icon(Icons.arrow_back_ios, size: 25,),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, size: 24),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: const Text("챌린지 시작하기", style: TextStyle(
           color: Palette.MAIN_BLACK,
           fontFamily: 'Pretendard',
@@ -73,22 +94,26 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
                     const SizedBox(
                       height: 50,
                     ),
-                    const Text("챌린지 이름", style: TextStyle(
-                      color: Palette.MAIN_BLUE,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                    ),),
-                    const SizedBox(height: 10,),
+                    const Text(
+                      "챌린지 이름",
+                      style: TextStyle(
+                        color: Palette.MAIN_BLUE,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Container(
                         width: inputWidth,
                         height: 55,
                         decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Palette.SHADOW_GREY, width: 0.8),
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white
-                        ),
+                            border: Border.all(
+                                color: Palette.SHADOW_GREY, width: 0.8),
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Center(
@@ -113,13 +138,18 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
                     const SizedBox(
                       height: 30,
                     ),
-                    const Text("챌린지 기간", style: TextStyle(
-                      color: Palette.MAIN_BLUE,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                    ),),
-                    const SizedBox(height: 10,),
+                    const Text(
+                      "챌린지 기간",
+                      style: TextStyle(
+                        color: Palette.MAIN_BLUE,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Container(
                       width: inputWidth,
                       height: 55,
@@ -127,8 +157,7 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
                           border: Border.all(
                               color: Palette.SHADOW_GREY, width: 0.8),
                           borderRadius: BorderRadius.circular(20),
-                          color: Colors.white
-                      ),
+                          color: Colors.white),
                       child: GestureDetector(
                         onTap: () async {
                           await selectDateRange();
@@ -164,9 +193,12 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
             borderRadius: BorderRadius.circular(0),
           ),
         ),
-        onPressed: () {
+        onPressed: () async {
           // 챌린지 등록
-          context.read<ChallengeStore>().registChallenge(name, _alarmStartDate, _alarmEndDate, context);
+          context
+              .read<ChallengeStore>()
+              .registChallenge(name, _alarmStartDate, _alarmEndDate, context);
+          showSnackbar("챌린지가 등록되었습니다", 'blue');
         },
         child: const Center(
           child: Text(
@@ -249,5 +281,4 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
       });
     }
   }
-
 }

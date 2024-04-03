@@ -85,6 +85,16 @@ class _LoginScreenState extends State<LoginScreen> {
     var inputWidth = MediaQuery.of(context).size.width * 0.82;
 
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Palette.MAIN_WHITE,
+        leading: IconButton(
+          icon: const Icon(Icons.close, color: Palette.MAIN_BLACK),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       backgroundColor: Palette.MAIN_WHITE,
       body: Center(
         child: Container(
