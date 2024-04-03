@@ -20,15 +20,14 @@ class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
   Widget build(BuildContext context) {
     context.watch<ChallengeStore>().othersChallengeList;
     // var isCheered = context.watch<ChallengeStore>().isCheered;
-
     double cardWidth = ScreenSize.getWidth(context) * 0.4;
     return Padding(
       padding: const EdgeInsets.only(top: 15, right: 10),
       child: GestureDetector(
         onTap: () {},
-        child: Container(
+            child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+          color: Colors.white,
             borderRadius: BorderRadius.circular(15),
             border: Border.all(width: 0.4, color: Palette.SHADOW_GREY),
           ),
@@ -109,9 +108,9 @@ class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
                                 .read<ChallengeStore>()
                                 .cheerUp(widget.challenge?['articleSeq']);
                             await context.read<ChallengeStore>().getOthersChallenge(accessToken);
-                            // setState(() {
-                            //   isCheered++;
-                            // });
+                            setState(() {
+                              // isCheered++;
+                            });
                           },
                         ),
                       ],
