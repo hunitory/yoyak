@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 
+import '../styles/colors/palette.dart';
+
 class BottomModal extends StatelessWidget {
   final Widget child;
   final double? height;
@@ -18,7 +20,7 @@ class BottomModal extends StatelessWidget {
       width: ScreenSize.getWidth(context),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Colors.white,
+        color: Palette.MAIN_WHITE,
       ),
       child: child,
     );

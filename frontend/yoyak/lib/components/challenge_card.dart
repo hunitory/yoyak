@@ -6,20 +6,24 @@ import '../styles/colors/palette.dart';
 
 class ChallengeCard extends StatelessWidget {
   const ChallengeCard({super.key, this.challenge});
+
   final challenge;
 
   @override
   Widget build(BuildContext context) {
     var myChallengeCard = context.read<ChallengeStore>().myChallengeCard;
     double cardWidth = ScreenSize.getWidth(context) * 0.4;
-    String curProgressDate = DateTime.parse(challenge?['createdDate']).difference(DateTime.parse(myChallengeCard['startDate'])).inDays.toString();
+    String curProgressDate = DateTime.parse(challenge?['createdDate'])
+        .difference(DateTime.parse(myChallengeCard['startDate']))
+        .inDays
+        .toString();
     return Padding(
       padding: const EdgeInsets.only(top: 15, right: 10),
       child: GestureDetector(
         onTap: () {},
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Palette.MAIN_WHITE,
             borderRadius: BorderRadius.circular(15),
             border: Border.all(width: 0.4, color: Palette.SHADOW_GREY),
           ),
@@ -40,7 +44,11 @@ class ChallengeCard extends StatelessWidget {
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
                     // 오류 발생 시 대체할 이미지
-                    return Image.asset("assets/images/pillbox.jpg", width: 200, height: 110,);
+                    return Image.asset(
+                      "assets/images/pillbox.jpg",
+                      width: 200,
+                      height: 110,
+                    );
                   },
                 ),
               ),
@@ -67,7 +75,8 @@ class ChallengeCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "${int.parse(curProgressDate) + 1}일 차" ?? "챌린지 업로드 날짜",
+                          "${int.parse(curProgressDate) + 1}일 차" ??
+                              "챌린지 업로드 날짜",
                           style: TextStyle(
                             color: Palette.MAIN_BLUE.withOpacity(0.7),
                             fontFamily: 'Pretendard',
@@ -77,7 +86,9 @@ class ChallengeCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20,),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

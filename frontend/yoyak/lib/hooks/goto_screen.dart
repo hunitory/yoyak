@@ -4,7 +4,7 @@ void goToScreen(context, Widget destination) {
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder : (context) => destination,
+      builder: (context) => destination,
     ),
   );
 }

@@ -328,7 +328,7 @@ class _PillBagDetailScreenState extends State<PillBagDetailScreen> {
                   children: [
                     Icon(
                       Icons.delete,
-                      color: Colors.white,
+                      color: Palette.MAIN_WHITE,
                       size: 23,
                     ),
                   ],
