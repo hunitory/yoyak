@@ -40,7 +40,12 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: const Icon(Icons.arrow_back_ios, size: 25,),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, size: 24),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: const Text("챌린지 시작하기", style: TextStyle(
           color: Palette.MAIN_BLACK,
           fontFamily: 'Pretendard',
