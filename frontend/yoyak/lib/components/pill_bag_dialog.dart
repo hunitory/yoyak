@@ -33,6 +33,23 @@ class _PillBagDialogState extends State<PillBagDialog> {
   // selectedAccountSeq 초기에 null값인거 바꾸기
   int? _selectedAccountSeq;
 
+  _showSnackbar(String message, String color) {
+    final snackbar = SnackBar(
+      backgroundColor: color == 'red' ? Palette.MAIN_RED : Palette.MAIN_BLUE,
+      content: Text(
+        message,
+        style: const TextStyle(
+          color: Palette.MAIN_WHITE,
+          fontSize: 14,
+          fontFamily: 'Pretendard',
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -192,19 +209,20 @@ class _PillBagDialogState extends State<PillBagDialog> {
                   // 약 봉투 이름 null인지 확인
                   if (_nameController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          '약 봉투 이름을 입력해주세요.',
-                          style: TextStyle(
-                            color: Palette.MAIN_WHITE,
-                            fontFamily: 'Pretendard',
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                          ),
-                        ),
-                        backgroundColor: Palette.MAIN_RED,
-                        duration: Duration(seconds: 2),
-                      ),
+                      // const SnackBar(
+                      //   content: Text(
+                      //     '약 봉투 이름을 입력해주세요.',
+                      //     style: TextStyle(
+                      //       color: Palette.MAIN_WHITE,
+                      //       fontFamily: 'Pretendard',
+                      //       fontWeight: FontWeight.w500,
+                      //       fontSize: 16,
+                      //     ),
+                      //   ),
+                      //   backgroundColor: Palette.MAIN_RED,
+                      //   duration: Duration(seconds: 2),
+                      // ),
+                      _showSnackbar('약 봉투 이름을 입력해주세요.', 'red'),
                     );
                     return;
                   }
@@ -219,6 +237,7 @@ class _PillBagDialogState extends State<PillBagDialog> {
                     _selectedAccountSeq ?? accountList[0].seq!,
                     _nameController.text,
                   );
+                  _showSnackbar('약 봉투가 생성되었습니다.', 'blue');
                 }),
           ],
         ),
