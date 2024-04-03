@@ -677,8 +677,8 @@ class CheckEatPillButtonState extends State<CheckEatPillButton> {
                 : taken == 'YET_TAKEN'
                     ? Image.asset(
                         'assets/images/medicine.png',
-                        width: 45,
-                        height: 45,
+                        width: 30,
+                        height: 30,
                       )
                     : const Icon(
                         Icons.close,
