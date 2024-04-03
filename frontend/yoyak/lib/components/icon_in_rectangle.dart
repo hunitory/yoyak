@@ -10,7 +10,7 @@ class IconInRectangle extends StatelessWidget {
   Widget build(BuildContext context) {
     double cardListWidth = MediaQuery.of(context).size.width * 0.85;
     return Padding(
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.all(10),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(
           "$subTitle",
@@ -39,7 +39,7 @@ class IconInRectangle extends StatelessWidget {
           children: [
             Image.asset(
               imagePath,
-              width: 70,
+              width: 80,
               height: 70,
             ),
           ],
