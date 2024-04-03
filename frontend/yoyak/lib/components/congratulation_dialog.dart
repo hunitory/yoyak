@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:yoyak/hooks/goto_screen.dart';
+import 'package:yoyak/screen/Challenge/challenge_screen.dart';
 import '../styles/colors/palette.dart';
 
 class CongratulationDialogUI extends StatelessWidget {
@@ -39,7 +41,7 @@ class CongratulationDialogUI extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pop(context); // 모달 창 닫기
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Palette.MAIN_BLUE,

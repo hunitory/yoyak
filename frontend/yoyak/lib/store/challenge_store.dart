@@ -18,6 +18,7 @@ class ChallengeStore extends ChangeNotifier {
   List<dynamic> allChallengeList = [];
   var accessToken = "";
   bool isCheered = false;
+  bool showCongratulationDialog = false;
 
   Future getMyChallengeList() async {
     try {
@@ -150,18 +151,7 @@ class ChallengeStore extends ChangeNotifier {
           }
         }
 
-        if (finishedCnt == 1) {
-          print("1이다");
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return const CongratulationDialogUI(
-                destination: MainScreen(),
-              );
-            },
-          );
-        }
-
+        showCongratulationDialog = finishedCnt == 1;
         notifyListeners();
       } else {
         print("일일 챌린지 등록 실패");
