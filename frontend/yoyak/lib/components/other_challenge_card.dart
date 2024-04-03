@@ -110,18 +110,12 @@ class _OtherChallengeCardState extends State<OtherChallengeCard>
                     : allChallengeList.length, // 개수 고치기 배열의 길이로
                 itemBuilder: (context, i) {
                   if (accessToken != '') {
-                    print("토큰있");
                     return LookAroundChallengeCard(
                         challenge: othersChallengeList[i]);
                   } else {
-<<<<<<< HEAD
-                    print("토큰없");
                     print(accessToken);
                     return AllChallengeCard(
                         challenge: allChallengeList[i]);
-=======
-                    return AllChallengeCard(challenge: allChallengeList[i]);
->>>>>>> 25cbf072d89b34ed867bae1e9bbed4125757e944
                   }
                 }),
           )
