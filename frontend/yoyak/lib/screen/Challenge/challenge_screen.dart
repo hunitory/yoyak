@@ -192,7 +192,7 @@ class _ChallengeTitleSection extends StatelessWidget {
                   onPressed: () async {
                     final prefs = await SharedPreferences.getInstance();
 
-                    prefs.getString('accessToken')!.isNotEmpty
+                    prefs.getString('accessToken') != null
                         ? goToScreen(
                             context, const RegistChallengeScreen()) // 로그인 되어있다면
                         : showDialog(
