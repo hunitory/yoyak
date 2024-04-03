@@ -109,7 +109,7 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10), // 둥근 모서리 반경 설정
                     child: Image.asset(
-                      'assets/images/signup33.png',
+                      'assets/images/signup3.png',
                       width: 230, // 이미지의 가로 크기
                       height: 300, // 이미지의 세로 크기
                       fit: BoxFit.cover, // 이미지의 크기를 설정한 크기에 맞게 조정
