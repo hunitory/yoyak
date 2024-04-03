@@ -83,8 +83,6 @@ class _UploadChallengeScreenState extends State<UploadChallengeScreen> {
                           content = challengeContentController.text;
                         });
                       },
-                      keyboardType: TextInputType.multiline, // 여러 줄 입력 가능하도록 설정
-
                       maxLines: 1, // null로 설정하면 자동으로 줄의 개수에 맞게 텍스트 필드 크기 조절
                       maxLength: 8,
                       decoration: const InputDecoration.collapsed(

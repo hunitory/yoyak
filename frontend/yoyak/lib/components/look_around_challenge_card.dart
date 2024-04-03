@@ -63,8 +63,10 @@ class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
                         color: Palette.MAIN_BLACK,
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w600,
-                        fontSize: 17,
+                        fontSize: 16,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ), // 게시물 제목
                     Text(
                       widget.challenge?['userNickname'] ?? "유저 닉네임",
@@ -74,6 +76,8 @@ class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
                         fontWeight: FontWeight.w500,
                         fontSize: 15,
                       ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                     const SizedBox(
                       height: 10,

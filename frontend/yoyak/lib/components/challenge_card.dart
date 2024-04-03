@@ -55,8 +55,10 @@ class ChallengeCard extends StatelessWidget {
                         color: Palette.MAIN_BLACK,
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w600,
-                        fontSize: 17,
+                        fontSize: 16,
                       ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ), // 게시물 제목
                     const SizedBox(
                       height: 10,
@@ -77,13 +79,13 @@ class ChallengeCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 20,),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.favorite_rounded, color: Palette.MAIN_RED.withOpacity(0.5),),
+                        // Icon(Icons.favorite_rounded, color: Palette.MAIN_RED.withOpacity(0.5),),
                         Padding(
                           padding: const EdgeInsets.only(left: 5),
                           child: Text(
-                            "${challenge?['cheerCnt']}",
+                            "${challenge?['cheerCnt']}명이 응원했어요",
                             style: const TextStyle(
                               color: Palette.SUB_BLACK,
                               fontFamily: 'Pretendard',
