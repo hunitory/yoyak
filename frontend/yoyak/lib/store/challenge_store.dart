@@ -15,6 +15,7 @@ class ChallengeStore extends ChangeNotifier {
   String challengeContent = "";
   List<dynamic> myChallengeList = [];
   List<dynamic> othersChallengeList = [];
+  List<dynamic> allChallengeList = [];
   var accessToken = "";
   bool isCheered = false;
 
@@ -155,8 +156,6 @@ class ChallengeStore extends ChangeNotifier {
             );
           }
         }
-
-
         notifyListeners();
       } else {
         print("일일 챌린지 등록 실패");
@@ -187,6 +186,27 @@ class ChallengeStore extends ChangeNotifier {
         notifyListeners();
       } else {
         print("챌린지 둘러보기 조회 실패");
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  // 비 로그인 시 챌린지 둘러보기 get
+  Future getAllChallenge() async {
+    try {
+      var response =
+        await http.get(Uri.parse('$yoyakUrl/challenge/article/all'));
+
+      print("All 챌린지 둘러보기 리스트: ${response.body}");
+
+      if (response.statusCode == 200) {
+        print("All 챌린지 둘러보기 조회 성공");
+        allChallengeList = json.decode(utf8.decode(response.bodyBytes));
+        allChallengeList = allChallengeList.reversed.toList();
+        notifyListeners();
+      } else {
+        print("All 챌린지 둘러보기 조회 실패");
       }
     } catch (error) {
       print(error);
