@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-import 'package:yoyak/styles/colors/palette.dart';
 
 class ChallengeStore extends ChangeNotifier {
   var yoyakUrl = API.yoyakUrl;
@@ -24,9 +23,6 @@ class ChallengeStore extends ChangeNotifier {
       var response = await http.get(Uri.parse('$yoyakUrl/challenge'), headers: {
         'Authorization': 'Bearer $accessToken',
       });
-      // print(yoyakUrl);
-      // print(response.body);
-      // print(accessToken);
 
       if (response.statusCode == 200) {
         print("내 챌린지 덱 조회 성공");
@@ -92,7 +88,6 @@ class ChallengeStore extends ChangeNotifier {
           }));
       print(response.statusCode);
       if (response.statusCode == 200) {
-
         print("챌린지 등록 성공");
         Navigator.of(context).pop();
       } else {
@@ -106,8 +101,9 @@ class ChallengeStore extends ChangeNotifier {
   }
 
   Future<void> uploadDailyChallenge(context, image) async {
+
     final prefs = await SharedPreferences.getInstance();
-    String? accessToken = prefs.getString('accessToken');
+      String? accessToken = prefs.getString('accessToken');
 
     var dto = MultipartFile.fromString(
       json.encode({
@@ -140,7 +136,6 @@ class ChallengeStore extends ChangeNotifier {
       if (response.statusCode == 200) {
         print("일일 챌린지 등록 성공");
         print("일일 챌린지 등록 후 내 챌린지 리스트:  $myChallengeList");
-
         Navigator.of(context).pop();
         getMyChallengeList();
         getMyChallenge(accessToken);
@@ -214,5 +209,4 @@ class ChallengeStore extends ChangeNotifier {
     othersChallengeList.clear();
     notifyListeners(); // UI에 변경사항을 알림
   }
-
 }
