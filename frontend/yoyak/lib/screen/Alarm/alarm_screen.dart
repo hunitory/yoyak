@@ -76,18 +76,17 @@ class _AlarmScreenState extends State<AlarmScreen> {
         // AppBar 배경색
         backgroundColor: Palette.BG_BLUE,
         // AppBar의 제목
-        title: const Center(
-          child: Text(
-            '알림 관리',
-            style: TextStyle(
-              color: Palette.MAIN_BLACK,
-              fontSize: 16,
-              fontFamily: 'Pretendard',
-              fontWeight: FontWeight.w500,
-            ),
+        title: const Text(
+          '알림 관리',
+          style: TextStyle(
+            color: Palette.MAIN_BLACK,
+            fontSize: 16,
+            fontFamily: 'Pretendard',
+            fontWeight: FontWeight.w500,
           ),
         ),
         toolbarHeight: 55,
+        centerTitle: true,
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: paddingValue),
