@@ -24,27 +24,46 @@ class _UploadChallengeScreenState extends State<UploadChallengeScreen> {
   Widget build(BuildContext context) {
     var image = context.watch<CameraStore>().image;
 
-    return Scaffold(
-        appBar: AppBar(
-          leading: const Icon(Icons.arrow_back_ios, size: 24),
-          title: const Text(
-            "챌린지 업로드",
-            style: TextStyle(
-              color: Palette.MAIN_BLACK,
-              fontFamily: 'Pretendard',
-              fontWeight: FontWeight.w500,
-              fontSize: 18,
-            ),
+    void showSnackbar(String message, String color) {
+      final snackbar = SnackBar(
+        backgroundColor: color == 'red' ? Palette.MAIN_RED : Palette.MAIN_BLUE,
+        content: Text(
+          message,
+          style: const TextStyle(
+            color: Palette.MAIN_WHITE,
+            fontSize: 14,
+            fontFamily: 'Pretendard',
+            fontWeight: FontWeight.w400,
           ),
-          centerTitle: true,
-          backgroundColor: Colors.white,
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 20,),
-              image != null
-                  ? Center(
+        duration: const Duration(seconds: 2),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        leading: const Icon(Icons.arrow_back_ios, size: 24),
+        title: const Text(
+          "챌린지 업로드",
+          style: TextStyle(
+            color: Palette.MAIN_BLACK,
+            fontFamily: 'Pretendard',
+            fontWeight: FontWeight.w500,
+            fontSize: 18,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            image != null
+                ? Center(
                     child: Container(
                       constraints: BoxConstraints(
                         maxWidth: ScreenSize.getWidth(context) * 0.8,
@@ -59,41 +78,49 @@ class _UploadChallengeScreenState extends State<UploadChallengeScreen> {
                       ),
                     ),
                   )
-                  : Lottie.asset('assets/lotties/loading.json',
-                      width: 120, height: 120),
-              const SizedBox(height: 40,),
-              // 글 쓰는 곳
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20), // 아래 라인 제거를 위해 top 제외
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 30), // 내용물과 외곽선 사이에 간격 추가
-                  child: TextField(
-                    controller: challengeContentController,
-                    onChanged: (value) {
-                      setState(() {
-                        content = challengeContentController.text;
-                      });
-                    },
-                    keyboardType: TextInputType.multiline, // 여러 줄 입력 가능하도록 설정
-                    maxLines: null, // null로 설정하면 자동으로 줄의 개수에 맞게 텍스트 필드 크기 조절
-                    decoration: const InputDecoration.collapsed(
-                      hintText: '간단히 설명해주세요...', // 힌트 텍스트
-                    ),
+                : Lottie.asset('assets/lotties/loading.json',
+                    width: 120, height: 120),
+            const SizedBox(
+              height: 40,
+            ),
+            // 글 쓰는 곳
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 20, right: 20, bottom: 20), // 아래 라인 제거를 위해 top 제외
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(
+                    10, 0, 10, 30), // 내용물과 외곽선 사이에 간격 추가
+                child: TextField(
+                  controller: challengeContentController,
+                  onChanged: (value) {
+                    setState(() {
+                      content = challengeContentController.text;
+                    });
+                  },
+                  keyboardType: TextInputType.multiline, // 여러 줄 입력 가능하도록 설정
+                  maxLines: null, // null로 설정하면 자동으로 줄의 개수에 맞게 텍스트 필드 크기 조절
+                  decoration: const InputDecoration.collapsed(
+                    hintText: '간단히 설명해주세요...', // 힌트 텍스트
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
       bottomNavigationBar: BottomAppBar(
         color: Palette.MAIN_WHITE,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: BaseButton(
             onPressed: () {
-              context.read<ChallengeStore>().challengeContent = content; // 챌린지 업로드 내용 저장
+              context.read<ChallengeStore>().challengeContent =
+                  content; // 챌린지 업로드 내용 저장
               // 일일 챌린지 업로드 함수 호출
-              context.read<ChallengeStore>().uploadDailyChallenge(context, image);
+              context
+                  .read<ChallengeStore>()
+                  .uploadDailyChallenge(context, image);
+              showSnackbar("챌린지가 등록되었습니다.", 'blue');
             },
             text: "완료",
             colorMode: "BLUE",
