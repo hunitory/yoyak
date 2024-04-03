@@ -94,13 +94,12 @@ flutter:
     - assets/images/lines/
     - assets/images/profiles/
     - assets/lotties/
-    - assets/videos/
     - assets/config/.env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
-  # For details regarding adding assets from package dependencies, see
+  # For details regarding adding assets from package dependegit ncies, see
   # https://flutter.dev/assets-and-images/#from-packages
 
   # To add custom fonts to your application, add a fonts section here,

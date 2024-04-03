@@ -304,13 +304,17 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           width: rectangleSize,
                           height: rectangleSize,
                           onTap: () {
-                            accessToken.isNotEmpty
-                                ? goTo(const PillBagScreen())
-                                : goTo(
-                                    const DialogUI(
-                                      destination: (LoginScreen()),
-                                    ),
-                                  );
+                            if (accessToken.isNotEmpty) {
+                              goTo(const PillBagScreen());
+                            } else {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return const DialogUI(
+                                      destination: LoginScreen());
+                                },
+                              );
+                            }
                           },
                           child: const IconInRectangle(
                             subTitle: "내 약을 한눈에",

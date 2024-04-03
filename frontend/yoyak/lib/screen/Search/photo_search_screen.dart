@@ -81,7 +81,7 @@ class _PhotoSearchScreenState extends State<PhotoSearchScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          '알약 검색',
+          '약 검색',
           style: TextStyle(
             color: Palette.MAIN_BLACK,
             fontFamily: 'Pretendard',
@@ -104,7 +104,7 @@ class _PhotoSearchScreenState extends State<PhotoSearchScreen> {
             Container(
               margin: const EdgeInsets.only(bottom: 10),
               child: const Text(
-                "사진으로 알약 검색",
+                "사진으로 약 검색",
                 style: TextStyle(
                     color: Palette.MAIN_BLACK,
                     fontFamily: 'Pretendard',
@@ -121,7 +121,7 @@ class _PhotoSearchScreenState extends State<PhotoSearchScreen> {
                   fontSize: 14),
             ),
             const Text(
-              "밝은 곳에서 알약의 문자가 잘 보이게 촬영해 주세요.",
+              "밝은 곳에서 알약이 잘 보이게 촬영해 주세요.",
               style: TextStyle(
                   color: Palette.MAIN_BLACK,
                   fontFamily: 'Pretendard',
@@ -142,11 +142,14 @@ class _PhotoSearchScreenState extends State<PhotoSearchScreen> {
                   )
                 ],
                 // 가이드 사진 && 사진 미리보기
-                child: image != null // 사용자가 사진을 선택한 후!
-                    ? Image.file(File(image.path))
-                    : const Image(
-                        image: AssetImage('assets/images/guide.png'),
-                      ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: image != null // 사용자가 사진을 선택한 후!
+                      ? Image.file(File(image.path))
+                      : const Image(
+                          image: AssetImage('assets/images/guide_pills.png'),
+                        ),
+                ),
               ),
             ),
             // 이미지, 카메라 버튼

@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:yoyak/components/congratulation_dialog.dart';
+import 'package:yoyak/screen/Main/main_screen.dart';
 
 class ChallengeStore extends ChangeNotifier {
   var yoyakUrl = API.yoyakUrl;
@@ -13,6 +15,7 @@ class ChallengeStore extends ChangeNotifier {
   String challengeContent = "";
   List<dynamic> myChallengeList = [];
   List<dynamic> othersChallengeList = [];
+  List<dynamic> allChallengeList = [];
   var accessToken = "";
   bool isCheered = false;
 
@@ -23,9 +26,6 @@ class ChallengeStore extends ChangeNotifier {
       var response = await http.get(Uri.parse('$yoyakUrl/challenge'), headers: {
         'Authorization': 'Bearer $accessToken',
       });
-      // print(yoyakUrl);
-      // print(response.body);
-      // print(accessToken);
 
       if (response.statusCode == 200) {
         print("내 챌린지 덱 조회 성공");
@@ -92,6 +92,7 @@ class ChallengeStore extends ChangeNotifier {
       print(response.statusCode);
       if (response.statusCode == 200) {
         print("챌린지 등록 성공");
+        getMyChallengeList();
         Navigator.of(context).pop();
       } else {
         print("챌린지 등록 실패");
@@ -140,8 +141,21 @@ class ChallengeStore extends ChangeNotifier {
         print("일일 챌린지 등록 성공");
         print("일일 챌린지 등록 후 내 챌린지 리스트:  $myChallengeList");
         Navigator.of(context).pop();
-        getMyChallengeList();
-        getMyChallenge(accessToken);
+        await getMyChallengeList();
+        await getMyChallenge(accessToken);
+
+        for (int i = 0; i < myChallengeList.length; i++) {
+          if (myChallengeList[i]['createdDate'] == myChallengeCard['endDate']) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return const CongratulationDialogUI(
+                  destination: MainScreen(),
+                );
+              },
+            );
+          }
+        }
         notifyListeners();
       } else {
         print("일일 챌린지 등록 실패");
@@ -172,6 +186,27 @@ class ChallengeStore extends ChangeNotifier {
         notifyListeners();
       } else {
         print("챌린지 둘러보기 조회 실패");
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  // 비 로그인 시 챌린지 둘러보기 get
+  Future getAllChallenge() async {
+    try {
+      var response =
+        await http.get(Uri.parse('$yoyakUrl/challenge/article/all'));
+
+      print("All 챌린지 둘러보기 리스트: ${response.body}");
+
+      if (response.statusCode == 200) {
+        print("All 챌린지 둘러보기 조회 성공");
+        allChallengeList = json.decode(utf8.decode(response.bodyBytes));
+        allChallengeList = allChallengeList.reversed.toList();
+        notifyListeners();
+      } else {
+        print("All 챌린지 둘러보기 조회 실패");
       }
     } catch (error) {
       print(error);

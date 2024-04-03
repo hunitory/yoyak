@@ -39,7 +39,7 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
         backgroundColor: Palette.BG_BLUE,
         appBar: AppBar(
           title: const Text(
-            '알약 상세 정보',
+            '약 상세 정보',
             style: TextStyle(
               color: Palette.MAIN_BLACK,
               fontFamily: 'Pretendard',
@@ -89,6 +89,22 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
                                   height:
                                       MediaQuery.of(context).size.width * 0.30,
                                   fit: BoxFit.cover, // 모서리 각진거 이걸로 해결
+                                  // 에러 처리(이미지 로딩 덜 됐을 때 대체 이미지로 대체)
+                                  errorBuilder: (BuildContext context,
+                                      Object error, StackTrace? stackTrace) {
+                                    print(error);
+                                    print("이미지 오류 해결 !!!!!!!!!!!!!");
+                                    // 대체 이미지 반환
+                                    return Image.asset(
+                                      'assets/images/pillbox.jpg',
+                                      width: MediaQuery.of(context).size.width *
+                                          0.25,
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              0.13,
+                                      fit: BoxFit.cover,
+                                    );
+                                  },
                                 )
                               : Image.asset(
                                   'assets/images/pillbox.jpg',
@@ -136,6 +152,7 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
                           onPressed: () {
                             showModalBottomSheet(
                                 context: context,
+                                isScrollControlled: true, // ?
                                 builder: (BuildContext context) {
                                   var screenHigh =
                                       ScreenSize.getHeight(context);
@@ -149,9 +166,13 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
                                   });
                                 });
                           },
-                          text: "저장하기",
+                          // text: "저장하기",
+                          // colorMode: "blue",
+                          // width: 104,
+                          // height: 35,
+                          text: "약 봉투에 담기",
                           colorMode: "blue",
-                          width: 104,
+                          width: 140,
                           height: 35,
                         )
                     ],
