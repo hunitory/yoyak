@@ -7,6 +7,7 @@ import '../Main/main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, this.destination});
+
   final destination;
 
   @override
@@ -50,7 +51,11 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text(
           "아이디를 입력해주세요",
-          style: TextStyle(color: Palette.MAIN_WHITE),
+          style: TextStyle(
+            color: Palette.MAIN_WHITE,
+            fontWeight: FontWeight.w500,
+            fontFamily: 'Pretendard',
+          ),
         ),
         backgroundColor: Palette.MAIN_RED,
         duration: Duration(milliseconds: 1100),
@@ -62,7 +67,11 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text(
           "비밀번호를 입력해주세요",
-          style: TextStyle(color: Palette.MAIN_WHITE),
+          style: TextStyle(
+            color: Palette.MAIN_WHITE,
+            fontWeight: FontWeight.w500,
+            fontFamily: 'Pretendard',
+          ),
         ),
         backgroundColor: Palette.MAIN_RED,
         duration: Duration(milliseconds: 1100),
@@ -87,13 +96,16 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        automaticallyImplyLeading: false,
         backgroundColor: Palette.MAIN_WHITE,
-        leading: IconButton(
-          icon: const Icon(Icons.close, color: Palette.MAIN_BLACK),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.close, color: Palette.MAIN_BLACK),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )
+        ],
       ),
       backgroundColor: Palette.MAIN_WHITE,
       body: Center(
@@ -122,16 +134,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         decoration: InputDecoration(
                             hintText: "아이디",
-                            hintStyle: TextStyle(
-                                color: Colors.grey.shade400,
-                                fontWeight: FontWeight.w400),
+                            hintStyle: const TextStyle(
+                              color: Palette.SUB_BLACK,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Pretendard',
+                            ),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
                                 borderSide: BorderSide.none),
                             fillColor: Palette.SHADOW_GREY.withOpacity(0.3),
                             filled: true,
-                            prefixIcon: Icon(Icons.person_outline,
-                                color: Colors.grey.shade500)),
+                            prefixIcon: const Icon(Icons.person_outline,
+                                color: Palette.SUB_BLACK)),
                       ),
                     ),
                     const SizedBox(height: 15),
@@ -146,16 +160,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         decoration: InputDecoration(
                           hintText: "비밀번호",
-                          hintStyle: TextStyle(
-                              color: Colors.grey.shade400,
-                              fontWeight: FontWeight.w400),
+                          hintStyle: const TextStyle(
+                            color: Palette.SUB_BLACK,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Pretendard',
+                          ),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
                               borderSide: BorderSide.none),
                           fillColor: Palette.SHADOW_GREY.withOpacity(0.3),
                           filled: true,
-                          prefixIcon: Icon(Icons.password_outlined,
-                              color: Colors.grey.shade500),
+                          prefixIcon: const Icon(Icons.password_outlined,
+                              color: Palette.SUB_BLACK),
                         ),
                         obscureText: true,
                       ),
@@ -177,59 +193,19 @@ class _LoginScreenState extends State<LoginScreen> {
                               // 로그인 실패 알림
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(
-                                content: Text("아이디 또는 비밀번호가 올바르지 않습니다.",
-                                    style:
-                                        TextStyle(color: Palette.MAIN_WHITE)),
+                                content: Text(
+                                  "아이디 또는 비밀번호가 올바르지 않습니다.",
+                                  style: TextStyle(
+                                    color: Palette.MAIN_WHITE,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: 'Pretendard',
+                                  ),
+                                ),
                                 backgroundColor: Palette.MAIN_RED,
                                 duration: Duration(milliseconds: 1100),
                               ));
                             }
                           }
-                          // try {
-                          //     context.read<LoginStore>().login(
-                          //         context, email, password, const MainScreen());
-                          //     print('로그인 버튼 눌림');
-                          //     // 로그인 확인
-                          //     // if (loginCheck == '-1') {
-                          //     //   print('로그인 실패');
-                          //     //   showDialog(
-                          //     //     context: context,
-                          //     //     builder: (BuildContext context) {
-                          //     //       return AlertDialog(
-                          //     //         title: const Text('알림'),
-                          //     //         content: const Text('아이디 또는 비밀번호가 올바르지 않습니다.'),
-                          //     //         actions: [
-                          //     //           TextButton(
-                          //     //             child: const Text('닫기'),
-                          //     //             onPressed: () {
-                          //     //               Navigator.of(context).pop();
-                          //     //             },
-                          //     //           ),
-                          //     //         ],
-                          //     //       );
-                          //     //     },
-                          //     //   );
-                          //     // }
-                          //   } catch (error) {
-                          //     print('로그인에서 난 에러 $error');
-                          //     // Vibration.vibrate(duration: 300); // 진동
-                          //     ScaffoldMessenger.of(context)
-                          //         .showSnackBar(const SnackBar(
-                          //       shape: RoundedRectangleBorder(
-                          //         // ShapeDecoration을 사용하여 borderRadius 적용
-                          //         borderRadius: BorderRadius.only(
-                          //             topLeft: Radius.circular(15),
-                          //             topRight: Radius.circular(15)),
-                          //       ),
-                          //       content: Text(
-                          //         "로그인 되었습니다",
-                          //         style: TextStyle(color: Palette.MAIN_BLACK),
-                          //       ),
-                          //       backgroundColor: Colors.yellow,
-                          //       duration: Duration(milliseconds: 1100),
-                          //     ));
-                          //   }
-                          // }
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -243,8 +219,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(
                             fontSize: 16,
                             color: Palette.MAIN_WHITE,
-                            fontFamily: 'Pretendard',
                             fontWeight: FontWeight.w600,
+                            fontFamily: 'Pretendard',
                           ),
                         ),
                       ),
@@ -268,7 +244,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return const Column(
       children: [
         Image(
-            image: AssetImage('assets/images/biglogo.png'),
+            image: AssetImage('assets/images/loginopen.png'),
             width: 240,
             height: 240),
         // const SizedBox(
@@ -317,17 +293,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ],
     );
   }
-
-// _forgotPassword(context) {
-//   return TextButton(
-//     onPressed: () {
-//       Navigator.push(context,
-//           MaterialPageRoute(builder: (context) => FindPasswordScreen()));
-//     },
-//     child: Text(
-//       "비밀번호 생각 안나시나요",
-//       style: TextStyle(color: BASIC_BLACK.withOpacity(0.7), decoration: TextDecoration.underline, fontSize: 13),
-//     ),
-//   );
-// }
 }

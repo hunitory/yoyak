@@ -25,7 +25,7 @@ class MyChallengeCard extends StatelessWidget {
     return RoundedRectangle(
       width: ScreenSize.getWidth(context),
       height: 350,
-      color: Colors.white,
+      color: Palette.MAIN_WHITE,
       child: Padding(
         padding: const EdgeInsets.all(15),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -67,52 +67,53 @@ class MyChallengeCard extends StatelessWidget {
 
           // 챌린지 시작했을 때, 안했을 때 분기
           myChallengeCard.length != 0
-              ?
-          myChallengeList.isNotEmpty ?
-          SizedBox(
-                  width: cardListWidth,
-                  height: 255,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemCount: myChallengeList.length, // 개수 고치기 배열의 길이로
-                      itemBuilder: (context, i) {
-                        // 사버에서 받은 데이터로 넘겨주기
-                        return ChallengeCard(challenge: myChallengeList[i]);
-                      }),
-                )
-              : SizedBox(
-            width: ScreenSize.getWidth(context),
-            height: 200,
-            child: Center(child: Column(
-              children: [
-                Lottie.asset('assets/lotties/cat.json',
-                    width: 120, height: 120),
-                Text("${myChallengeCard?['title'] ?? ""} 챌린지의 인증샷을 올려보세요!",
-                  style: const TextStyle(
-                      fontFamily: "Pretendard",
-                      color: Palette.SUB_BLACK,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15
-                  ),
-                ),
-              ],
-            )),
-          )
+              ? myChallengeList.isNotEmpty
+                  ? SizedBox(
+                      width: cardListWidth,
+                      height: 255,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: myChallengeList.length, // 개수 고치기 배열의 길이로
+                          itemBuilder: (context, i) {
+                            // 사버에서 받은 데이터로 넘겨주기
+                            return ChallengeCard(challenge: myChallengeList[i]);
+                          }),
+                    )
+                  : SizedBox(
+                      width: ScreenSize.getWidth(context),
+                      height: 200,
+                      child: Center(
+                          child: Column(
+                        children: [
+                          Lottie.asset('assets/lotties/cat.json',
+                              width: 120, height: 120),
+                          Text(
+                            "${myChallengeCard?['title'] ?? ""} 챌린지의 인증샷을 올려보세요!",
+                            style: const TextStyle(
+                                fontFamily: "Pretendard",
+                                color: Palette.SUB_BLACK,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15),
+                          ),
+                        ],
+                      )),
+                    )
               : SizedBox(
                   width: ScreenSize.getWidth(context),
                   height: 200,
-                  child: Center(child: Column(
+                  child: Center(
+                      child: Column(
                     children: [
                       Lottie.asset('assets/lotties/cat.json',
                           width: 120, height: 120),
-                      const Text("챌린지를 시작해볼까요?",
+                      const Text(
+                        "챌린지를 시작해볼까요?",
                         style: TextStyle(
                             fontFamily: "Pretendard",
                             color: Palette.SUB_BLACK,
                             fontWeight: FontWeight.w500,
-                            fontSize: 15
-                        ),
+                            fontSize: 15),
                       ),
                     ],
                   )),

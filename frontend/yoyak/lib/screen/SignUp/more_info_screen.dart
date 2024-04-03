@@ -35,6 +35,7 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                   const Text(
                     "원하는 시간에",
                     style: TextStyle(
+                      fontFamily: "Pretendard",
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
                     ),
@@ -46,6 +47,7 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                           text: 'PUSH 알림',
                           style: TextStyle(
                             color: Palette.MAIN_BLUE,
+                            fontFamily: "Pretendard",
                             fontSize: 22,
                             fontWeight: FontWeight.w600,
                           ),
@@ -54,6 +56,7 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                           text: '을 받아보세요',
                           style: TextStyle(
                             fontSize: 22,
+                            fontFamily: "Pretendard",
                             color: Palette.MAIN_BLACK,
                             fontWeight: FontWeight.w600,
                           ),
@@ -75,21 +78,6 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                   ),
                   const SizedBox(
                     height: 40,
-                  ),
-                  RichText(
-                    text: const TextSpan(
-                      children: [
-                        // const TextSpan(
-                        //   text: '님 성별을 알려주세요',
-                        //   style: TextStyle(
-                        //     fontFamily: "Pretendard",
-                        //     fontSize: 22,
-                        //     color: Palette.MAIN_BLACK,
-                        //     fontWeight: FontWeight.w600,
-                        //   ),
-                        // ),
-                      ],
-                    ),
                   ),
                 ],
               ),
@@ -123,7 +111,6 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                         width: inputWidth,
                         height: 60,
                         decoration: BoxDecoration(
-                          // border: Border.all(color: Colors.lightBlueAccent, width: 0.1),
                           borderRadius: BorderRadius.circular(20),
                           color: Colors.lightBlueAccent.withOpacity(0.08),
                         ),
@@ -133,6 +120,7 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                             child: Text(
                               "남자에요",
                               style: TextStyle(
+                                fontFamily: "Pretendard",
                                 fontWeight: FontWeight.w500,
                                 fontSize: 16,
                               ),
@@ -184,6 +172,7 @@ class _MoreInfoScreenState extends State<MoreInfoScreen> {
                               "여자에요",
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
+                                fontFamily: "Pretendard",
                                 fontSize: 16,
                               ),
                             ),

@@ -107,7 +107,7 @@ class _FilterComponentState extends State<FilterComponentNoDi> {
                         // 현재 선택된 옵션이면 배경을 파란색.
                         color: selectedOption == widget.options[index]
                             ? Palette.BG_BLUE
-                            : Colors.white,
+                            : Palette.MAIN_WHITE,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Column(
@@ -180,7 +180,7 @@ class _FilterComponentState extends State<FilterComponentNoDi> {
                                 ),
                               ],
                             ),
-                            
+
                           if (option.imagePath != null)
                             Text(
                               option.text,

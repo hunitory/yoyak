@@ -106,7 +106,8 @@ class _PillBagScreenState extends State<PillBagScreen> {
                         child: Transform.scale(
                           scale: 1.4,
                           child: Checkbox(
-                            value: isChecked, // 체크 여부
+                            value: isChecked,
+                            // 체크 여부
                             onChanged: (bool? value) {
                               setState(() {
                                 if (value == true) {
@@ -387,7 +388,7 @@ class _PillBagScreenState extends State<PillBagScreen> {
                   children: [
                     Icon(
                       Icons.delete,
-                      color: Colors.white,
+                      color: Palette.MAIN_WHITE,
                       size: 23,
                     ),
                   ],
@@ -428,7 +429,7 @@ class _PillBagScreenState extends State<PillBagScreen> {
                   children: [
                     Icon(
                       Icons.add,
-                      color: Colors.white,
+                      color: Palette.MAIN_WHITE,
                       size: 30,
                     ),
                   ],

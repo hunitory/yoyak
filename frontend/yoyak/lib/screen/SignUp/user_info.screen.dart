@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 import 'package:yoyak/apis/url.dart';
 import 'package:yoyak/screen/SignUp/greeting_screen.dart';
 import 'package:yoyak/store/login_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
+import 'package:provider/provider.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 
 class UserInfoScreen extends StatefulWidget {
@@ -36,7 +36,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text(
           "아이디를 입력해주세요",
-          style: TextStyle(color: Palette.MAIN_WHITE),
+          style: TextStyle(fontFamily: "Pretendard", color: Palette.MAIN_WHITE),
         ),
         backgroundColor: Palette.MAIN_RED,
         duration: Duration(milliseconds: 1100),
@@ -48,7 +48,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text(
           "비밀번호를 입력해주세요",
-          style: TextStyle(color: Palette.MAIN_WHITE),
+          style: TextStyle(fontFamily: "Pretendard", color: Palette.MAIN_WHITE),
         ),
         backgroundColor: Palette.MAIN_RED,
         duration: Duration(milliseconds: 1100),
@@ -105,7 +105,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     height: ScreenSize.getHeight(context) * 0.13,
                   ),
                   const Image(
-                      image: AssetImage('assets/images/biglogo.png'),
+                      image: AssetImage('assets/images/loginopen.png'),
                       width: 240,
                       height: 240),
                   RichText(
@@ -154,7 +154,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                       height: 60,
                       decoration: BoxDecoration(
                         border:
-                            Border.all(color: Colors.grey.shade200, width: 0.1),
+                            Border.all(color: Palette.SHADOW_GREY, width: 0.1),
                         borderRadius: BorderRadius.circular(20),
                         color: Palette.SHADOW_GREY.withOpacity(0.3),
                       ),
@@ -177,7 +177,8 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                               hintText: "아이디를 입력해주세요.",
                               hintStyle: TextStyle(
                                 fontSize: 16,
-                                fontFamily: 'pretendard',
+                                color: Palette.SUB_BLACK,
+                                fontFamily: 'Pretendard',
                                 fontWeight: FontWeight.w400,
                               ),
                               border: InputBorder.none,
@@ -194,7 +195,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                       height: 60,
                       decoration: BoxDecoration(
                         border:
-                            Border.all(color: Colors.grey.shade200, width: 0.1),
+                            Border.all(color: Palette.SHADOW_GREY, width: 0.1),
                         borderRadius: BorderRadius.circular(20),
                         color: Palette.SHADOW_GREY.withOpacity(0.3),
                       ),
@@ -214,8 +215,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                               hintText: "비밀번호를 입력해주세요.",
                               hintStyle: TextStyle(
                                 fontSize: 16,
+                                color: Palette.SUB_BLACK,
                                 fontWeight: FontWeight.w400,
-                                fontFamily: 'pretendard',
+                                fontFamily: 'Pretendard',
                               ),
                               border: InputBorder.none,
                             ),
@@ -236,21 +238,8 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     // 회원가입 요청
                     GestureDetector(
                       onTap: () async {
-                        print('여기는 오지 ?');
-                        // await showPersonalAgreementDialog(context);
-                        // if (!agreement) {
-                        //   // agreement가 false인 경우 메시지를 띄움
-                        //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        //     content: Text('개인정보 수집 동의가 필요합니다.'),
-                        //   ));
-                        //   return; // 등록 작업을 중단
-                        // }
-
                         // agreement가 true인 경우 사용자 정보 입력 값의 유효성 검사를 수행
-
-                        if (!isValidate()) {
-                          return; // 등록 작업을 중단
-                        }
+                        if (!isValidate()) return;
 
                         bool isDuplicate = await checkUsernameDuplicate(userId);
 
@@ -260,7 +249,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                               .showSnackBar(const SnackBar(
                             content: Text(
                               "이미 가입된 아이디입니다!",
-                              style: TextStyle(color: Palette.MAIN_WHITE),
+                              style: TextStyle(
+                                  color: Palette.MAIN_WHITE,
+                                  fontFamily: "Pretendard"),
                             ),
                             backgroundColor: Palette.MAIN_RED,
                             duration: Duration(milliseconds: 1100),
@@ -292,55 +283,6 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                             ),
                           );
                         }
-
-                        //회원가입 요청
-                        // try {
-                        //   context.read<LoginStore>().userEmail = email;
-                        //   context.read<LoginStore>().password = password;
-
-                        //   if (isValidate()) {
-                        //     Navigator.of(context).pop();
-                        //     Navigator.of(context).pop();
-                        //     // 회원가입 성공 시 이름이랑 닉네임 페이지 사라지게
-                        //     Navigator.push(
-                        //       context,
-                        //       PageRouteBuilder(
-                        //         pageBuilder: (c, a1, a2) =>
-                        //             const GreetingScreen(),
-                        //         transitionsBuilder: (c, a1, a2, child) =>
-                        //             SlideTransition(
-                        //           position: Tween(
-                        //             begin: const Offset(-1.0, 0.0),
-                        //             end: const Offset(0.0, 0.0),
-                        //           )
-                        //               .chain(
-                        //                   CurveTween(curve: Curves.easeInOut))
-                        //               .animate(a1),
-                        //           child: child,
-                        //         ),
-                        //         transitionDuration:
-                        //             const Duration(milliseconds: 500),
-                        //       ),
-                        //     );
-                        //   }
-                        // } catch (e) {
-                        //   // Vibration.vibrate(duration: 300); // 진동
-                        //   ScaffoldMessenger.of(context)
-                        //       .showSnackBar(const SnackBar(
-                        //     shape: RoundedRectangleBorder(
-                        //       // ShapeDecoration을 사용하여 borderRadius 적용
-                        //       borderRadius: BorderRadius.only(
-                        //           topLeft: Radius.circular(15),
-                        //           topRight: Radius.circular(15)),
-                        //     ),
-                        //     content: Text(
-                        //       "이미 가입된 아이디입니다!",
-                        //       style: TextStyle(color: Palette.MAIN_WHITE),
-                        //     ),
-                        //     backgroundColor: Palette.MAIN_RED,
-                        //     duration: Duration(milliseconds: 1100),
-                        //   ));
-                        // }
                       },
                       child: Container(
                         width: 55,
@@ -357,7 +299,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                               color: Palette.MAIN_WHITE,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
-                              fontFamily: 'pretendard',
+                              fontFamily: 'Pretendard',
                             ),
                           ),
                         ),

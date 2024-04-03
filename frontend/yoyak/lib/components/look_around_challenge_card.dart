@@ -26,9 +26,9 @@ class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
       padding: const EdgeInsets.only(top: 15, right: 10),
       child: GestureDetector(
         onTap: () {},
-            child: Container(
+        child: Container(
           decoration: BoxDecoration(
-          color: Colors.white,
+            color: Palette.MAIN_WHITE,
             borderRadius: BorderRadius.circular(15),
             border: Border.all(width: 0.4, color: Palette.SHADOW_GREY),
           ),
@@ -49,7 +49,11 @@ class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
                     // 오류 발생 시 대체할 이미지
-                    return Image.asset("assets/images/pillbox.jpg", width: 200, height: 110,);
+                    return Image.asset(
+                      "assets/images/pillbox.jpg",
+                      width: 200,
+                      height: 110,
+                    );
                   },
                 ),
               ),
@@ -108,11 +112,14 @@ class _LookAroundChallengeCardState extends State<LookAroundChallengeCard> {
                           ),
                           onPressed: () async {
                             final prefs = await SharedPreferences.getInstance();
-                            String? accessToken = prefs.getString('accessToken');
+                            String? accessToken =
+                                prefs.getString('accessToken');
                             await context
                                 .read<ChallengeStore>()
                                 .cheerUp(widget.challenge?['articleSeq']);
-                            await context.read<ChallengeStore>().getOthersChallenge(accessToken);
+                            await context
+                                .read<ChallengeStore>()
+                                .getOthersChallenge(accessToken);
                             setState(() {
                               // isCheered++;
                             });

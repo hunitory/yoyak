@@ -54,7 +54,7 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
     var inputWidth = MediaQuery.of(context).size.width * 0.9;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Palette.MAIN_WHITE,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, size: 24),
@@ -62,12 +62,15 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
             Navigator.pop(context);
           },
         ),
-        title: const Text("챌린지 시작하기", style: TextStyle(
-          color: Palette.MAIN_BLACK,
-          fontFamily: 'Pretendard',
-          fontWeight: FontWeight.w500,
-          fontSize: 20,
-        ),),
+        title: const Text(
+          "챌린지 시작하기",
+          style: TextStyle(
+            color: Palette.MAIN_BLACK,
+            fontFamily: 'Pretendard',
+            fontWeight: FontWeight.w500,
+            fontSize: 20,
+          ),
+        ),
         centerTitle: true,
       ),
       resizeToAvoidBottomInset: true,
@@ -113,7 +116,7 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
                             border: Border.all(
                                 color: Palette.SHADOW_GREY, width: 0.8),
                             borderRadius: BorderRadius.circular(20),
-                            color: Colors.white),
+                            color: Palette.MAIN_WHITE),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Center(
@@ -157,7 +160,7 @@ class _GreetingScreenState extends State<RegistChallengeScreen> {
                           border: Border.all(
                               color: Palette.SHADOW_GREY, width: 0.8),
                           borderRadius: BorderRadius.circular(20),
-                          color: Colors.white),
+                          color: Palette.MAIN_WHITE),
                       child: GestureDetector(
                         onTap: () async {
                           await selectDateRange();
