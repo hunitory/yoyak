@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:yoyak/models/user/account_models.dart';
@@ -52,11 +53,15 @@ class _AccountItemState extends State<AccountItem> {
             Expanded(
               child: Row(
                 children: [
-                  Image(
-                    width: 50,
-                    height: 50,
-                    image: AssetImage(
-                        'assets/images/profiles/profile${widget.accountitem.profileImg}.png'),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: Image(
+                      width: 50,
+                      height: 50,
+                      image: AssetImage(
+                          'assets/images/profiles/profile${widget.accountitem.profileImg}.png'),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   const SizedBox(width: 14),
                   Text(
