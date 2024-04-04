@@ -79,6 +79,23 @@ class _PillBagDetailScreenState extends State<PillBagDetailScreen> {
     print("삭제 모드: $_isDeleteMode");
   }
 
+  _showSnackbar(String message, String color) {
+    final snackbar = SnackBar(
+      backgroundColor: color == 'red' ? Palette.MAIN_RED : Palette.MAIN_BLUE,
+      content: Text(
+        message,
+        style: const TextStyle(
+          color: Palette.MAIN_WHITE,
+          fontSize: 14,
+          fontFamily: 'Pretendard',
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
   // 약 컴포넌트
   Widget _pillComponent(
     int medicineSeq,
@@ -97,6 +114,16 @@ class _PillBagDetailScreenState extends State<PillBagDetailScreen> {
           // 삭제 모드가 아닐 때, 클릭하면 상세 페이지로 이동
           print('상세정보 페이지로 이동 클릭');
           _goToDetail(medicineSeq);
+        } else {
+          // 삭제 모드일 때, 클릭하면 체크박스 토글
+          setState(() {
+            if (isChecked) {
+              _checkedPills.remove(medicineSeq);
+            } else {
+              _checkedPills.add(medicineSeq);
+            }
+          });
+          print("체크된 약: $_checkedPills");
         }
       },
       child: Container(
@@ -264,38 +291,7 @@ class _PillBagDetailScreenState extends State<PillBagDetailScreen> {
                             itemName,
                           ));
                         }).toList()
-
-                      // PillPreviews 출력
-
-                      // 약 봉투에 약이 없을 때
-                      // 로티 바꾸기 ?????
-                      : [
-                          // 로티
-                          // const Column(
-                          //   mainAxisAlignment: MainAxisAlignment.center,
-                          //   crossAxisAlignment: CrossAxisAlignment.center,
-                          //   children: [
-                          //     Lottie.asset(
-                          //       'assets/lotties/no_search.json',
-                          //       alignment: Alignment.center,
-                          //       width: MediaQuery.of(context).size.width * 0.750,
-                          //       height: MediaQuery.of(context).size.height * 0.40,
-                          //       // fit: BoxFit.fill,
-                          //     ),
-                          //     Center(
-                          //       child: Text(
-                          //         "담겨있는 약이 없어요",
-                          //         style: TextStyle(
-                          //           color: Palette.SUB_BLACK,
-                          //           fontFamily: 'Pretendard',
-                          //           fontWeight: FontWeight.w400,
-                          //           fontSize: 20,
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                        ],
+                      : [],
                 ),
               ),
             ),
@@ -320,6 +316,7 @@ class _PillBagDetailScreenState extends State<PillBagDetailScreen> {
                           widget.envelopSeq,
                         );
                   }
+                  _showSnackbar("약이 삭제되었습니다.", 'red');
                   // 삭제 모드 종료
                   _toggleDeleteMode();
                 },

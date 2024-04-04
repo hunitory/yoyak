@@ -30,6 +30,23 @@ class _PillBagScreenState extends State<PillBagScreen> {
     print("삭제 모드: $_isDeleteMode");
   }
 
+  _showSnackbar(String message, String color) {
+    final snackbar = SnackBar(
+      backgroundColor: color == 'red' ? Palette.MAIN_RED : Palette.MAIN_BLUE,
+      content: Text(
+        message,
+        style: const TextStyle(
+          color: Palette.MAIN_WHITE,
+          fontSize: 14,
+          fontFamily: 'Pretendard',
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
   // 약 봉투 컴포넌트
   Widget _pillBagComponent(
     int medicineEnvelopSeq,
@@ -64,6 +81,15 @@ class _PillBagScreenState extends State<PillBagScreen> {
               ),
             ),
           );
+        } else {
+          // 삭제 모드일 때, 체크박스 토글
+          setState(() {
+            if (isChecked) {
+              _checkedPillBags.remove(medicineEnvelopSeq);
+            } else {
+              _checkedPillBags.add(medicineEnvelopSeq);
+            }
+          });
         }
       },
       child: Container(
@@ -165,31 +191,6 @@ class _PillBagScreenState extends State<PillBagScreen> {
     );
   }
 
-  // 돌보미 목록을 드롭다운 아이템
-  // List<DropdownMenuItem<int>> getAccountDropdownItems() {
-  //   List<DropdownMenuItem<int>> dropdownItems = [
-  //     const DropdownMenuItem(
-  //       value: null, // '모두' 옵션
-  //       child: Text("모두의 약 봉투"),
-  //     ),
-  //   ];
-  //   // pillBags 데이터에서 고유한 accountSeq와 nickname을 추출하여 목록 생성
-  //   // 예시로 직접 추가한 항목들, 실제로는 API에서 받은 데이터 사용
-  //   var accounts = [
-  //     {"accountSeq": 1, "nickname": "사용자1"},
-  //     {"accountSeq": 2, "nickname": "사용자2"},
-  //   ];
-  //   for (var account in accounts) {
-  //     dropdownItems.add(
-  //       DropdownMenuItem(
-  //         value: account['accountSeq'],
-  //         child: Text(account['nickname']),
-  //       ),
-  //     );
-  //   }
-  //   return dropdownItems;
-  // }
-
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> pillBags =
@@ -239,7 +240,7 @@ class _PillBagScreenState extends State<PillBagScreen> {
       backgroundColor: Palette.BG_BLUE,
       appBar: AppBar(
         title: const Text(
-          '내 약 봉투',
+          '약 봉투',
           style: TextStyle(
             color: Palette.MAIN_BLACK,
             fontFamily: 'Pretendard',
@@ -248,10 +249,12 @@ class _PillBagScreenState extends State<PillBagScreen> {
           ),
         ),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.delete_outline),
-            onPressed: _toggleDeleteMode, // 삭제 모드 토글 버튼
-          ),
+          // 약 봉투 있을때만 삭제 모드 버튼 출력
+          if (pillBags['count'] > 0)
+            IconButton(
+              icon: const Icon(Icons.delete_outline),
+              onPressed: _toggleDeleteMode, // 삭제 모드 토글 버튼
+            ),
         ],
         backgroundColor: Palette.BG_BLUE,
         centerTitle: true,
@@ -271,75 +274,81 @@ class _PillBagScreenState extends State<PillBagScreen> {
               ),
             )
           // 약 봉투가 있을 때
-          : SingleChildScrollView(
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(
-                  vertical: MediaQuery.of(context).size.height * 0.02,
-                  horizontal: MediaQuery.of(context).size.height * 0.03,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 돌보미 필터링 드롭다운 메뉴
-                    if (accountList.length > 1)
-                      Padding(
-                        padding: EdgeInsets.only(
-                          right: MediaQuery.of(context).size.height * 0.004,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            DropdownButton<int>(
-                              value: _selectedAccountSeq,
-                              items: dropdownItems,
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedAccountSeq =
-                                      value; // 선택된 accountSeq 업데이트
-                                });
-                              },
-                              underline: Container(), // 드롭다운 메뉴의 밑줄 제거
-                            ),
-                          ],
-                        ),
-                      ),
-
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.03,
+          : Column(
+              children: [
+                // 돌보미 필터링 드롭다운 메뉴
+                if (accountList.length > 1)
+                  Padding(
+                    padding: EdgeInsets.only(
+                      right: MediaQuery.of(context).size.height * 0.014,
                     ),
-                    Column(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        // 필터링된 약 봉투 위젯 목록
-                        if (filteredPillBagsWidgets.isNotEmpty)
-                          ...filteredPillBagsWidgets
-                        else
-                          Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                // 가운데가 안 먹어
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.2,
-                                ),
-                                const Text(
-                                  "약 봉투가 없습니다.",
-                                  style: TextStyle(
-                                    color: Palette.SUB_BLACK,
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                        DropdownButton<int>(
+                          value: _selectedAccountSeq,
+                          items: dropdownItems,
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedAccountSeq =
+                                  value; // 선택된 accountSeq 업데이트
+                            });
+                          },
+                          underline: Container(), // 드롭다운 메뉴의 밑줄 제거
+                        ),
                       ],
                     ),
-                  ],
+                  ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        vertical: MediaQuery.of(context).size.height * 0.02,
+                        horizontal: MediaQuery.of(context).size.height * 0.03,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.03,
+                          ),
+                          Column(
+                            children: [
+                              // 필터링된 약 봉투 위젯 목록
+                              if (filteredPillBagsWidgets.isNotEmpty)
+                                ...filteredPillBagsWidgets
+                              else
+                                Center(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      // 가운데가 안 먹어
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.2,
+                                      ),
+                                      const Text(
+                                        "약 봉투가 없습니다.",
+                                        style: TextStyle(
+                                          color: Palette.SUB_BLACK,
+                                          fontFamily: 'Pretendard',
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
       // 약 봉투 생성 or 삭제 버튼
       floatingActionButton: _isDeleteMode
@@ -361,6 +370,7 @@ class _PillBagScreenState extends State<PillBagScreen> {
                         .read<PillBagStore>()
                         .deletePillBag(context, medicineEnvelopSeq);
                   }
+                  _showSnackbar("약 봉투가 삭제되었습니다.", 'red');
                   // 삭제 모드 종료
                   _toggleDeleteMode();
                 },

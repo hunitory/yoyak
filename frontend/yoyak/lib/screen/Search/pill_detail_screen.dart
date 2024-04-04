@@ -22,6 +22,8 @@ class PillDetailScreen extends StatefulWidget {
 }
 
 class _PillDetailScreenState extends State<PillDetailScreen> {
+  int _currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     List<dynamic> Logined = context.watch<LoginStore>().accountList;
@@ -183,8 +185,13 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
                 height: MediaQuery.of(context).size.width * 0.05,
               ),
               // 약 정보, 주의사항 탭
-              const TabBar(
-                tabs: [
+              TabBar(
+                onTap: (index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+                tabs: const [
                   Tab(
                     text: "약 정보",
                   ),
@@ -196,155 +203,177 @@ class _PillDetailScreenState extends State<PillDetailScreen> {
                 indicatorColor: Palette.MAIN_BLUE,
                 unselectedLabelColor: Palette.SUB_BLACK,
                 labelColor: Palette.MAIN_BLUE,
-                overlayColor: MaterialStatePropertyAll(
+                overlayColor: const MaterialStatePropertyAll(
                     Palette.BG_BLUE), // 탭 바 클릭 시 나오는 splash 컬러
               ),
-              // TabBarView
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                height: MediaQuery.of(context).size.width *
-                    1.3, // 컨텐츠에 FIT하게 바꿀 수 있나..
-                child: TabBarView(
-                  children: [
-                    // 약 정보
-                    SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // 요약
-                          if (widget.medicineInfo["summary"] != null)
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 13, top: 10, bottom: 10),
-                              child: Container(
-                                padding: const EdgeInsets.only(
-                                  right: 10,
-                                  top: 8,
-                                  bottom: 8,
-                                ),
-                                width: MediaQuery.of(context).size.width * 0.9,
-                                // height: 40,
-                                decoration: BoxDecoration(
-                                  color: Palette.MAIN_BLUE,
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Row(
-                                  children: [
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    // 사진 너무 작아.. 그냥 원래 사진 파일을 좀 더 크게 가져와야하나?
-                                    Image.asset(
-                                      "assets/images/logo.png",
-                                      // scale: 1.7,
-                                      width: 33,
-                                      height: 25,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        widget.medicineInfo["summary"]!,
-                                        style: const TextStyle(
-                                          color: Palette.MAIN_WHITE,
-                                          fontFamily: 'Pretendard',
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 16,
-                                        ),
-                                        softWrap: true,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          // 효능효과 분기
-                          if (widget.medicineInfo["efficacy"] != null)
-                            PillDescription(
-                              title: "효능효과",
-                              description: widget.medicineInfo["efficacy"],
-                            ),
-                          if (widget.medicineInfo["useMethod"] != null)
-                            PillDescription(
-                              title: "사용 방법",
-                              description: widget.medicineInfo["useMethod"],
-                            ),
-                          if (widget.medicineInfo["depositMethod"] != null)
-                            PillDescription(
-                              title: "보관 방법",
-                              description: widget.medicineInfo["depositMethod"],
-                            ),
-                        ],
-                      ),
-                    ),
-                    // 주의사항
-                    SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // 주의 키워드 바
-                          if (widget.medicineInfo["keyword"] != null)
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 13, top: 10, bottom: 10),
-                              child: RoundedRectangle(
-                                width: MediaQuery.of(context).size.width * 0.9,
-                                height: 40,
-                                color: Palette.MAIN_BLUE,
-                                child: Row(
-                                  children: [
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Image.asset(
-                                      "assets/images/light.png",
-                                      width: 30,
-                                      height: 25,
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    // API로 데이터 받기
-                                    Text(
-                                      widget.medicineInfo["keyword"]!,
-                                      style: const TextStyle(
-                                        color: Palette.MAIN_WHITE,
-                                        fontFamily: 'Pretendard',
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ), // 효능효과 분기
-                          if (widget.medicineInfo["atpnWarn"] != null)
-                            PillDescription(
-                              title: "경과",
-                              description: widget.medicineInfo["atpnWarn"],
-                            ),
-                          if (widget.medicineInfo["atpn"] != null)
-                            PillDescription(
-                              title: "주의 사항",
-                              description: widget.medicineInfo["atpn"],
-                            ),
-                          if (widget.medicineInfo["sideEffect"] != null)
-                            PillDescription(
-                              title: "부작용",
-                              description: widget.medicineInfo["sideEffect"],
-                            ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )
+
+              IndexedStack(
+                index: _currentIndex,
+                children: [
+                  Visibility(
+                    visible: _currentIndex == 0,
+                    maintainState: true,
+                    child: _Pillinfo(widget: widget),
+                  ),
+                  Visibility(
+                    visible: _currentIndex == 1,
+                    maintainState: true,
+                    child: _Pillwarning(widget: widget),
+                  ),
+                ],
+              ),
             ]),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _Pillwarning extends StatelessWidget {
+  const _Pillwarning({
+    required this.widget,
+  });
+
+  final PillDetailScreen widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // 주의 키워드 바
+        if (widget.medicineInfo["keyword"] != null)
+          Padding(
+            padding: const EdgeInsets.only(left: 13, top: 10, bottom: 10),
+            child: RoundedRectangle(
+              width: MediaQuery.of(context).size.width * 0.9,
+              height: 40,
+              color: Palette.MAIN_BLUE,
+              child: Row(
+                children: [
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Image.asset(
+                    "assets/images/light.png",
+                    width: 30,
+                    height: 25,
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  // API로 데이터 받기
+                  Text(
+                    widget.medicineInfo["keyword"]!,
+                    style: const TextStyle(
+                      color: Palette.MAIN_WHITE,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ), // 효능효과 분기
+        if (widget.medicineInfo["atpnWarn"] != null)
+          PillDescription(
+            title: "경과",
+            description: widget.medicineInfo["atpnWarn"],
+          ),
+        if (widget.medicineInfo["atpn"] != null)
+          PillDescription(
+            title: "주의 사항",
+            description: widget.medicineInfo["atpn"],
+          ),
+        if (widget.medicineInfo["sideEffect"] != null)
+          PillDescription(
+            title: "부작용",
+            description: widget.medicineInfo["sideEffect"],
+          ),
+      ],
+    );
+  }
+}
+
+class _Pillinfo extends StatelessWidget {
+  const _Pillinfo({
+    required this.widget,
+  });
+
+  final PillDetailScreen widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // 요약
+        if (widget.medicineInfo["summary"] != null)
+          Padding(
+            padding: const EdgeInsets.only(left: 13, top: 10, bottom: 10),
+            child: Container(
+              padding: const EdgeInsets.only(
+                right: 10,
+                top: 8,
+                bottom: 8,
+              ),
+              width: MediaQuery.of(context).size.width * 0.9,
+              // height: 40,
+              decoration: BoxDecoration(
+                color: Palette.MAIN_BLUE,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Row(
+                children: [
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  // 사진 너무 작아.. 그냥 원래 사진 파일을 좀 더 크게 가져와야하나?
+                  Image.asset(
+                    "assets/images/logo.png",
+                    // scale: 1.7,
+                    width: 33,
+                    height: 25,
+                    fit: BoxFit.cover,
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Expanded(
+                    child: Text(
+                      widget.medicineInfo["summary"]!,
+                      style: const TextStyle(
+                        color: Palette.MAIN_WHITE,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                      ),
+                      softWrap: true,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        // 효능효과 분기
+        if (widget.medicineInfo["efficacy"] != null)
+          PillDescription(
+            title: "효능효과",
+            description: widget.medicineInfo["efficacy"],
+          ),
+        if (widget.medicineInfo["useMethod"] != null)
+          PillDescription(
+            title: "사용 방법",
+            description: widget.medicineInfo["useMethod"],
+          ),
+        if (widget.medicineInfo["depositMethod"] != null)
+          PillDescription(
+            title: "보관 방법",
+            description: widget.medicineInfo["depositMethod"],
+          ),
+      ],
     );
   }
 }

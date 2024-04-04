@@ -109,14 +109,14 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10), // 둥근 모서리 반경 설정
                     child: Image.asset(
-                      'assets/images/signup3.jpg',
+                      'assets/images/signup3.png',
                       width: 230, // 이미지의 가로 크기
-                      height: 260, // 이미지의 세로 크기
+                      height: 300, // 이미지의 세로 크기
                       fit: BoxFit.cover, // 이미지의 크기를 설정한 크기에 맞게 조정
                     ),
                   ),
                   const SizedBox(
-                    height: 70,
+                    height: 50,
                   ),
                   RichText(
                     text: TextSpan(
@@ -337,6 +337,8 @@ class _LastInfoScreenState extends State<LastInfoScreen> {
                           style: TextStyle(
                             fontFamily: "Pretendard",
                             color: Palette.MAIN_WHITE, // 텍스트의 색상
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15, // 텍스트의 크기),
                           ),
                         ),
                       ),

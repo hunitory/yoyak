@@ -173,9 +173,9 @@ class _PhotoSearchScreenState extends State<PhotoSearchScreen> {
                         child: Center(
                           // 이미지 크기 조절
                           child: Image.asset(
-                            'assets/images/mountain.png',
-                            width: rectangleHeight * 0.45,
-                            fit: BoxFit.cover,
+                            'assets/images/imageupload.png',
+                            width: rectangleHeight * 0.3,
+                            fit: BoxFit.contain,
                           ),
                         ),
                         onTap: () {
