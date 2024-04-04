@@ -171,7 +171,7 @@
 # 📋 프로젝트 산출물
 
 - [요구사항 명세서](https://gpolya.notion.site/1-1f83cfe2412f47c6a44feadcd8310bbd?pvs=4)
-- [API 명세서]([http:](https://gpolya.notion.site/API-dfbe58a8b1c04e30a118784ea4ac0446?pvs=4))
+- [API 명세서](https://gpolya.notion.site/API-dfbe58a8b1c04e30a118784ea4ac0446?pvs=4)
 - [ERD](https://www.erdcloud.com/d/jrqkzcPXLabYagDgT)
 - [와이어프레임](https://www.figma.com/file/KdEqQscVLYHN2hXUSfPVEo/%EC%9A%94%EC%95%BD?type=design&node-id=0-1&mode=design&t=UyKlj5WlR9TGr0lG-0)
 
