@@ -36,6 +36,7 @@ class _PillBagState extends State<PillBag> {
   void initState() {
     super.initState();
     ischecked = widget.isSavedMedicine; // 초기값을 위젯에서 받아옴
+    // 이 약이 저장되어있는지 여부
   }
 
   // 약이 봉투에 저장되어있는지 check toggle
@@ -64,6 +65,7 @@ class _PillBagState extends State<PillBag> {
     // 상태 업데이트 (체크박스 상태 변경)
     setState(() {
       ischecked = value;
+      // 위젯의 isSavedMedicine 상태 업데이트
       widget.isSavedMedicine = ischecked;
     });
     print("흠흠 : widget.isSavedMedicine : ${widget.isSavedMedicine}");
@@ -73,6 +75,14 @@ class _PillBagState extends State<PillBag> {
 
   @override
   Widget build(BuildContext context) {
+    var findIsSavedMedicine = context
+        .watch<PillBagStore>()
+        .pillBags["result"]
+        ?.where((pillBag) =>
+            pillBag["medicineEnvelopSeq"] == widget.medicineEnvelopSeq)
+        .toList();
+    print("findIsSavedMedicine: $findIsSavedMedicine");
+
     return Container(
       margin: const EdgeInsets.only(bottom: 5),
       // padding: const EdgeInsets.only(bottom: 5),
@@ -85,16 +95,18 @@ class _PillBagState extends State<PillBag> {
         leading: Transform.scale(
           scale: 1.5, // 체크박스 크기 조절
           child: Checkbox(
-            value: ischecked,
+            // value: ischecked,
+            // value: context
+            //     .watch<PillBagStore>()
+            //     .isMedicineSaved(widget.medicineEnvelopSeq),
+            value: findIsSavedMedicine[0]["isSavedMedicine"], // 약 저장 여부!!!
             // 체크 박스
+            // 필터 변경 시 PillBagModal 내부에서 상태가 업데이트
             onChanged: (bool? value) {
-              // 체크박스 클릭할때마다 상태 변경
-              // api 연결해서 수정하기 !
-              // setState(() {
-              //   isSavedMedicine = value!;
-              // });
-              // widget.onClick(); // 부모 위젯에 이벤트 알림
               _toggleSavedMedicine(value!);
+              context
+                  .read<PillBagStore>()
+                  .toggleSavedMedicine(widget.medicineEnvelopSeq, value);
             },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5),

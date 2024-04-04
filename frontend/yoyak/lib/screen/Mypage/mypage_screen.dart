@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -85,7 +86,7 @@ class _MypageScreenState extends State<MypageScreen>
         backgroundColor: Palette.BG_BLUE,
         appBar: AppBar(
           centerTitle: true,
-          backgroundColor: Palette.MAIN_WHITE,
+          backgroundColor: Palette.BG_BLUE,
           elevation: 0,
           title: const Text(
             '내 정보',
@@ -132,11 +133,14 @@ class _MypageScreenState extends State<MypageScreen>
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Image(
-                                width: 86,
-                                height: 86,
-                                image: AssetImage(
-                                    'assets/images/profiles/profile$profileImg.png'),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: Image(
+                                  width: 86,
+                                  height: 86,
+                                  image: AssetImage(
+                                      'assets/images/profiles/profile$profileImg.png'),
+                                ),
                               ),
                               SizedBox(
                                   width: ScreenSize.getWidth(context) * 0.06),

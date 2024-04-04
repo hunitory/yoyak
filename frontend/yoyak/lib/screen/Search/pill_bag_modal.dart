@@ -90,164 +90,161 @@ class _PillBagModalState extends State<PillBagModal> {
       height: MediaQuery.of(context).size.height * 0.60,
       color: Palette.MAIN_WHITE,
       child: Column(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.03,
-          ),
-          // Header
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          Column(
             children: [
               SizedBox(
-                // width: 0,
-                width: MediaQuery.of(context).size.height * 0.05,
+                height: MediaQuery.of(context).size.height * 0.03,
               ),
-              const Text(
-                "약 봉투에 담기",
-                style: TextStyle(
-                  color: Palette.MAIN_BLACK,
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 17,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  // 약 봉투 생성 함수..?
-                  print('약 봉투 생성');
-                  showDialog(
-                    context: context,
-                    barrierDismissible: true,
-                    builder: (BuildContext context) {
-                      // 실시간 반영을 위한 StatefulBuilder
-                      return StatefulBuilder(builder: (context, setState) {
-                        return Builder(
-                          // Builder를 사용하여 새로운 context를 생성
-                          builder: (innerContext) {
-                            // 이제 innerContext는 모달 내부의 context를 참조합니다.
-                            return PillBagDialog(
-                              medicineSeq: widget.medicineSeq,
-                              onError: (errorMessage) {
-                                // ScaffoldMessenger.of(innerContext).showSnackBar(
-                                //   // innerContext를 사용
-                                //   SnackBar(
-                                //     content: Text(errorMessage),
-                                //     backgroundColor: Colors.red,
-                                //   ),
-                                // );
+              // Header
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    // width: 0,
+                    width: MediaQuery.of(context).size.height * 0.05,
+                  ),
+                  const Text(
+                    "약 봉투에 담기",
+                    style: TextStyle(
+                      color: Palette.MAIN_BLACK,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 17,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      // 약 봉투 생성 함수..?
+                      print('약 봉투 생성');
+                      showDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (BuildContext context) {
+                          // 실시간 반영을 위한 StatefulBuilder
+                          return StatefulBuilder(builder: (context, setState) {
+                            return Builder(
+                              // Builder를 사용하여 새로운 context를 생성
+                              builder: (innerContext) {
+                                // 이제 innerContext는 모달 내부의 context를 참조합니다.
+                                return PillBagDialog(
+                                  medicineSeq: widget.medicineSeq,
+                                );
                               },
                             );
-                          },
-                        );
-                      });
+                          });
+                        },
+                      );
                     },
-                  );
-                },
-                child: Image.asset(
-                  'assets/images/pillbag.png',
-                  width: 40,
-                  height: 40,
+                    child: Image.asset(
+                      'assets/images/pillbag.png',
+                      width: 40,
+                      height: 40,
+                    ),
+                  ),
+                ],
+              ),
+              // 돌보미 필터
+              // 돌보미 필터링 드롭다운 메뉴
+              if (accountList.length > 1)
+                // 여기에 sizedbox
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: 15.0,
+                    top: 10,
+                    bottom: 10,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      DropdownButton<int>(
+                        value: _selectedAccountSeq,
+                        items: dropdownItems,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedAccountSeq = value; // 선택된 accountSeq 업데이트
+                          });
+                        },
+                        underline: Container(), // 드롭다운 메뉴의 밑줄 제거
+                      ),
+                    ],
+                  ),
+                )
+
+              // 약 봉투 리스트
+              else
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.04,
+                ),
+              SizedBox(
+                height: widget.sceenHeight * 0.35,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      if (filteredPillBagsModalWidgets.isNotEmpty)
+                        ...filteredPillBagsModalWidgets
+                      else
+                        Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.1,
+                              ),
+                              const Text(
+                                "약 봉투가 없습니다.",
+                                style: TextStyle(
+                                  color: Palette.SUB_BLACK,
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
-          // 돌보미 필터
-          // 돌보미 필터링 드롭다운 메뉴
-          if (accountList.length > 1)
-            // 여기에 sizedbox
-            Padding(
-              padding: const EdgeInsets.only(
-                right: 15.0,
-                top: 10,
-                bottom: 10,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  DropdownButton<int>(
-                    value: _selectedAccountSeq,
-                    items: dropdownItems,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedAccountSeq = value; // 선택된 accountSeq 업데이트
-                      });
-                    },
-                    underline: Container(), // 드롭다운 메뉴의 밑줄 제거
+          Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(
+                  bottom: 10,
+                ),
+                height: 45,
+                width: ScreenSize.getWidth(context) * 0.9,
+                decoration: BoxDecoration(
+                  color: Palette.MAIN_BLUE,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // 모달 닫기
+                  },
+                  style: TextButton.styleFrom(
+                    foregroundColor: Palette.MAIN_BLUE, // 버튼 텍스트 색상
                   ),
-                ],
-              ),
-            )
-
-          // 약 봉투 리스트
-          else
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.04,
-            ),
-          SizedBox(
-            height: widget.sceenHeight * 0.35,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  if (filteredPillBagsModalWidgets.isNotEmpty)
-                    ...filteredPillBagsModalWidgets
-                  else
-                    Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // 가운데가 안 먹어
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.1,
-                          ),
-                          const Text(
-                            "약 봉투가 없습니다.",
-                            style: TextStyle(
-                              color: Palette.SUB_BLACK,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ],
-                      ),
+                  child: const Text(
+                    '완료',
+                    style: TextStyle(
+                      color: Palette.MAIN_WHITE,
+                      fontSize: 17,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w700,
                     ),
-                ],
-              ),
-            ),
-          ),
-          if (accountList.length <= 1)
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.04,
-            ),
-
-          Container(
-            margin: const EdgeInsets.only(
-              bottom: 10,
-            ),
-            height: 45,
-            width: ScreenSize.getWidth(context) * 0.9,
-            decoration: BoxDecoration(
-              color: Palette.MAIN_BLUE,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: TextButton(
-              onPressed: () {
-                Navigator.pop(context); // 모달 닫기
-              },
-              style: TextButton.styleFrom(
-                foregroundColor: Palette.MAIN_BLUE, // 버튼 텍스트 색상
-              ),
-              child: const Text(
-                '완료',
-                style: TextStyle(
-                  color: Palette.MAIN_WHITE,
-                  fontSize: 17,
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
-            ),
+              SizedBox(
+                height: ScreenSize.getHeight(context) * 0.01,
+              )
+            ],
           ),
         ],
       ),

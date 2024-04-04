@@ -10,12 +10,14 @@ import 'package:yoyak/store/challenge_store.dart';
 import 'package:yoyak/styles/colors/palette.dart';
 import 'package:yoyak/styles/screenSize/screen_size.dart';
 import '../../components/base_button.dart';
+import '../../components/congratulation_dialog.dart';
 import '../../components/dialog.dart';
 import '../../components/other_challenge_card.dart';
 import '../../hooks/goto_screen.dart';
 import '../../store/camera_store.dart';
 import '../../store/login_store.dart';
 import '../Login/login_screen.dart';
+import '../Main/main_screen.dart';
 import '../Mypage/mypage_screen.dart';
 
 class ChallengeScreen extends StatefulWidget {
@@ -112,8 +114,14 @@ class _ChallengeScreenState extends State<ChallengeScreen>
   }
 }
 
-class _ChallengeTitleSection extends StatelessWidget {
+class _ChallengeTitleSection extends StatefulWidget {
   const _ChallengeTitleSection({super.key});
+
+  @override
+  State<_ChallengeTitleSection> createState() => _ChallengeTitleSectionState();
+}
+
+class _ChallengeTitleSectionState extends State<_ChallengeTitleSection> {
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +130,22 @@ class _ChallengeTitleSection extends StatelessWidget {
     var myChallengeCard =
         context.watch<ChallengeStore>().myChallengeCard; // 내 첼린지 덱
     var getImageAndNavigate = context.read<CameraStore>().getImageAndNavigate;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      var showCongratulationDialog = context.read<ChallengeStore>().showCongratulationDialog;
+      if (showCongratulationDialog) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const CongratulationDialogUI(
+              destination: MainScreen(),
+            );
+          },
+        );
+        context.read<ChallengeStore>().showCongratulationDialog = false;
+      }
+    });
+
 
     // 챌린지를 시작하지 않은 경우
     if (myChallengeCard.length == 0) {
