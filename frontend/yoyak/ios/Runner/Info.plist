@@ -5,11 +5,11 @@
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<string>ko_KR</string>
 	<key>CFBundleDisplayName</key>
 	<string>Yoyak</string>
 	<key>NSCameraUsageDescription</key>
-    <string>To capture profile photo please grant camera access</string>
+    <string>이 앱은 사진을 찍어 서버로 전송하기 위해 사용자의 카메라에 접근합니다.</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -17,7 +17,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-    <string>이 앱은 프로필 사진을 설정하고 게시물에 사진을 첨부하기 위해 사진 라이브러리에 접근합니다.</string>
+    <string>이 앱은 게시물에 사진을 첨부하기 위해 사진 라이브러리에 접근합니다.</string>
     <key>NSPrivacyAccessedAPITypes</key>
     <array>
         <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
