@@ -9,7 +9,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>Yoyak</string>
 	<key>NSCameraUsageDescription</key>
-    <string>이 앱은 사진을 찍어 서버로 전송하기 위해 사용자의 카메라에 접근합니다.</string>
+    <string>"Yoyak"은 사진을 촬영하여 알약을 인식하기 위해 사용자의 카메라에 접근합니다.</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -17,7 +17,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-    <string>이 앱은 게시물에 사진을 첨부하기 위해 사진 라이브러리에 접근합니다.</string>
+    <string>"Yoyak"은 사진을 첨부하기 위해 사진 라이브러리에 접근합니다.</string>
     <key>NSPrivacyAccessedAPITypes</key>
     <array>
         <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
