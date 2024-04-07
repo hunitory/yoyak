@@ -258,10 +258,14 @@ class _ChallengeTitleSectionState extends State<_ChallengeTitleSection> {
 // 날짜 문자열을 DateTime 객체로 파싱합니다.
       DateTime startDate = DateTime.parse(startDateString);
       DateTime endDate = DateTime.parse(endDateString);
-
+      DateTime now = DateTime.now();
+      // 현재 날짜에서 시간 부분을 제거 (자정으로 설정)
+      DateTime today = DateTime(now.year, now.month, now.day);
 // 날짜를 원하는 형식으로 포맷팅합니다.
       String formattedStartDate = DateFormat('M월 d일').format(startDate);
       String formattedEndDate = DateFormat('M월 d일').format(endDate);
+
+      int daysLeft = endDate.difference(today).inDays;
 
       // 챌린지를 시작했다면
       return Column(
@@ -410,7 +414,7 @@ class _ChallengeTitleSectionState extends State<_ChallengeTitleSection> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "D-${totalDay - 1}",
+                  "D-$daysLeft",
                   style: const TextStyle(
                     fontSize: 22,
                     color: Palette.MAIN_BLUE,
