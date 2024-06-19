@@ -35,6 +35,16 @@ class _OtherChallengeCardState extends State<OtherChallengeCard>
   }
 
   @override
+<<<<<<< HEAD
+=======
+  void initState() {
+    super.initState();
+    getAccessToken();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
@@ -106,7 +116,13 @@ class _OtherChallengeCardState extends State<OtherChallengeCard>
                     return LookAroundChallengeCard(
                         challenge: othersChallengeList[i]);
                   } else {
+<<<<<<< HEAD
                     return AllChallengeCard(challenge: allChallengeList[i]);
+=======
+                    print(accessToken);
+                    return AllChallengeCard(
+                        challenge: allChallengeList[i]);
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
                   }
                 }),
           )

@@ -18,6 +18,10 @@ class ChallengeStore extends ChangeNotifier {
   List<dynamic> allChallengeList = [];
   var accessToken = "";
   bool isCheered = false;
+<<<<<<< HEAD
+=======
+  bool showCongratulationDialog = false;
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
 
   Future getMyChallengeList() async {
     try {
@@ -142,6 +146,7 @@ class ChallengeStore extends ChangeNotifier {
         Navigator.of(context).pop();
         await getMyChallengeList();
         await getMyChallenge(accessToken);
+<<<<<<< HEAD
 
         for (int i = 0; i < myChallengeList.length; i++) {
           if (myChallengeList[i]['createdDate'] == myChallengeCard['endDate']) {
@@ -155,6 +160,17 @@ class ChallengeStore extends ChangeNotifier {
             );
           }
         }
+=======
+        int finishedCnt = 0;
+        for (int i = 0; i < myChallengeList.length; i++) {
+          if (myChallengeList[i]['createdDate'] == myChallengeCard['endDate']) {
+            finishedCnt++;
+            print("finishedCnt : $finishedCnt");
+          }
+        }
+
+        showCongratulationDialog = finishedCnt == 1;
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
         notifyListeners();
       } else {
         print("일일 챌린지 등록 실패");

@@ -55,9 +55,16 @@ class _UploadChallengeScreenState extends State<UploadChallengeScreen> {
             color: Palette.MAIN_BLACK,
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w500,
+<<<<<<< HEAD
             fontSize: 18,
           ),
         ),
+=======
+            fontSize: 16,
+          ),
+        ),
+        toolbarHeight: 55,
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
         centerTitle: true,
         backgroundColor: Palette.MAIN_WHITE,
       ),
@@ -94,11 +101,19 @@ class _UploadChallengeScreenState extends State<UploadChallengeScreen> {
               ),
               // 글 쓰는 곳
               Padding(
+<<<<<<< HEAD
                 padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
                 // 아래 라인 제거를 위해 top 제외
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 30),
                   // 내용물과 외곽선 사이에 간격 추가
+=======
+                padding: const EdgeInsets.only(
+                    left: 20, right: 20, bottom: 20), // 아래 라인 제거를 위해 top 제외
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(
+                      10, 0, 10, 30), // 내용물과 외곽선 사이에 간격 추가
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
                   child: TextField(
                     controller: challengeContentController,
                     onChanged: (value) {
@@ -106,8 +121,12 @@ class _UploadChallengeScreenState extends State<UploadChallengeScreen> {
                         content = challengeContentController.text;
                       });
                     },
+<<<<<<< HEAD
                     maxLines: 1,
                     // null로 설정하면 자동으로 줄의 개수에 맞게 텍스트 필드 크기 조절
+=======
+                    maxLines: 1, // null로 설정하면 자동으로 줄의 개수에 맞게 텍스트 필드 크기 조절
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
                     maxLength: 8,
                     decoration: const InputDecoration.collapsed(
                       hintText: '한 줄 설명...', // 힌트 텍스트

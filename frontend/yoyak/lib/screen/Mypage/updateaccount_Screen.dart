@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -354,6 +355,7 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
           icon: const Icon(
             Icons.arrow_back_ios,
             color: Palette.MAIN_BLACK,
+            size: 20,
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -368,7 +370,7 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
                 color: Palette.MAIN_BLACK,
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w500,
-                fontSize: 18,
+                fontSize: 16,
               ),
             ),
             if (widget.isUser == false &&
@@ -405,9 +407,14 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
                   children: [
                     Stack(
                       children: [
-                        Image(
-                          image: AssetImage(
-                              'assets/images/profiles/profile${widget.accountitem.profileImg}.png'),
+                        // 자식요소 강제로 바꾸기
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: Image(
+                            image: AssetImage(
+                                'assets/images/profiles/profile${widget.accountitem.profileImg}.png'),
+                            fit: BoxFit.cover, // 이미지가 꽉 차게
+                          ),
                         ),
                         Positioned(
                           right: 3, // 버튼을 오른쪽으로 조금 이동
@@ -747,9 +754,12 @@ class _UpdateAccountScreenState extends State<UpdateAccountScreen> {
                     });
                     Navigator.of(context).pop();
                   },
-                  child: Image.asset(
-                    'assets/images/profiles/profile$index.png',
-                    fit: BoxFit.cover,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: Image.asset(
+                      'assets/images/profiles/profile$index.png',
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 );
               },

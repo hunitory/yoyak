@@ -85,8 +85,16 @@ class _MainAppBarState extends State<MainAppBar> with WidgetsBindingObserver {
         child: SizedBox(
           width: 35,
           height: 35,
+<<<<<<< HEAD
           child: Image.asset(
               "assets/images/profiles/profile${account.profileImg}.png"),
+=======
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: Image.asset(
+                "assets/images/profiles/profile${account.profileImg}.png"),
+          ),
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
         ),
       );
     } else {
