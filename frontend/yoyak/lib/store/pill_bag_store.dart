@@ -7,6 +7,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PillBagStore extends ChangeNotifier {
   Map<String, dynamic> pillBags = {}; // 약 봉투 목록
   Map<String, dynamic> pillBagDetail = {}; // 약 봉투 저장된 약 목록
+<<<<<<< HEAD
+=======
+  Map<int, bool> savedMedicines = {}; // 약 저장 여부
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
 
   // 약 봉투 목록 가져오기 api
   Future<void> getPillBagDatas(BuildContext context, {int? medicineSeq}) async {
@@ -252,4 +256,17 @@ class PillBagStore extends ChangeNotifier {
     }
     notifyListeners();
   }
+<<<<<<< HEAD
+=======
+
+  // 약 저장 여부 토글
+  void toggleSavedMedicine(int medicineEnvelopSeq, bool isSaved) {
+    savedMedicines[medicineEnvelopSeq] = isSaved;
+    notifyListeners(); // 상태 변경 알림
+  }
+
+  bool isMedicineSaved(int medicineEnvelopSeq) {
+    return savedMedicines[medicineEnvelopSeq] ?? false;
+  }
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
 }

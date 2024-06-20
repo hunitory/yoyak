@@ -15,12 +15,20 @@ import 'package:yoyak/apis/url.dart';
 // 약 봉투 생성 다이얼로그
 class PillBagDialog extends StatefulWidget {
   final int medicineSeq;
+<<<<<<< HEAD
   final Function(String)? onError; // 스낵바
+=======
+  // final Function(String)? onError; // 스낵바
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
 
   const PillBagDialog({
     super.key,
     required this.medicineSeq,
+<<<<<<< HEAD
     this.onError,
+=======
+    // this.onError,
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
   });
 
   @override
@@ -60,8 +68,11 @@ class _PillBagDialogState extends State<PillBagDialog> {
   Future<void> createPillBag(int accountSeq, String name) async {
     final prefs = await SharedPreferences.getInstance();
     String yoyakURL = API.yoyakUrl; // 호스트 URL
+<<<<<<< HEAD
     var accessToken =
         prefs.getString('accessToken') ?? ''; // accessToken state 업데이트
+=======
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
     String url = '$yoyakURL/medicineEnvelop'; // path
     // 색상 리스트
     List<String> colors = [

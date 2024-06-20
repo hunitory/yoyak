@@ -289,7 +289,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           },
                           child: const IconInRectangle(
                             subTitle: "내 약을 한눈에",
+<<<<<<< HEAD
                             title: "MY 약 봉투",
+=======
+                            title: "약 봉투",
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
                             imagePath: "assets/images/envelop.png",
                           ),
                         ),
@@ -304,7 +308,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           },
                           child: const IconInRectangle(
                             subTitle: "복약 시간 알려드려요",
+<<<<<<< HEAD
                             title: "알림",
+=======
+                            title: "복용 알림",
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
                             imagePath: "assets/images/alarm.png",
                           ),
                         ),

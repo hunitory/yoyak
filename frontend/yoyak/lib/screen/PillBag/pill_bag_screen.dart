@@ -30,6 +30,23 @@ class _PillBagScreenState extends State<PillBagScreen> {
     print("삭제 모드: $_isDeleteMode");
   }
 
+  _showSnackbar(String message, String color) {
+    final snackbar = SnackBar(
+      backgroundColor: color == 'red' ? Palette.MAIN_RED : Palette.MAIN_BLUE,
+      content: Text(
+        message,
+        style: const TextStyle(
+          color: Palette.MAIN_WHITE,
+          fontSize: 14,
+          fontFamily: 'Pretendard',
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
   // 약 봉투 컴포넌트
   Widget _pillBagComponent(
     int medicineEnvelopSeq,
@@ -64,6 +81,18 @@ class _PillBagScreenState extends State<PillBagScreen> {
               ),
             ),
           );
+<<<<<<< HEAD
+=======
+        } else {
+          // 삭제 모드일 때, 체크박스 토글
+          setState(() {
+            if (isChecked) {
+              _checkedPillBags.remove(medicineEnvelopSeq);
+            } else {
+              _checkedPillBags.add(medicineEnvelopSeq);
+            }
+          });
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
         }
       },
       child: Container(
@@ -239,7 +268,7 @@ class _PillBagScreenState extends State<PillBagScreen> {
       backgroundColor: Palette.BG_BLUE,
       appBar: AppBar(
         title: const Text(
-          '내 약 봉투',
+          '약 봉투',
           style: TextStyle(
             color: Palette.MAIN_BLACK,
             fontFamily: 'Pretendard',
@@ -248,10 +277,12 @@ class _PillBagScreenState extends State<PillBagScreen> {
           ),
         ),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.delete_outline),
-            onPressed: _toggleDeleteMode, // 삭제 모드 토글 버튼
-          ),
+          // 약 봉투 있을때만 삭제 모드 버튼 출력
+          if (pillBags['count'] > 0)
+            IconButton(
+              icon: const Icon(Icons.delete_outline),
+              onPressed: _toggleDeleteMode, // 삭제 모드 토글 버튼
+            ),
         ],
         backgroundColor: Palette.BG_BLUE,
         centerTitle: true,
@@ -267,6 +298,86 @@ class _PillBagScreenState extends State<PillBagScreen> {
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,
                   fontSize: 20,
+<<<<<<< HEAD
+=======
+                ),
+              ),
+            )
+          // 약 봉투가 있을 때
+          : Column(
+              children: [
+                // 돌보미 필터링 드롭다운 메뉴
+                if (accountList.length > 1)
+                  Padding(
+                    padding: EdgeInsets.only(
+                      right: MediaQuery.of(context).size.height * 0.014,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        DropdownButton<int>(
+                          value: _selectedAccountSeq,
+                          items: dropdownItems,
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedAccountSeq =
+                                  value; // 선택된 accountSeq 업데이트
+                            });
+                          },
+                          underline: Container(), // 드롭다운 메뉴의 밑줄 제거
+                        ),
+                      ],
+                    ),
+                  ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        vertical: MediaQuery.of(context).size.height * 0.02,
+                        horizontal: MediaQuery.of(context).size.height * 0.03,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.03,
+                          ),
+                          Column(
+                            children: [
+                              // 필터링된 약 봉투 위젯 목록
+                              if (filteredPillBagsWidgets.isNotEmpty)
+                                ...filteredPillBagsWidgets
+                              else
+                                Center(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      // 가운데가 안 먹어
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.2,
+                                      ),
+                                      const Text(
+                                        "약 봉투가 없습니다.",
+                                        style: TextStyle(
+                                          color: Palette.SUB_BLACK,
+                                          fontFamily: 'Pretendard',
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
                 ),
               ),
             )
@@ -361,6 +472,10 @@ class _PillBagScreenState extends State<PillBagScreen> {
                         .read<PillBagStore>()
                         .deletePillBag(context, medicineEnvelopSeq);
                   }
+<<<<<<< HEAD
+=======
+                  _showSnackbar("약 봉투가 삭제되었습니다.", 'red');
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
                   // 삭제 모드 종료
                   _toggleDeleteMode();
                 },

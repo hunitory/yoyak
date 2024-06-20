@@ -77,7 +77,11 @@ class _AlarmScreenState extends State<AlarmScreen> {
         backgroundColor: Palette.BG_BLUE,
         // AppBar의 제목
         title: const Text(
+<<<<<<< HEAD
           '알림 관리',
+=======
+          '복용 알림',
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
           style: TextStyle(
             color: Palette.MAIN_BLACK,
             fontSize: 16,
@@ -163,11 +167,8 @@ class _AlarmScreenState extends State<AlarmScreen> {
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w500,
                     ),
-                    underline: Container(
-                      color: Palette.SUB_WHITE,
-                      height: 1,
-                    ),
                     iconSize: 30,
+                    underline: Container(),
                     iconEnabledColor: Palette.MAIN_BLACK,
                     borderRadius: BorderRadius.circular(10),
                     value: selectedAccountSeq,

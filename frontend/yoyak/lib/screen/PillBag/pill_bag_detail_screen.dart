@@ -79,6 +79,26 @@ class _PillBagDetailScreenState extends State<PillBagDetailScreen> {
     print("삭제 모드: $_isDeleteMode");
   }
 
+<<<<<<< HEAD
+=======
+  _showSnackbar(String message, String color) {
+    final snackbar = SnackBar(
+      backgroundColor: color == 'red' ? Palette.MAIN_RED : Palette.MAIN_BLUE,
+      content: Text(
+        message,
+        style: const TextStyle(
+          color: Palette.MAIN_WHITE,
+          fontSize: 14,
+          fontFamily: 'Pretendard',
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+      duration: const Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
   // 약 컴포넌트
   Widget _pillComponent(
     int medicineSeq,
@@ -97,6 +117,19 @@ class _PillBagDetailScreenState extends State<PillBagDetailScreen> {
           // 삭제 모드가 아닐 때, 클릭하면 상세 페이지로 이동
           print('상세정보 페이지로 이동 클릭');
           _goToDetail(medicineSeq);
+<<<<<<< HEAD
+=======
+        } else {
+          // 삭제 모드일 때, 클릭하면 체크박스 토글
+          setState(() {
+            if (isChecked) {
+              _checkedPills.remove(medicineSeq);
+            } else {
+              _checkedPills.add(medicineSeq);
+            }
+          });
+          print("체크된 약: $_checkedPills");
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
         }
       },
       child: Container(
@@ -264,6 +297,7 @@ class _PillBagDetailScreenState extends State<PillBagDetailScreen> {
                             itemName,
                           ));
                         }).toList()
+<<<<<<< HEAD
 
                       // PillPreviews 출력
 
@@ -296,6 +330,9 @@ class _PillBagDetailScreenState extends State<PillBagDetailScreen> {
                           //   ],
                           // ),
                         ],
+=======
+                      : [],
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
                 ),
               ),
             ),
@@ -320,6 +357,10 @@ class _PillBagDetailScreenState extends State<PillBagDetailScreen> {
                           widget.envelopSeq,
                         );
                   }
+<<<<<<< HEAD
+=======
+                  _showSnackbar("약이 삭제되었습니다.", 'red');
+>>>>>>> 46e4893f07d6df3d119451d13f16ba31ad224c0c
                   // 삭제 모드 종료
                   _toggleDeleteMode();
                 },
